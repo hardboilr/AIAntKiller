@@ -13,7 +13,7 @@ import aiantwars.impl.DummyGraphicsAntWarsGUI;
 import aiantwars.impl.Location;
 import aiantwars.impl.LogicAnt;
 import aiantwars.impl.TeamInfo;
-import behaviour.CollectFood;
+import behaviour.food.CollectFood;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
