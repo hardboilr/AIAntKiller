@@ -30,16 +30,14 @@ public class Main implements IAntAI {
                     + ", IsFilled: " + tile.isFilled() + ", IsRock: " + tile.isRock());
         }
 
-        /**
-         * Possible actions
-         *
-         * TurnLeft("Turn Left <-")
-         * TurnRight("Turn Right ->") MoveForward("Move forward")
-         * MoveBackward("Move backward") Attack("Attack") PickUpFood("Pick up
-         * food") DropFood("Drop food") EatFood("Eat food") DigOut("Dig out")
-         * DropSoil("Drop soil") LayEgg("Lay egg") Pass("Pass")
-         *
-         */
+        System.out.println("visibleLocations: ");
+        for (ILocationInfo loc : visibleLocations) {
+            System.out.println("Coord: " + loc.getX() + "," + loc.getY());
+            System.out.println("Ant?" + loc.getAnt());
+            System.out.println("isFilled?" + loc.isFilled());
+            System.out.println("isRock?" + loc.isRock());
+        }
+
         EAction action = null;
         if (possibleActions.contains(EAction.EatFood) && thisAnt.getHitPoints() < 10) {
             action = EAction.EatFood;

@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/netbeans,windows,osx,java
+# Created by https://www.gitignore.io/api/netbeans,java,windows,osx
 
 ### NetBeans ###
 nbproject/private/
@@ -9,6 +9,21 @@ dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
+
+
+### Java ###
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
 
 
 ### Windows ###
@@ -59,17 +74,3 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-
-### Java ###
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
