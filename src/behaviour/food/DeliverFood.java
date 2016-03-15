@@ -6,6 +6,10 @@ import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
 import java.util.List;
 
+/**
+ * WIP!
+ * @author Tobias
+ */
 public class DeliverFood {
 
     private final IAntInfo thisAnt;
@@ -21,7 +25,7 @@ public class DeliverFood {
     public EAction getAction() {
         ILocationInfo queenLocation = getQueenLocation();
         
-        
+        return null;
         
     }
     

@@ -7,14 +7,31 @@ import aiantwars.IAntInfo;
 import aiantwars.IEgg;
 import aiantwars.ILocationInfo;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import memory.CollectiveMemory;
+import memory.Position;
+import memory.Tile;
 
 public class Main implements IAntAI {
 
     private final Random rnd = new Random();
+    private final CollectiveMemory collectiveMemory = CollectiveMemory.getInstance();
+    private int worldSizeX;
+    private int worldSizeY;
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
+        collectiveMemory.addVisibleLocations(visibleLocations);
+
+        for (Map.Entry pair : collectiveMemory.getMemory().entrySet()) {
+            Position pos = (Position) pair.getKey();
+            Tile tile = (Tile) pair.getValue();
+
+            System.out.println("Map position (" + pos.getxPos() + ", " + pos.getyPos() + ")" + ", FoodCount: " + tile.getFoodCount() + ", Ant: Not Supported"
+                    + ", IsFilled: " + tile.isFilled() + ", IsRock: " + tile.isRock());
+        }
+
         System.out.println("visibleLocations: ");
         for (ILocationInfo loc : visibleLocations) {
             System.out.println("Coord: " + loc.getX() + "," + loc.getY());
@@ -73,6 +90,8 @@ public class Main implements IAntAI {
     @Override
     public void onHatch(IAntInfo thisAnt, ILocationInfo thisLocation, int worldSizeX, int worldSizeY) {
         System.out.println("ID: " + thisAnt.antID() + " onHatch");
+        this.worldSizeX = worldSizeX;
+        this.worldSizeY = worldSizeY;
     }
 
 }

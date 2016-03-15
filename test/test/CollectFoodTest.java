@@ -19,6 +19,10 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * 
+ * @author Tobias
+ */
 public class CollectFoodTest {
 
     private final Board board;

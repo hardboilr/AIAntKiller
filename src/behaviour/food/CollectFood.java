@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.List;
 import utility.Calc;
 
+/**
+ * @author Tobias
+ */
 public class CollectFood {
 
     private final IAntInfo thisAnt;

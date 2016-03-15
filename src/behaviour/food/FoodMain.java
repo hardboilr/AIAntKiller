@@ -5,6 +5,10 @@ import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
 import java.util.List;
 
+/**
+ * WIP!
+ * @author Tobias
+ */
 public class FoodMain {
 
     private final IAntInfo thisAnt;

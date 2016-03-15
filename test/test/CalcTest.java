@@ -6,6 +6,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import utility.Calc;
 
+/**
+ * 
+ * @author Tobias
+ */
 public class CalcTest {
 
     @Test
@@ -29,15 +33,15 @@ public class CalcTest {
 
     @Test(expected = Exception.class)
     public void GetMovementCostExceptionTest() throws Exception {
-        Calc.getMovementCost(EAction.Attack, EAntType.QUEEN);
+        Calc.getMovementCost(EAction.Attack, EAntType.QUEEN, true);
     }
 
     @Test
     public void GetMovementCostTest() throws Exception {
-        int turnLeft = Calc.getMovementCost(EAction.TurnLeft, EAntType.QUEEN);
-        int turnRight = Calc.getMovementCost(EAction.TurnRight, EAntType.QUEEN);
-        int moveBackward = Calc.getMovementCost(EAction.MoveBackward, EAntType.QUEEN);
-        int moveForward = Calc.getMovementCost(EAction.MoveForward, EAntType.QUEEN);
+        int turnLeft = Calc.getMovementCost(EAction.TurnLeft, EAntType.QUEEN, true);
+        int turnRight = Calc.getMovementCost(EAction.TurnRight, EAntType.QUEEN, true);
+        int moveBackward = Calc.getMovementCost(EAction.MoveBackward, EAntType.QUEEN, true);
+        int moveForward = Calc.getMovementCost(EAction.MoveForward, EAntType.QUEEN, true);
         assertEquals(5, turnLeft);
         assertEquals(5, turnRight);
         assertEquals(4, moveBackward);
