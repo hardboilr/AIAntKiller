@@ -6,38 +6,36 @@ import aiantwars.IAntAI;
 import aiantwars.IAntInfo;
 import aiantwars.IEgg;
 import aiantwars.ILocationInfo;
+import behaviour.Breeding;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import memory.CollectiveMemory;
-import memory.Position;
-import memory.Tile;
 
 public class Main implements IAntAI {
 
     private final Random rnd = new Random();
     private final CollectiveMemory collectiveMemory = CollectiveMemory.getInstance();
+    private final Breeding breeding = Breeding.getInstance();
+    private int turn;
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
         collectiveMemory.addVisibleLocations(visibleLocations);
 
-        for (Map.Entry pair : collectiveMemory.getMemory().entrySet()) {
-            Position pos = (Position) pair.getKey();
-            Tile tile = (Tile) pair.getValue();
-
-            System.out.println("Map position (" + pos.getxPos() + ", " + pos.getyPos() + ")" + ", FoodCount: " + tile.getFoodCount() + ", Ant: Not Supported"
-                    + ", IsFilled: " + tile.isFilled() + ", IsRock: " + tile.isRock());
-        }
-
-        System.out.println("visibleLocations: ");
-        for (ILocationInfo loc : visibleLocations) {
-            System.out.println("Coord: " + loc.getX() + "," + loc.getY());
-            System.out.println("Ant?" + loc.getAnt());
-            System.out.println("isFilled?" + loc.isFilled());
-            System.out.println("isRock?" + loc.isRock());
-        }
-
+//        for (Map.Entry pair : collectiveMemory.getMemory().entrySet()) {
+//            Position pos = (Position) pair.getKey();
+//            Tile tile = (Tile) pair.getValue();
+//
+//            System.out.println("Map position (" + pos.getxPos() + ", " + pos.getyPos() + ")" + ", FoodCount: " + tile.getFoodCount() + ", Ant: Not Supported"
+//                    + ", IsFilled: " + tile.isFilled() + ", IsRock: " + tile.isRock());
+//        }
+//        System.out.println("visibleLocations: ");
+//        for (ILocationInfo loc : visibleLocations) {
+//            System.out.println("Coord: " + loc.getX() + "," + loc.getY());
+//            System.out.println("Ant?" + loc.getAnt());
+//            System.out.println("isFilled?" + loc.isFilled());
+//            System.out.println("isRock?" + loc.isRock());
+//        }
         EAction action = null;
         if (possibleActions.contains(EAction.EatFood) && thisAnt.getHitPoints() < 10) {
             action = EAction.EatFood;
@@ -65,6 +63,7 @@ public class Main implements IAntAI {
 
     @Override
     public void onStartTurn(IAntInfo thisAnt, int turn) {
+        this.turn = turn;
         System.out.println("ID: " + thisAnt.antID() + " onStartTurn(" + turn + ")");
     }
 
@@ -75,18 +74,21 @@ public class Main implements IAntAI {
 
     @Override
     public void onDeath(IAntInfo thisAnt) {
+        collectiveMemory.removeAnt(thisAnt);
         System.out.println("ID: " + thisAnt.antID() + " onDeath");
     }
 
     @Override
     public void onLayEgg(IAntInfo thisAnt, List<EAntType> types, IEgg egg) {
-        EAntType type = types.get(rnd.nextInt(types.size()));
+        int index = breeding.getBreedingAction(collectiveMemory.getAnts(), turn);
+        EAntType type = types.get(index);
         System.out.println("ID: " + thisAnt.antID() + " onLayEgg: " + type);
         egg.set(type, this);
     }
 
     @Override
     public void onHatch(IAntInfo thisAnt, ILocationInfo thisLocation, int worldSizeX, int worldSizeY) {
+        collectiveMemory.addAnt(thisAnt);
         System.out.println("ID: " + thisAnt.antID() + " onHatch");
     }
 
