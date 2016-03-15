@@ -8,8 +8,11 @@ import aiantwars.IEgg;
 import aiantwars.ILocationInfo;
 import behaviour.Breeding;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import memory.CollectiveMemory;
+import memory.Position;
+import memory.Tile;
 
 public class Main implements IAntAI {
 
@@ -20,7 +23,10 @@ public class Main implements IAntAI {
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
+        visibleLocations.add(thisLocation);
         collectiveMemory.addVisibleLocations(visibleLocations);
+        ILocationInfo location = collectiveMemory.getQueenSpawn();
+        System.out.println("QueenSpawn: (" + location.getX() + ", " + location.getY() + ")");
 
 //        for (Map.Entry pair : collectiveMemory.getMemory().entrySet()) {
 //            Position pos = (Position) pair.getKey();
@@ -89,6 +95,9 @@ public class Main implements IAntAI {
     @Override
     public void onHatch(IAntInfo thisAnt, ILocationInfo thisLocation, int worldSizeX, int worldSizeY) {
         collectiveMemory.addAnt(thisAnt);
+        if (thisAnt.getAntType().getTypeName().equals("Queen")) {
+            collectiveMemory.setQueenSpawn(thisLocation);
+        }
         System.out.println("ID: " + thisAnt.antID() + " onHatch");
     }
 
