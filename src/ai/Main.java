@@ -25,8 +25,6 @@ public class Main implements IAntAI {
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
         visibleLocations.add(thisLocation);
         collectiveMemory.addVisibleLocations(visibleLocations);
-        ILocationInfo location = collectiveMemory.getQueenSpawn();
-        System.out.println("QueenSpawn: (" + location.getX() + ", " + location.getY() + ")");
 
 //        for (Map.Entry pair : collectiveMemory.getMemory().entrySet()) {
 //            Position pos = (Position) pair.getKey();
