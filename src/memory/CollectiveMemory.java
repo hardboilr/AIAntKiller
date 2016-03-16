@@ -2,18 +2,17 @@ package memory;
 
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author Jonas Rafn
- */
 public class CollectiveMemory {
 
     private static CollectiveMemory instance = null;
     private final Map<Position, Tile> memory = new HashMap();
+    private final List<IAntInfo> ants = new ArrayList();
+    private ILocationInfo queenSpawn;
 
     private CollectiveMemory() {
     }
@@ -48,4 +47,23 @@ public class CollectiveMemory {
         return memory;
     }
 
+    public void addAnt(IAntInfo ant) {
+        ants.add(ant);
+    }
+
+    public void removeAnt(IAntInfo ant) {
+        ants.remove(ant);
+    }
+
+    public List<IAntInfo> getAnts() {
+        return ants;
+    }
+
+    public void setQueenSpawn(ILocationInfo queenSpawn) {
+        this.queenSpawn = this.queenSpawn == null ? queenSpawn : this.queenSpawn;
+    }
+
+    public ILocationInfo getQueenSpawn() {
+        return queenSpawn;
+    }
 }

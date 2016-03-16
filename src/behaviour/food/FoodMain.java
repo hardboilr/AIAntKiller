@@ -31,18 +31,19 @@ public class FoodMain {
     }
 
     public EAction getAction() {
-        return collectFood.getEAction();
+//        return collectFood.getEAction();
 
-        /* not yet implemented
+//        /* not yet implemented
         if (thisAnt.getAntType().getMaxFoodLoad() == thisAnt.getFoodLoad()) {
-            // ant has maxed its food storage -> return food to queen
+             //ant has maxed its food storage -> return food to queen. Maybe before that in earlier rounds./if we have many or less carriers.
             return deliverFood.getAction(); // not yet implemented
         } else if (thisLocation.getFoodCount() > 0) {
-            // food in current location -> pick it up
+             //food in current location -> pick it up
             return EAction.PickUpFood;
         } else {
             // find collect in nearby tile
             return collectFood.getEAction();
-        }*/
+        }
+//        */
     }
 }
