@@ -6,6 +6,7 @@ import aiantwars.IAntAI;
 import aiantwars.IAntInfo;
 import aiantwars.IEgg;
 import aiantwars.ILocationInfo;
+import behaviour.food.FoodMain;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -19,10 +20,13 @@ public class Main implements IAntAI {
     private final CollectiveMemory collectiveMemory = CollectiveMemory.getInstance();
     private int worldSizeX;
     private int worldSizeY;
+    
+    private FoodMain foodMain;
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
         collectiveMemory.addVisibleLocations(visibleLocations);
+        foodMain = new FoodMain(thisAnt, thisLocation, visibleLocations);
 
         for (Map.Entry pair : collectiveMemory.getMemory().entrySet()) {
             Position pos = (Position) pair.getKey();
@@ -48,7 +52,9 @@ public class Main implements IAntAI {
         } else if (possibleActions.contains(EAction.Attack) && visibleLocations.get(0).getAnt().getTeamInfo().getTeamID() != thisAnt.getTeamInfo().getTeamID()) {
             action = EAction.Attack;
         } else if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 15) {
+//            action = foodMain.getAction();
             action = EAction.PickUpFood;
+            
         } else {
             action = possibleActions.get(rnd.nextInt(possibleActions.size()));
             if (action == EAction.Attack) {

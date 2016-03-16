@@ -1,6 +1,8 @@
 package algorithm.model;
 
 /**
+ * Node containing 
+ * 
  * @author Tobias
  */
 public class Node {

@@ -39,7 +39,7 @@ public class CollectFoodTest {
         Location location2 = new Location(4, 4);
         ITeamInfo teamInfo = new TeamInfo(1, "Test team");
         Main ai = new Main();
-        thisAnt = new LogicAnt(factory, board, (Location) thisLocation, 1, 1, teamInfo, EAntType.CARRIER, ai);
+        thisAnt = new LogicAnt(factory, board, (Location) thisLocation, 0, 1, teamInfo, EAntType.CARRIER, ai);
         queen = new LogicAnt(factory, board, location2, 4, 2, teamInfo, EAntType.QUEEN, ai);
 
     }

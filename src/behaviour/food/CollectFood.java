@@ -11,6 +11,10 @@ import java.util.List;
 import utility.Calc;
 
 /**
+ * Todo: 1. Use Tile.class instead of LocationExtends.class (redundant)
+ *
+ * 2. Use collectiveMemory instead of visibleLocations.
+ *
  * @author Tobias
  */
 public class CollectFood {
@@ -33,22 +37,22 @@ public class CollectFood {
 
             if (IsLocationFree(location) && (location.getX() == currentLocation.getX() && location.getY() == currentLocation.getY() + 1)) {
                 // get north
-                LocationExtends locationNorth = new LocationExtends(location.getX(), location.getY(), thisAnt, 1, location.getFoodCount());
+                LocationExtends locationNorth = new LocationExtends(location.getX(), location.getY(), thisAnt, 0, location.getFoodCount());
                 possibleLocations.add(locationNorth);
             }
             if (IsLocationFree(location) && (location.getX() == currentLocation.getX() && location.getY() == currentLocation.getY() - 1)) {
                 // get south
-                LocationExtends locationSouth = new LocationExtends(location.getX(), location.getY(), thisAnt, 3, location.getFoodCount());
+                LocationExtends locationSouth = new LocationExtends(location.getX(), location.getY(), thisAnt, 2, location.getFoodCount());
                 possibleLocations.add(locationSouth);
             }
             if (IsLocationFree(location) && (location.getX() == currentLocation.getX() - 1 && location.getY() == currentLocation.getY())) {
                 // get west
-                LocationExtends locationWest = new LocationExtends(location.getX(), location.getY(), thisAnt, 4, location.getFoodCount());
+                LocationExtends locationWest = new LocationExtends(location.getX(), location.getY(), thisAnt, 3, location.getFoodCount());
                 possibleLocations.add(locationWest);
             }
             if (IsLocationFree(location) && (location.getX() == currentLocation.getX() + 1 && location.getY() == currentLocation.getY())) {
                 // get east
-                LocationExtends locationEast = new LocationExtends(location.getX(), location.getY(), thisAnt, 2, location.getFoodCount());
+                LocationExtends locationEast = new LocationExtends(location.getX(), location.getY(), thisAnt, 1, location.getFoodCount());
                 possibleLocations.add(locationEast);
             }
         }

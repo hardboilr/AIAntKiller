@@ -6,7 +6,12 @@ import aiantwars.ILocationInfo;
 import java.util.List;
 
 /**
- * WIP!
+ * WIP! Todo: 
+ * 
+ * 1. Implement deliverFood.
+ * 
+ * 2. Must use collectiveMemory instead of visibleLocations.
+ *
  * @author Tobias
  */
 public class FoodMain {
@@ -26,17 +31,18 @@ public class FoodMain {
     }
 
     public EAction getAction() {
+        return collectFood.getEAction();
+
+        /* not yet implemented
         if (thisAnt.getAntType().getMaxFoodLoad() == thisAnt.getFoodLoad()) {
             // ant has maxed its food storage -> return food to queen
-            return deliverFood.getAction();
+            return deliverFood.getAction(); // not yet implemented
         } else if (thisLocation.getFoodCount() > 0) {
             // food in current location -> pick it up
             return EAction.PickUpFood;
         } else {
             // find collect in nearby tile
             return collectFood.getEAction();
-        }
-
+        }*/
     }
-
 }

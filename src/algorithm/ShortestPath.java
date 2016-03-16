@@ -20,6 +20,8 @@ import utility.Calc;
 /**
  * WIP!
  *
+ * 1. Failed strategy below! Instead implement wip Board.class
+ *
  * @author Tobias
  */
 public class ShortestPath {

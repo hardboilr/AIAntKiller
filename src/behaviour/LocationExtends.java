@@ -37,7 +37,7 @@ public class LocationExtends extends Location {
             int currentDirection = ant.getDirection();
             EAntType antType = ant.getAntType();
             try {
-                movementCost = Calc.getMovementCost(Calc.getMovementAction(currentDirection, direction), antType, false);
+                movementCost = Calc.getMovementCost(Calc.getMovementAction(currentDirection, direction), antType, true);
             } catch (Exception ex) {
                 Logger.getLogger(LocationExtends.class.getName()).log(Level.SEVERE, null, ex);
             }
