@@ -46,6 +46,10 @@ public class CollectiveMemory {
     public Map<Position, Tile> getMemory() {
         return memory;
     }
+    
+    public void clearMemory() {
+        instance = new CollectiveMemory();
+    }
 
     public void addAnt(IAntInfo ant) {
         ants.add(ant);

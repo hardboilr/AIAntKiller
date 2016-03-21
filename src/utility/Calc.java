@@ -28,8 +28,8 @@ public class Calc {
         }
         return EAction.Pass;
     }
-    
-    public static int getMovementCost(EAction action, EAntType antType, boolean canMoveBackward) throws Exception {
+
+    public static int getMovementCost(EAction action, EAntType antType, boolean canMoveBackward) {
         switch (action) {
             case MoveForward:
                 return antType.getActionCost(EAction.MoveForward);
@@ -44,19 +44,20 @@ public class Calc {
             case TurnRight:
                 return antType.getActionCost(EAction.TurnRight) + antType.getActionCost(EAction.MoveForward);
             default:
-                throw new Exception("Not a valid movement action");
+                return Integer.MAX_VALUE;
         }
     }
 
-    /**
-     * Total movementCost from node A to node B
-     *
-     * @param nodeA
-     * @param nodeB
-     * @return total movementCost
-     */
-    public static int getMovementCost(Node nodeA, Node nodeB) {
-        
-        return 0;
+    public static int getMovementDirection(Node parent, Node child) {
+        if (child.getX() > parent.getX()) {
+            return 1;
+        } else if (child.getX() < parent.getX()) {
+            return 3;
+        } else if (child.getY() > parent.getY()) {
+            return 0;
+        } else {
+            return 2;
+        }
     }
+
 }

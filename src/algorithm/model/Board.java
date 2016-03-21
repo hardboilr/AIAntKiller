@@ -3,6 +3,7 @@ package algorithm.model;
 import memory.CollectiveMemory;
 import memory.Position;
 import memory.Tile;
+import static utility.Debug.println;
 
 /**
  * Creates empty nodes based on world size and add them to two-dimensional
@@ -22,12 +23,12 @@ public class Board {
         this.worldSizeY = worldSizeY;
         nodes = new Node[worldSizeX][worldSizeY];
 
-        // create nodes and add to two-dimensional nodes array.
+        // 1a. create nodes and add to two-dimensional nodes array.
         for (int x = 0; x < worldSizeX; x++) {
             for (int y = 0; y < worldSizeY; y++) {
-                nodes[x][y] = new Node(x, y, null, -1);
+                nodes[x][y] = new Node(x, y, 0);
 
-                // check for obstacles
+                // 1b. check for obstacles
                 Tile tile = cm.getMemory().get(new Position(x, y));
                 if (tile != null) {
                     if (tile.isFilled() || tile.isRock()) {
@@ -37,19 +38,38 @@ public class Board {
             }
         }
 
-        // add adjacent nodes to each node in nodes array
+        // 2. add adjacent nodes to each node in nodes array
         for (int x = 0; x < worldSizeX; x++) {
             for (int y = 0; y < worldSizeY; y++) {
                 Node current = nodes[x][y];
                 if (current != null) {
                     //north
-                    current.setNodeNorth(checkNode(x, y + 1));
+                    int yOffset = y + 1;
+                    int direction = 0;
+                    if (checkNode(x, yOffset)) {
+                        current.addAdjacentNode(createNode(x, yOffset, direction));
+                    }
+
                     //south
-                    current.setNodeSouth(checkNode(x, y - 1));
+                    yOffset = y - 1;
+                    direction = 2;
+                    if (checkNode(x, yOffset)) {
+                        current.addAdjacentNode(createNode(x, yOffset, direction));
+                    }
+
                     //east
-                    current.setNodeEast(checkNode(x + 1, y));
+                    int xOffset = x + 1;
+                    direction = 1;
+                    if (checkNode(xOffset, y)) {
+                        current.addAdjacentNode(createNode(xOffset, y, direction));
+                    }
+
                     //west
-                    current.setNodeWest(checkNode(x - 1, y));
+                    xOffset = x - 1;
+                    direction = 3;
+                    if (checkNode(xOffset, y)) {
+                        current.addAdjacentNode(createNode(xOffset, y, direction));
+                    }
                 }
             }
         }
@@ -62,12 +82,24 @@ public class Board {
      * @param y position y
      * @return node or null if outside boundaries
      */
-    private Node checkNode(int x, int y) {
-        if (x > 0 && x <= worldSizeX && y > 0 && y <= worldSizeY) {
-            return nodes[x][y];
-        } else {
-            return null;
+    private boolean checkNode(int x, int y) {
+        try {
+            
+            Node node = nodes[x][y];
+            if(node != null) {
+            return true;
+            } else {
+                return false;
+            }
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            return false;
         }
+    }
+
+    private Node createNode(int x, int y, int direction) {
+        Node node = nodes[x][y];
+        node.setDirection(direction);
+        return node;
     }
 
     public Node[][] getBoardNodes() {

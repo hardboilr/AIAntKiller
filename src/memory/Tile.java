@@ -52,4 +52,9 @@ public class Tile {
         this.isRock = isRock;
     }
 
+    @Override
+    public String toString() {
+        return "Tile:" + ", isRock:" + isRock;
+    }
+
 }
