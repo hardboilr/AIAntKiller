@@ -14,13 +14,12 @@ import static utility.Debug.println;
 public class Board {
 
     private final CollectiveMemory cm = CollectiveMemory.getInstance();
-    private final int worldSizeX;
-    private final int worldSizeY;
     private final Node[][] nodes;
 
-    public Board(int worldSizeX, int worldSizeY) {
-        this.worldSizeX = worldSizeX;
-        this.worldSizeY = worldSizeY;
+    public Board() {
+        int worldSizeX = cm.getWorldSizeX();
+        int worldSizeY = cm.getWorldSizeY();
+        
         nodes = new Node[worldSizeX][worldSizeY];
 
         // 1a. create nodes and add to two-dimensional nodes array.
@@ -29,7 +28,7 @@ public class Board {
                 nodes[x][y] = new Node(x, y, 0);
 
                 // 1b. check for obstacles
-                Tile tile = cm.getMemory().get(new Position(x, y));
+                Tile tile = cm.getTiles().get(new Position(x, y));
                 if (tile != null) {
                     if (tile.isFilled() || tile.isRock()) {
                         nodes[x][y] = null;

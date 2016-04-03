@@ -19,17 +19,22 @@ public class FoodMain {
     private final IAntInfo thisAnt;
     private final ILocationInfo thisLocation;
     private final List<ILocationInfo> visibleLocations;
-    private final CollectFood collectFood;
+    private final ScavengeFood collectFood;
     private final DeliverFood deliverFood;
 
     public FoodMain(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations) {
         this.thisAnt = thisAnt;
         this.thisLocation = thisLocation;
         this.visibleLocations = visibleLocations;
-        this.collectFood = new CollectFood(this.thisAnt, this.thisLocation, this.visibleLocations);
+        this.collectFood = new ScavengeFood(this.thisAnt, this.thisLocation, this.visibleLocations);
         this.deliverFood = new DeliverFood(this.thisAnt, this.thisLocation, this.visibleLocations);
     }
 
+    /**
+     * 
+     * @return 
+     */
+    
     public EAction getAction() {
 //        return collectFood.getEAction();
 

@@ -33,9 +33,9 @@ public class ShortestPath {
     private final Board board;
     private final Node[][] nodes;
 
-    public ShortestPath(IAntInfo ant, ILocationInfo start, ILocationInfo goal, int worldSizeX, int worldSizeY) {
+    public ShortestPath(IAntInfo ant, ILocationInfo start, ILocationInfo goal) {
         this.ant = ant;
-        board = new Board(worldSizeX, worldSizeY);
+        board = new Board();
         nodes = board.getBoardNodes();
         startNode = nodes[start.getX()][start.getY()];
         startNode.setDirection(ant.getDirection());
@@ -43,6 +43,13 @@ public class ShortestPath {
         goalNode = nodes[goal.getX()][goal.getY()];
     }
 
+    /**
+     * Calculates shortest path to goal using A*.
+     *
+     * @return List containing path to goal, excluding current location and
+     * including goal location. Null if path could not be found (ex. due to
+     * obstructions)
+     */
     public List<ILocationInfo> getShortestPath() {
         Set<Node> closedList = new HashSet();
         PriorityQueue<Node> openList = new PriorityQueue(Comparator.naturalOrder());
@@ -81,7 +88,7 @@ public class ShortestPath {
                     if (openList.contains(adjacentNode)) {
                         // refresh adjacentNode position in openList
                         adjacentNode.sethVal(getHCost(adjacentNode)); // !!
-                        
+
                         openList.remove(adjacentNode);
                         openList.add(adjacentNode);
                     }
@@ -98,6 +105,10 @@ public class ShortestPath {
                 }
             }
 
+            if (openList.isEmpty()) {
+                return null;
+            }
+
             closedList.add(currentNode);
             println("##to closedList-> " + currentNode);
 
@@ -107,18 +118,6 @@ public class ShortestPath {
             currentNode.setDirection(Calc.getMovementDirection(currentNode.getParent(), currentNode));
 
             println("###Picked with lowest cost--->" + currentNode);
-
-            //debug-------------
-            print("########openList: ");
-
-            for (Node n : openList) {
-                print("(" + n + ")");
-                print("-");
-                print(n.getfVal());
-                print(",");
-            }
-            println("");
-            //debug-------------
 
             // found goal. Run through parent nodes and save to list 
             if (currentNode == goalNode) {
@@ -155,47 +154,47 @@ public class ShortestPath {
         EAction movementAction;
         int direction;
 
-        int curX = currentNode.getX(); // 8
-        int curY = currentNode.getY(); // 9
-        int goalX = goalNode.getX(); // 0
-        int goalY = goalNode.getY(); // 9 
+        int curX = currentNode.getX(); 
+        int curY = currentNode.getY(); 
+        int goalX = goalNode.getX(); 
+        int goalY = goalNode.getY(); 
 
-        int movementX = abs(curX - goalX); // 8
-        int movementY = abs(curY - goalY); // 0
+        int movementX = abs(curX - goalX); 
+        int movementY = abs(curY - goalY); 
 
         // calculate straight movement costs
-        int straightMovementDistance = movementX + movementY; // 8
+        int straightMovementDistance = movementX + movementY; 
         print("straightDistance: " + straightMovementDistance + ", ");
-        int straightMovementCost = Calc.getMovementCost(EAction.MoveForward, ant.getAntType(), false); // 3
-        movementCost += straightMovementDistance * straightMovementCost; // 8*3 =24
+        int straightMovementCost = Calc.getMovementCost(EAction.MoveForward, ant.getAntType(), false); 
+        movementCost += straightMovementDistance * straightMovementCost; 
         print("straightMovementCost: " + movementCost + ", ");
 
         // calculate optional turn costs for x direction
         if (movementX > 0) {
             if (curX > goalX) {
-                direction = 3; //west
+                direction = 3; 
             } else {
-                direction = 1; //east
+                direction = 1; 
             }
-            movementAction = Calc.getMovementAction(currentNode.getDirection(), direction); //turn left
+            movementAction = Calc.getMovementAction(currentNode.getDirection(), direction); 
             print("currentDirection: " + currentNode.getDirection() + ", ");
             print("movementAction: " + movementAction.toString() + ", ");
-            movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward); //2
+            movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
             print("with optional turn1: " + movementCost + ", ");
         }
 
         // calculate optional turn costs for y direction
         if (movementY > 0) {
             if (curY > goalY) {
-                direction = 2; //south
+                direction = 2; 
             } else {
-                direction = 0; // north
+                direction = 0; 
             }
             movementAction = Calc.getMovementAction(ant.getDirection(), direction);
             movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
             print("with optional turn1: " + movementCost);
         }
-        return movementCost; // 26
+        return movementCost; 
     }
 
     /**

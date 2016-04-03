@@ -237,7 +237,7 @@ public class CollectiveMemorytest {
 
         memory.addVisibleLocations(locations);
 
-        Map<Position, Tile> map = memory.getMemory();
+        Map<Position, Tile> map = memory.getTiles();
         Position pos = new Position(1, 0);
 
         assertTrue(map.containsKey(pos));

@@ -4,6 +4,7 @@ import ai.Main;
 import aiantwars.EAntType;
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
+import aiantwars.IOnGameFinished;
 import aiantwars.ITeamInfo;
 import aiantwars.graphicsinterface.IGraphicsAntWarsGUI;
 import aiantwars.impl.AntWarsGameCtrl;
@@ -21,6 +22,7 @@ import memory.CollectiveMemory;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import test.model.OnGameFinished;
 import static utility.Debug.isDebug;
 
 /**
@@ -29,6 +31,7 @@ import static utility.Debug.isDebug;
  */
 public class ShortestPathTest {
 
+    private final IOnGameFinished onFinished;
     Map<String, ILocationInfo> visibleLocations;
     private Board board;
     private IGraphicsAntWarsGUI antwarsGUI;
@@ -38,8 +41,11 @@ public class ShortestPathTest {
     CollectiveMemory cm = CollectiveMemory.getInstance();
 
     public ShortestPathTest() {
-        isDebug = true;
+        onFinished = new OnGameFinished();
+        isDebug = false;
         visibleLocations = new HashMap();
+        cm.saveWorldSizeX(10);
+        cm.saveWorldSizeY(10);
     }
 
     @After
@@ -76,10 +82,10 @@ public class ShortestPathTest {
         loc84.setRock(true);
 
         cm.addVisibleLocations(getLocationsList());
-        board = new Board(10, 10);
+        board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
-        antwarsGUI = new DummyGraphicsAntWarsGUI();
-        factory = new AntWarsGameCtrl(antwarsGUI, board);
+        antwarsGUI = new DummyGraphicsAntWarsGUI(false);
+        factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
         ai = new Main();
         teamInfo = new TeamInfo(1, "Test team");
         IAntInfo ant = new LogicAnt(factory, board, loc84, 0/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
@@ -87,7 +93,7 @@ public class ShortestPathTest {
         ILocationInfo start = new Location(2, 3);
         ILocationInfo goal = new Location(2, 7);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal, board.getSizeX(), board.getSizeY());
+        ShortestPath sp = new ShortestPath(ant, start, goal);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
         assertEquals("2,4", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
@@ -145,10 +151,10 @@ public class ShortestPathTest {
         loc29.setRock(true);
 
         cm.addVisibleLocations(getLocationsList());
-        board = new Board(10, 10);
+        board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
-        antwarsGUI = new DummyGraphicsAntWarsGUI();
-        factory = new AntWarsGameCtrl(antwarsGUI, board);
+        antwarsGUI = new DummyGraphicsAntWarsGUI(false);
+        factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
         ai = new Main();
         teamInfo = new TeamInfo(1, "Test team");
 
@@ -157,7 +163,7 @@ public class ShortestPathTest {
 
         IAntInfo ant = new LogicAnt(factory, board, (Location) start, 2/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal, board.getSizeX(), board.getSizeY());
+        ShortestPath sp = new ShortestPath(ant, start, goal);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
         assertEquals("5,3", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
@@ -227,10 +233,10 @@ public class ShortestPathTest {
         loc29.setRock(true);
 
         cm.addVisibleLocations(getLocationsList());
-        board = new Board(10, 10);
+        board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
-        antwarsGUI = new DummyGraphicsAntWarsGUI();
-        factory = new AntWarsGameCtrl(antwarsGUI, board);
+        antwarsGUI = new DummyGraphicsAntWarsGUI(false);
+        factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
         ai = new Main();
         teamInfo = new TeamInfo(1, "Test team");
 
@@ -239,7 +245,7 @@ public class ShortestPathTest {
 
         IAntInfo ant = new LogicAnt(factory, board, (Location) start, 3/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal, board.getSizeX(), board.getSizeY());
+        ShortestPath sp = new ShortestPath(ant, start, goal);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
         assertEquals("7,3", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
@@ -343,10 +349,10 @@ public class ShortestPathTest {
         loc69.setRock(true);
 
         cm.addVisibleLocations(getLocationsList());
-        board = new Board(10, 10);
+        board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
-        antwarsGUI = new DummyGraphicsAntWarsGUI();
-        factory = new AntWarsGameCtrl(antwarsGUI, board);
+        antwarsGUI = new DummyGraphicsAntWarsGUI(false);
+        factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
         ai = new Main();
         teamInfo = new TeamInfo(1, "Test team");
 
@@ -355,41 +361,58 @@ public class ShortestPathTest {
 
         IAntInfo ant = new LogicAnt(factory, board, (Location) start, 3/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal, board.getSizeX(), board.getSizeY());
+        ShortestPath sp = new ShortestPath(ant, start, goal);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
-//        assertEquals("7,3", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
-//        assertEquals("8,3", shortestPath.get(1).getX() + "," + shortestPath.get(1).getY());
-//        assertEquals("8,4", shortestPath.get(2).getX() + "," + shortestPath.get(2).getY());
-//        assertEquals("8,5", shortestPath.get(3).getX() + "," + shortestPath.get(3).getY());
-//        assertEquals("8,6", shortestPath.get(4).getX() + "," + shortestPath.get(4).getY());
-//        assertEquals("8,7", shortestPath.get(5).getX() + "," + shortestPath.get(5).getY());
-//        assertEquals("8,8", shortestPath.get(6).getX() + "," + shortestPath.get(6).getY());
-//        assertEquals("8,9", shortestPath.get(7).getX() + "," + shortestPath.get(7).getY());
-//        assertEquals("7,9", shortestPath.get(8).getX() + "," + shortestPath.get(8).getY());
-//        assertEquals("6,9", shortestPath.get(9).getX() + "," + shortestPath.get(9).getY());
-//        assertEquals("5,9", shortestPath.get(10).getX() + "," + shortestPath.get(10).getY());
-//        assertEquals("4,9", shortestPath.get(11).getX() + "," + shortestPath.get(11).getY());
-//        assertEquals("4,8", shortestPath.get(12).getX() + "," + shortestPath.get(12).getY());
-//        assertEquals("4,7", shortestPath.get(13).getX() + "," + shortestPath.get(13).getY());
-//        assertEquals("4,6", shortestPath.get(14).getX() + "," + shortestPath.get(14).getY());
-//        assertEquals("4,5", shortestPath.get(15).getX() + "," + shortestPath.get(15).getY());
-//        assertEquals("4,4", shortestPath.get(16).getX() + "," + shortestPath.get(16).getY());
-//        assertEquals("3,4", shortestPath.get(17).getX() + "," + shortestPath.get(17).getY());
-//        assertEquals("2,4", shortestPath.get(18).getX() + "," + shortestPath.get(18).getY());
-//        assertEquals("1,4", shortestPath.get(19).getX() + "," + shortestPath.get(19).getY());
-//        assertEquals("0,4", shortestPath.get(20).getX() + "," + shortestPath.get(20).getY());
-//        assertEquals("0,5", shortestPath.get(21).getX() + "," + shortestPath.get(21).getY());
-//        assertEquals("0,6", shortestPath.get(22).getX() + "," + shortestPath.get(22).getY());
-//        assertEquals("0,7", shortestPath.get(23).getX() + "," + shortestPath.get(23).getY());
-//        assertEquals("0,8", shortestPath.get(24).getX() + "," + shortestPath.get(24).getY());
-//        assertEquals("0,9", shortestPath.get(25).getX() + "," + shortestPath.get(25).getY());
+        assertEquals("1,0", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
+        assertEquals("2,0", shortestPath.get(1).getX() + "," + shortestPath.get(1).getY());
+        assertEquals("3,0", shortestPath.get(2).getX() + "," + shortestPath.get(2).getY());
+        assertEquals("3,1", shortestPath.get(3).getX() + "," + shortestPath.get(3).getY());
+        assertEquals("3,2", shortestPath.get(4).getX() + "," + shortestPath.get(4).getY());
+        assertEquals("3,3", shortestPath.get(5).getX() + "," + shortestPath.get(5).getY());
+        assertEquals("2,3", shortestPath.get(6).getX() + "," + shortestPath.get(6).getY());
+        assertEquals("1,3", shortestPath.get(7).getX() + "," + shortestPath.get(7).getY());
+        assertEquals("0,3", shortestPath.get(8).getX() + "," + shortestPath.get(8).getY());
+        assertEquals("0,4", shortestPath.get(9).getX() + "," + shortestPath.get(9).getY());
+        assertEquals("0,5", shortestPath.get(10).getX() + "," + shortestPath.get(10).getY());
+        assertEquals("1,5", shortestPath.get(11).getX() + "," + shortestPath.get(11).getY());
+        assertEquals("2,5", shortestPath.get(12).getX() + "," + shortestPath.get(12).getY());
+        assertEquals("3,5", shortestPath.get(13).getX() + "," + shortestPath.get(13).getY());
+        assertEquals("4,5", shortestPath.get(14).getX() + "," + shortestPath.get(14).getY());
+        assertEquals("5,5", shortestPath.get(15).getX() + "," + shortestPath.get(15).getY());
+        assertEquals("5,4", shortestPath.get(16).getX() + "," + shortestPath.get(16).getY());
+        assertEquals("5,3", shortestPath.get(17).getX() + "," + shortestPath.get(17).getY());
+        assertEquals("5,2", shortestPath.get(18).getX() + "," + shortestPath.get(18).getY());
+        assertEquals("5,1", shortestPath.get(19).getX() + "," + shortestPath.get(19).getY());
+        assertEquals("6,1", shortestPath.get(20).getX() + "," + shortestPath.get(20).getY());
+        assertEquals("7,1", shortestPath.get(21).getX() + "," + shortestPath.get(21).getY());
+        assertEquals("8,1", shortestPath.get(22).getX() + "," + shortestPath.get(22).getY());
+        assertEquals("8,2", shortestPath.get(23).getX() + "," + shortestPath.get(23).getY());
+        assertEquals("8,3", shortestPath.get(24).getX() + "," + shortestPath.get(24).getY());
+        assertEquals("9,3", shortestPath.get(25).getX() + "," + shortestPath.get(25).getY());
+        assertEquals("9,4", shortestPath.get(26).getX() + "," + shortestPath.get(26).getY());
+        assertEquals("9,5", shortestPath.get(27).getX() + "," + shortestPath.get(27).getY());
+        assertEquals("9,6", shortestPath.get(28).getX() + "," + shortestPath.get(28).getY());
+        assertEquals("9,7", shortestPath.get(29).getX() + "," + shortestPath.get(29).getY());
+        assertEquals("8,7", shortestPath.get(30).getX() + "," + shortestPath.get(30).getY());
+        assertEquals("7,7", shortestPath.get(31).getX() + "," + shortestPath.get(31).getY());
+        assertEquals("6,7", shortestPath.get(32).getX() + "," + shortestPath.get(32).getY());
+        assertEquals("5,7", shortestPath.get(33).getX() + "," + shortestPath.get(33).getY());
+        assertEquals("5,8", shortestPath.get(34).getX() + "," + shortestPath.get(34).getY());
+        assertEquals("5,9", shortestPath.get(35).getX() + "," + shortestPath.get(35).getY());
+        assertEquals("4,9", shortestPath.get(36).getX() + "," + shortestPath.get(36).getY());
+        assertEquals("3,9", shortestPath.get(37).getX() + "," + shortestPath.get(37).getY());
+        assertEquals("2,9", shortestPath.get(38).getX() + "," + shortestPath.get(38).getY());
+        assertEquals("1,9", shortestPath.get(39).getX() + "," + shortestPath.get(39).getY());
+        assertEquals("0,9", shortestPath.get(40).getX() + "," + shortestPath.get(40).getY());
+        assertEquals("0,8", shortestPath.get(41).getX() + "," + shortestPath.get(41).getY());
+        assertEquals("0,7", shortestPath.get(42).getX() + "," + shortestPath.get(42).getY());
     }
-    
+
     @Test
     public void testScenario5() {
         Map<String, ILocationInfo> locations = getLocationsMap();
-        
+
         Location loc33 = (Location) locations.get("3,3");
         loc33.setRock(true);
         Location loc34 = (Location) locations.get("3,4");
@@ -400,12 +423,12 @@ public class ShortestPathTest {
         loc36.setRock(true);
         Location loc37 = (Location) locations.get("3,7");
         loc37.setRock(true);
-        
-        cm.addVisibleLocations(getLocationsList());
-        board = new Board(10, 10);
 
-        antwarsGUI = new DummyGraphicsAntWarsGUI();
-        factory = new AntWarsGameCtrl(antwarsGUI, board);
+        cm.addVisibleLocations(getLocationsList());
+        board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
+
+        antwarsGUI = new DummyGraphicsAntWarsGUI(false);
+        factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
         ai = new Main();
         teamInfo = new TeamInfo(1, "Test team");
 
@@ -414,35 +437,76 @@ public class ShortestPathTest {
 
         IAntInfo ant = new LogicAnt(factory, board, (Location) start, 3/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal, board.getSizeX(), board.getSizeY());
+        ShortestPath sp = new ShortestPath(ant, start, goal);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
-//        assertEquals("7,3", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
-//        assertEquals("8,3", shortestPath.get(1).getX() + "," + shortestPath.get(1).getY());
-//        assertEquals("8,4", shortestPath.get(2).getX() + "," + shortestPath.get(2).getY());
-//        assertEquals("8,5", shortestPath.get(3).getX() + "," + shortestPath.get(3).getY());
-//        assertEquals("8,6", shortestPath.get(4).getX() + "," + shortestPath.get(4).getY());
-//        assertEquals("8,7", shortestPath.get(5).getX() + "," + shortestPath.get(5).getY());
-//        assertEquals("8,8", shortestPath.get(6).getX() + "," + shortestPath.get(6).getY());
-//        assertEquals("8,9", shortestPath.get(7).getX() + "," + shortestPath.get(7).getY());
-//        assertEquals("7,9", shortestPath.get(8).getX() + "," + shortestPath.get(8).getY());
-//        assertEquals("6,9", shortestPath.get(9).getX() + "," + shortestPath.get(9).getY());
-//        assertEquals("5,9", shortestPath.get(10).getX() + "," + shortestPath.get(10).getY());
-//        assertEquals("4,9", shortestPath.get(11).getX() + "," + shortestPath.get(11).getY());
-//        assertEquals("4,8", shortestPath.get(12).getX() + "," + shortestPath.get(12).getY());
-//        assertEquals("4,7", shortestPath.get(13).getX() + "," + shortestPath.get(13).getY());
-//        assertEquals("4,6", shortestPath.get(14).getX() + "," + shortestPath.get(14).getY());
-//        assertEquals("4,5", shortestPath.get(15).getX() + "," + shortestPath.get(15).getY());
-//        assertEquals("4,4", shortestPath.get(16).getX() + "," + shortestPath.get(16).getY());
-//        assertEquals("3,4", shortestPath.get(17).getX() + "," + shortestPath.get(17).getY());
-//        assertEquals("2,4", shortestPath.get(18).getX() + "," + shortestPath.get(18).getY());
-//        assertEquals("1,4", shortestPath.get(19).getX() + "," + shortestPath.get(19).getY());
-//        assertEquals("0,4", shortestPath.get(20).getX() + "," + shortestPath.get(20).getY());
-//        assertEquals("0,5", shortestPath.get(21).getX() + "," + shortestPath.get(21).getY());
-//        assertEquals("0,6", shortestPath.get(22).getX() + "," + shortestPath.get(22).getY());
-//        assertEquals("0,7", shortestPath.get(23).getX() + "," + shortestPath.get(23).getY());
-//        assertEquals("0,8", shortestPath.get(24).getX() + "," + shortestPath.get(24).getY());
-//        assertEquals("0,9", shortestPath.get(25).getX() + "," + shortestPath.get(25).getY());
+        assertEquals("2,5", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
+        assertEquals("2,4", shortestPath.get(1).getX() + "," + shortestPath.get(1).getY());
+        assertEquals("2,3", shortestPath.get(2).getX() + "," + shortestPath.get(2).getY());
+        assertEquals("2,2", shortestPath.get(3).getX() + "," + shortestPath.get(3).getY());
+        assertEquals("3,2", shortestPath.get(4).getX() + "," + shortestPath.get(4).getY());
+        assertEquals("4,2", shortestPath.get(5).getX() + "," + shortestPath.get(5).getY());
+        assertEquals("5,2", shortestPath.get(6).getX() + "," + shortestPath.get(6).getY());
+        assertEquals("6,2", shortestPath.get(7).getX() + "," + shortestPath.get(7).getY());
+        assertEquals("6,3", shortestPath.get(8).getX() + "," + shortestPath.get(8).getY());
+        assertEquals("6,4", shortestPath.get(9).getX() + "," + shortestPath.get(9).getY());
+        assertEquals("6,5", shortestPath.get(10).getX() + "," + shortestPath.get(10).getY());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testScenario6() {
+        Map<String, ILocationInfo> locations = getLocationsMap();
+
+        Location loc23 = (Location) locations.get("2,3");
+        loc23.setRock(true);
+        Location loc33 = (Location) locations.get("3,3");
+        loc33.setRock(true);
+        Location loc43 = (Location) locations.get("4,3");
+        loc43.setRock(true);
+        Location loc53 = (Location) locations.get("5,3");
+        loc53.setRock(true);
+        Location loc63 = (Location) locations.get("6,3");
+        loc63.setRock(true);
+        Location loc24 = (Location) locations.get("2,4");
+        loc24.setRock(true);
+        Location loc25 = (Location) locations.get("2,5");
+        loc25.setRock(true);
+        Location loc26 = (Location) locations.get("2,6");
+        loc26.setRock(true);
+        Location loc27 = (Location) locations.get("2,7");
+        loc27.setRock(true);
+        Location loc37 = (Location) locations.get("3,7");
+        loc37.setRock(true);
+        Location loc47 = (Location) locations.get("4,7");
+        loc47.setRock(true);
+        Location loc57 = (Location) locations.get("5,7");
+        loc57.setRock(true);
+        Location loc67 = (Location) locations.get("6,7");
+        loc67.setRock(true);
+        Location loc66 = (Location) locations.get("6,6");
+        loc66.setRock(true);
+        Location loc65 = (Location) locations.get("6,5");
+        loc65.setRock(true);
+        Location loc64 = (Location) locations.get("6,4");
+        loc64.setRock(true);
+
+        cm.addVisibleLocations(getLocationsList());
+        board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
+
+        antwarsGUI = new DummyGraphicsAntWarsGUI(false);
+        factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
+        ai = new Main();
+        teamInfo = new TeamInfo(1, "Test team");
+
+        ILocationInfo start = new Location(4, 5);
+        ILocationInfo goal = new Location(8, 8);
+
+        IAntInfo ant = new LogicAnt(factory, board, (Location) start, 0/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
+
+        ShortestPath sp = new ShortestPath(ant, start, goal);
+        List<ILocationInfo> shortestPath = sp.getShortestPath();
+
+        assertEquals("exception", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
     }
 
     private Map getLocationsMap() {
