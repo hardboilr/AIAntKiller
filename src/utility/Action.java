@@ -10,6 +10,11 @@ import java.util.Random;
  */
 public class Action {
 
+    /**
+     * Returns random action, unless action is "attack", "dropFood", "dropSoil" or "LayEgg" -> pass
+     * @param possibleActions
+     * @return random action
+     */
     public static EAction getRandomAction(List<EAction> possibleActions) {
         Random rnd = new Random();
         EAction action = possibleActions.get(rnd.nextInt(possibleActions.size()));
