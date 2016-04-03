@@ -53,6 +53,10 @@ public class CollectiveMemory {
     public Map<Position, Tile> getTiles() {
         return tiles;
     }
+    
+    public List<Tile> getTilesAsList() {
+        return new ArrayList(tiles.values());
+    }
 
     public Tile getTile(Position pos) {
         return tiles.get(pos);

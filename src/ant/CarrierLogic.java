@@ -6,6 +6,7 @@ import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
 import aiantwars.impl.Location;
 import algorithm.ShortestPath;
+import behaviour.food.ScavengeFood;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,10 +63,15 @@ public class CarrierLogic {
                 ShortestPath path = new ShortestPath(thisAnt, thisLocation, findDepositLocation());
                 int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
                 EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
-                if(possibleActions.contains(movementAction)) {
+                if (possibleActions.contains(movementAction)) {
                     return movementAction;
                 }
             }
+        } else if (thisLocation.getFoodCount() == 0) {
+            // e. when current position has 0 food, then scavenge food
+            println("picked e");
+            ScavengeFood scavengeFood = new ScavengeFood(thisAnt);
+            
         }
         println("Picked random");
         return getRandomAction(possibleActions);

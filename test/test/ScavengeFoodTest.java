@@ -16,6 +16,7 @@ import aiantwars.impl.TeamInfo;
 import behaviour.food.ScavengeFood;
 import java.util.ArrayList;
 import java.util.List;
+import memory.CollectiveMemory;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import test.model.OnGameFinished;
@@ -26,6 +27,7 @@ import test.model.OnGameFinished;
  */
 public class ScavengeFoodTest {
 
+    private final CollectiveMemory cm = CollectiveMemory.getInstance();
     private final Board board;
     private final IAntInfo thisAnt;
     private final ILocationInfo thisLocation;
@@ -68,7 +70,10 @@ public class ScavengeFoodTest {
                 add(loc21);
             }
         };
-        ScavengeFood collectFood = new ScavengeFood(thisAnt, thisLocation, visibleLocations);
+        cm.addVisibleLocations(visibleLocations);
+        
+        
+        ScavengeFood collectFood = new ScavengeFood(thisAnt);
         EAction eAction = collectFood.getEAction();
         assertEquals(EAction.TurnLeft, eAction);
     }
@@ -94,7 +99,9 @@ public class ScavengeFoodTest {
                 add(loc21);
             }
         };
-        ScavengeFood collectFood = new ScavengeFood(thisAnt, thisLocation, visibleLocations);
+        cm.addVisibleLocations(visibleLocations);
+        
+        ScavengeFood collectFood = new ScavengeFood(thisAnt);
         EAction eAction = collectFood.getEAction();
         assertEquals(EAction.MoveBackward, eAction);
     }
@@ -120,7 +127,9 @@ public class ScavengeFoodTest {
                 add(loc21);
             }
         };
-        ScavengeFood collectFood = new ScavengeFood(thisAnt, thisLocation, visibleLocations);
+        cm.addVisibleLocations(visibleLocations);
+        
+        ScavengeFood collectFood = new ScavengeFood(thisAnt);
         EAction eAction = collectFood.getEAction();
         assertEquals(EAction.TurnLeft, eAction);
     }
