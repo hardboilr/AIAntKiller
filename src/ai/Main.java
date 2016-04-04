@@ -27,22 +27,28 @@ public class Main implements IAntAI {
 
         EAction action = null;
 
+        // ALL
         if (possibleActions.contains(EAction.EatFood) && thisAnt.getHitPoints() < 10) {
             action = EAction.EatFood;
 
+            // CARRIER
         } else if (thisAnt.getAntType().equals(EAntType.CARRIER)) {
-            CarrierLogic carrier = new CarrierLogic(thisAnt, thisLocation, possibleActions);
-            action = carrier.getAction();
-
+            CarrierLogic carrierLogic = new CarrierLogic(thisAnt, thisLocation, possibleActions);
+            action = carrierLogic.getAction();
+            
+            // QUEEN
         } else if (thisAnt.getAntType().equals(EAntType.QUEEN)) {
             if (possibleActions.contains(EAction.LayEgg)) {
                 action = EAction.LayEgg;
             } else {
-                getRandomAction(possibleActions);
+                action = getRandomAction(possibleActions);
             }
-
+            
+            // SCOUT
         } else if (thisAnt.getAntType().equals(EAntType.SCOUT)) {
+            action = getRandomAction(possibleActions);
 
+            //WARRIOR
         } else if (thisAnt.getAntType().equals(EAntType.WARRIOR)) {
             if (possibleActions.contains(EAction.Attack) && visibleLocations.get(0).getAnt().getTeamInfo().getTeamID() != thisAnt.getTeamInfo().getTeamID()) {
                 action = EAction.Attack;
@@ -56,8 +62,8 @@ public class Main implements IAntAI {
             actions.append(a.toString());
             actions.append(", ");
         }
-        System.out.println(actions.toString());
-        System.out.println("ID: " + thisAnt.antID() + " chooseAction: " + action);
+        System.out.println("Available actions: " + actions.toString());
+        System.out.println("ID: " + thisAnt.antID() + " chose action: " + action);
         return action;
     }
 
