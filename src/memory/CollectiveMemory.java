@@ -10,9 +10,11 @@ import java.util.Map;
 public class CollectiveMemory {
 
     private static CollectiveMemory instance = null;
-    private final Map<Position, Tile> memory = new HashMap();
+    private final Map<Position, Tile> tiles = new HashMap();
     private final List<IAntInfo> ants = new ArrayList();
     private ILocationInfo queenSpawn;
+    private int worldSizeX;
+    private int worldSizeY;
 
     private CollectiveMemory() {
     }
@@ -32,19 +34,41 @@ public class CollectiveMemory {
             boolean isFilled = visibleLocation.isFilled();
             boolean isRock = visibleLocation.isRock();
 
-            if (memory.containsKey(pos)) {
-                memory.get(pos);
+            if (tiles.containsKey(pos)) {
+                tiles.get(pos);
                 Tile tile = new Tile(foodCount, ant, isFilled, isRock);
-                memory.put(pos, tile);
+                tiles.put(pos, tile);
             } else {
                 Tile tile = new Tile(foodCount, ant, isFilled, isRock);
-                memory.put(pos, tile);
+                tiles.put(pos, tile);
             }
         }
     }
+    
+    public void addLocation(ILocationInfo location) {
+        Tile tile = new Tile(location);
+        tiles.put(new Position(tile.getX(), tile.getY()), tile);
+    }
 
-    public Map<Position, Tile> getMemory() {
-        return memory;
+    public Map<Position, Tile> getTiles() {
+        return tiles;
+    }
+    
+    public List<Tile> getTilesAsList() {
+        return new ArrayList(tiles.values());
+    }
+
+    public Tile getTile(Position pos) {
+        return tiles.get(pos);
+    }
+
+    public Tile getTile(String pos) {
+        String[] positions = pos.split(",");
+        return tiles.get(new Position(Integer.parseInt(positions[0]), Integer.parseInt(positions[1])));
+    }
+
+    public void clearMemory() {
+        instance = new CollectiveMemory();
     }
 
     public void addAnt(IAntInfo ant) {
@@ -65,5 +89,21 @@ public class CollectiveMemory {
 
     public ILocationInfo getQueenSpawn() {
         return queenSpawn;
+    }
+
+    public void saveWorldSizeX(int worldSizeX) {
+        this.worldSizeX = worldSizeX;
+    }
+
+    public void saveWorldSizeY(int worldSizeY) {
+        this.worldSizeY = worldSizeY;
+    }
+
+    public int getWorldSizeX() {
+        return worldSizeX;
+    }
+
+    public int getWorldSizeY() {
+        return worldSizeY;
     }
 }

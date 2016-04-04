@@ -1,33 +1,28 @@
 package algorithm.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import static utility.Debug.println;
+
 /**
- * Node containing 
- * 
  * @author Tobias
  */
-public class Node {
+public class Node implements Comparable<Node> {
 
     private final int x;
     private final int y;
     private int direction;
-    private double gVal; // movement cost from starting node to this node
-    private double hVal; // estimated movement cost from this node to final destination
+    private double gVal = Double.POSITIVE_INFINITY; // movement cost from starting node to this node
+    private double hVal = Double.POSITIVE_INFINITY;
+    ; // estimated movement cost from this node to final destination
     private Node parent;
-    private Node nodeNorth;
-    private Node nodeSouth;
-    private Node nodeWest;
-    private Node nodeEast;
+    private final List<Node> adjacentNodes;
 
-    public Node(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public Node(int x, int y, Node parent, int direction) {
+    public Node(int x, int y, int direction) {
         this.x = x;
         this.y = y;
         this.direction = direction;
-        this.parent = parent;
+        adjacentNodes = new ArrayList();
     }
 
     public double getgVal() {
@@ -46,7 +41,7 @@ public class Node {
         this.hVal = hVal;
     }
 
-    public double getHVal() {
+    public double getfVal() {
         return hVal + gVal;
     }
 
@@ -74,35 +69,34 @@ public class Node {
         this.direction = direction;
     }
 
-    public Node getNodeNorth() {
-        return nodeNorth;
+    public List<Node> getAdjacentNodes() {
+        return adjacentNodes;
     }
 
-    public void setNodeNorth(Node nodeNorth) {
-        this.nodeNorth = nodeNorth;
+    public void addAdjacentNode(Node n) {
+        adjacentNodes.add(n);
     }
 
-    public Node getNodeSouth() {
-        return nodeSouth;
+    @Override
+    public String toString() {
+        return x + "," + y;
     }
 
-    public void setNodeSouth(Node nodeSouth) {
-        this.nodeSouth = nodeSouth;
+    @Override
+    public int compareTo(Node o) {
+        if (this.getfVal() < o.getfVal()) {
+            return -1;
+        }
+        if (this.getfVal() > o.getfVal()) {
+            return 1;
+        }
+        if (this.gethVal() < o.gethVal()) {
+            return -1;
+        }
+        if (this.gethVal() > o.gethVal()) {
+            return 1;
+        }
+        return 0;
     }
 
-    public Node getNodeWest() {
-        return nodeWest;
-    }
-
-    public void setNodeWest(Node nodeWest) {
-        this.nodeWest = nodeWest;
-    }
-
-    public Node getNodeEast() {
-        return nodeEast;
-    }
-
-    public void setNodeEast(Node nodeEast) {
-        this.nodeEast = nodeEast;
-    }
 }

@@ -5,8 +5,10 @@ import comparator.FoodCostComparator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import memory.Tile;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import static utility.Debug.println;
 
 /**
  * 
@@ -16,77 +18,77 @@ public class ComparatorTest {
 
     @Test
     public void testFoodCostComparator1() {
-        System.out.println("--- testFoodCostComparator1 ---");
+        println("--- testFoodCostComparator1 ---");
 
-        List<LocationExtends> path = new ArrayList();
+        List<Tile> path = new ArrayList();
 
-        LocationExtends locNorth = new LocationExtends(0, 1, null, 1, 1);
+        Tile locNorth = new Tile(0, 1, null, 1, 1);
         locNorth.setMovementCost(3);
         path.add(locNorth);
-        System.out.println(locNorth);
+        println(locNorth);
 
-        LocationExtends locSouth = new LocationExtends(0, 2, null, 3, 0);
+        Tile locSouth = new Tile(0, 2, null, 3, 0);
         locSouth.setMovementCost(4);
         path.add(locSouth);
-        System.out.println(locSouth);
+        println(locSouth);
 
-        LocationExtends locEast = new LocationExtends(1, 0, null, 2, 4);
+        Tile locEast = new Tile(1, 0, null, 2, 4);
         locEast.setMovementCost(5);
         path.add(locEast);
-        System.out.println(locEast);
+        println(locEast);
 
-        LocationExtends locWest = new LocationExtends(1, 1, null, 4, 6);
+        Tile locWest = new Tile(1, 1, null, 4, 6);
         locWest.setMovementCost(5);
         path.add(locWest);
-        System.out.println(locWest);
+        println(locWest);
 
-        System.out.println("--- Sorted ---");
+        println("--- Sorted ---");
         Collections.sort(path, new FoodCostComparator());
-        for (LocationExtends location : path) {
-            System.out.println(location);
+        for (Tile location : path) {
+            println(location);
         }
         assertEquals(path.get(0), locWest);
         assertEquals(path.get(1), locEast);
         assertEquals(path.get(2), locNorth);
         assertEquals(path.get(3), locSouth);
-        System.out.println("\n");
+        println("\n");
     }
 
     @Test
     public void testFoodCostComparator2() {
-        System.out.println("--- testFoodCostComparator2 ---");
-        List<LocationExtends> path = new ArrayList();
+        println("--- testFoodCostComparator2 ---");
+        List<Tile> path = new ArrayList();
 
-        LocationExtends locNorth = new LocationExtends(0, 1, null, 1, 4);
+        Tile locNorth = new Tile(0, 1, null, 1, 4);
         locNorth.setMovementCost(3);
         path.add(locNorth);
-        System.out.println(locNorth);
+        println(locNorth);
 
-        LocationExtends locSouth = new LocationExtends(0, 2, null, 3, 0);
+        Tile locSouth = new Tile(0, 2, null, 3, 0);
         locSouth.setMovementCost(4);
         path.add(locSouth);
-        System.out.println(locSouth);
+        println(locSouth);
 
-        LocationExtends locEast = new LocationExtends(1, 0, null, 2, 4);
+        Tile locEast = new Tile(1, 0, null, 2, 4);
         locEast.setMovementCost(5);
         path.add(locEast);
-        System.out.println(locEast);
+        println(locEast);
 
-        LocationExtends locWest = new LocationExtends(1, 1, null, 4, 6);
+        Tile locWest = new Tile(1, 1, null, 4, 6);
         locWest.setMovementCost(5);
         path.add(locWest);
-        System.out.println(locWest);
+        println(locWest);
 
-        System.out.println("--- Sorted ---");
+        println("--- Sorted ---");
         Collections.sort(path, new FoodCostComparator());
-        for (LocationExtends location : path) {
-            System.out.println(location);
+        for (Tile location : path) {
+            println(location);
         }
         assertEquals(path.get(0), locWest);
         assertEquals(path.get(1), locNorth);
         assertEquals(path.get(2), locEast);
         assertEquals(path.get(3), locSouth);
-        System.out.println("\n");
+        println("\n");
     }
 
 }
