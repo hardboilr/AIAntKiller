@@ -154,29 +154,29 @@ public class ShortestPath {
         EAction movementAction;
         int direction;
 
-        int curX = currentNode.getX(); 
-        int curY = currentNode.getY(); 
-        int goalX = goalNode.getX(); 
-        int goalY = goalNode.getY(); 
+        int curX = currentNode.getX();
+        int curY = currentNode.getY();
+        int goalX = goalNode.getX();
+        int goalY = goalNode.getY();
 
-        int movementX = abs(curX - goalX); 
-        int movementY = abs(curY - goalY); 
+        int movementX = abs(curX - goalX);
+        int movementY = abs(curY - goalY);
 
         // calculate straight movement costs
-        int straightMovementDistance = movementX + movementY; 
+        int straightMovementDistance = movementX + movementY;
         print("straightDistance: " + straightMovementDistance + ", ");
-        int straightMovementCost = Calc.getMovementCost(EAction.MoveForward, ant.getAntType(), false); 
-        movementCost += straightMovementDistance * straightMovementCost; 
+        int straightMovementCost = Calc.getMovementCost(EAction.MoveForward, ant.getAntType(), false);
+        movementCost += straightMovementDistance * straightMovementCost;
         print("straightMovementCost: " + movementCost + ", ");
 
         // calculate optional turn costs for x direction
         if (movementX > 0) {
             if (curX > goalX) {
-                direction = 3; 
+                direction = 3;
             } else {
-                direction = 1; 
+                direction = 1;
             }
-            movementAction = Calc.getMovementAction(currentNode.getDirection(), direction); 
+            movementAction = Calc.getMovementAction(currentNode.getDirection(), direction);
             print("currentDirection: " + currentNode.getDirection() + ", ");
             print("movementAction: " + movementAction.toString() + ", ");
             movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
@@ -186,15 +186,15 @@ public class ShortestPath {
         // calculate optional turn costs for y direction
         if (movementY > 0) {
             if (curY > goalY) {
-                direction = 2; 
+                direction = 2;
             } else {
-                direction = 0; 
+                direction = 0;
             }
             movementAction = Calc.getMovementAction(ant.getDirection(), direction);
             movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
             print("with optional turn1: " + movementCost);
         }
-        return movementCost; 
+        return movementCost;
     }
 
     /**

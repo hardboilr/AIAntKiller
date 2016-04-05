@@ -41,8 +41,8 @@ public class CarrierLogic {
 
     public EAction getAction() {
 //        System.out.println("\u001B[31m test");
-        
-        println("Carrier: Current AP: " +  thisAnt.getActionPoints() + "| Available actions: " + possibleActions.toString());
+
+        println("Carrier: Current AP: " + thisAnt.getActionPoints() + "| Available actions: " + possibleActions.toString());
         println("Carrier: foodLoad: " + thisAnt.getFoodLoad() + ", maxFoodLoad: " + maxFoodLoad);
 
         if (isDeposit() && possibleActions.contains(EAction.DropFood) && thisAnt.getFoodLoad() > minFoodLoad) {

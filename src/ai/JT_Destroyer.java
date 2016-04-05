@@ -7,11 +7,11 @@ import aiantwars.IAntInfo;
 import aiantwars.IEgg;
 import aiantwars.ILocationInfo;
 import ant.CarrierLogic;
+import ant.QueenLogic;
 import behaviour.Breeding;
 import java.util.List;
 import memory.CollectiveMemory;
 import static utility.Action.getRandomAction;
-import utility.Debug;
 import static utility.Debug.println;
 
 public class JT_Destroyer implements IAntAI {
@@ -22,7 +22,7 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
-        
+
         visibleLocations.add(thisLocation);
         collectiveMemory.addVisibleLocations(visibleLocations);
 
@@ -40,33 +40,31 @@ public class JT_Destroyer implements IAntAI {
 
             // QUEEN
         } else if (thisAnt.getAntType().equals(EAntType.QUEEN)) {
-            if (possibleActions.contains(EAction.LayEgg)) {
-                action = EAction.LayEgg;
-            } else if (possibleActions.contains(EAction.PickUpFood)) {
-                action = EAction.PickUpFood;
-            } else {
-                action = getRandomAction(possibleActions);
-            }
+            QueenLogic queenLogic = QueenLogic.getInstance();
+            action = queenLogic.getAction(thisAnt, thisLocation, possibleActions, visibleLocations, turn);
+            println("Queen: chose action: " + action.toString());
 
             // SCOUT
         } else if (thisAnt.getAntType().equals(EAntType.SCOUT)) {
             action = getRandomAction(possibleActions);
-
+            println("Scout: chose action: " + action.toString());
             //WARRIOR
         } else if (thisAnt.getAntType().equals(EAntType.WARRIOR)) {
             if (possibleActions.contains(EAction.Attack) && visibleLocations.get(0).getAnt().getTeamInfo().getTeamID() != thisAnt.getTeamInfo().getTeamID()) {
                 action = EAction.Attack;
+            } else if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 2) {
+                action = EAction.PickUpFood;
             } else {
-                getRandomAction(possibleActions);
+                action = getRandomAction(possibleActions);
             }
+            println("Warrior: chose action: " + action.toString());
         }
 
         return action;
     }
 
     @Override
-    public void onStartTurn(IAntInfo thisAnt, int turn
-    ) {
+    public void onStartTurn(IAntInfo thisAnt, int turn) {
         this.turn = turn;
         println("System: ID: " + thisAnt.antID() + " onStartTurn(" + turn + ")");
     }
@@ -97,7 +95,7 @@ public class JT_Destroyer implements IAntAI {
             collectiveMemory.setQueenSpawn(thisLocation);
         }
         println("System: ID: " + thisAnt.antID() + " onHatch");
-        
+
         collectiveMemory.saveWorldSizeX(worldSizeX);
         collectiveMemory.saveWorldSizeY(worldSizeY);
     }
