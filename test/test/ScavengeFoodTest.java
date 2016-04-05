@@ -1,6 +1,6 @@
 package test;
 
-import ai.Main;
+import ai.JT_Destroyer;
 import aiantwars.EAction;
 import aiantwars.EAntType;
 import aiantwars.IAntInfo;
@@ -43,7 +43,7 @@ public class ScavengeFoodTest {
         thisLocation = new Location(1, 1);
         Location location2 = new Location(4, 4);
         ITeamInfo teamInfo = new TeamInfo(1, "Test team");
-        Main ai = new Main();
+        JT_Destroyer ai = new JT_Destroyer();
         thisAnt = new LogicAnt(factory, board, (Location) thisLocation, 0, 1, teamInfo, EAntType.CARRIER, ai);
         queen = new LogicAnt(factory, board, location2, 4, 2, teamInfo, EAntType.QUEEN, ai);
 

@@ -10,6 +10,7 @@ import memory.CollectiveMemory;
 import memory.Position;
 import memory.Tile;
 import utility.Calc;
+import static utility.Debug.println;
 
 /**
  *
@@ -63,6 +64,9 @@ public class ScavengeFood {
             possibleLocations.add(tile);
         }
 
+        println("possibleLocations size: " + possibleLocations.size());
+        println("C: firstLocation: " + possibleLocations.first().toString());
+        
         int chosenDirection = possibleLocations.first().getDirection();
         return Calc.getMovementAction(thisAnt.getDirection(), chosenDirection);
     }

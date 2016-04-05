@@ -1,6 +1,6 @@
 package test;
 
-import ai.Main;
+import ai.JT_Destroyer;
 import aiantwars.EAntType;
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
@@ -37,7 +37,7 @@ public class ShortestPathTest {
     private IGraphicsAntWarsGUI antwarsGUI;
     private AntWarsGameCtrl factory;
     private ITeamInfo teamInfo;
-    private Main ai;
+    private JT_Destroyer ai;
     CollectiveMemory cm = CollectiveMemory.getInstance();
 
     public ShortestPathTest() {
@@ -86,7 +86,7 @@ public class ShortestPathTest {
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
         factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
-        ai = new Main();
+        ai = new JT_Destroyer();
         teamInfo = new TeamInfo(1, "Test team");
         IAntInfo ant = new LogicAnt(factory, board, loc84, 0/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
@@ -155,7 +155,7 @@ public class ShortestPathTest {
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
         factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
-        ai = new Main();
+        ai = new JT_Destroyer();
         teamInfo = new TeamInfo(1, "Test team");
 
         ILocationInfo start = new Location(6, 3);
@@ -237,7 +237,7 @@ public class ShortestPathTest {
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
         factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
-        ai = new Main();
+        ai = new JT_Destroyer();
         teamInfo = new TeamInfo(1, "Test team");
 
         ILocationInfo start = new Location(6, 3);
@@ -353,7 +353,7 @@ public class ShortestPathTest {
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
         factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
-        ai = new Main();
+        ai = new JT_Destroyer();
         teamInfo = new TeamInfo(1, "Test team");
 
         ILocationInfo start = new Location(1, 1);
@@ -429,7 +429,7 @@ public class ShortestPathTest {
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
         factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
-        ai = new Main();
+        ai = new JT_Destroyer();
         teamInfo = new TeamInfo(1, "Test team");
 
         ILocationInfo start = new Location(1, 5);
@@ -495,7 +495,7 @@ public class ShortestPathTest {
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
         factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
-        ai = new Main();
+        ai = new JT_Destroyer();
         teamInfo = new TeamInfo(1, "Test team");
 
         ILocationInfo start = new Location(4, 5);

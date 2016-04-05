@@ -9,19 +9,20 @@ import aiantwars.ILocationInfo;
 import ant.CarrierLogic;
 import behaviour.Breeding;
 import java.util.List;
-import java.util.Random;
 import memory.CollectiveMemory;
 import static utility.Action.getRandomAction;
+import utility.Debug;
+import static utility.Debug.println;
 
-public class Main implements IAntAI {
+public class JT_Destroyer implements IAntAI {
 
-    private final Random rnd = new Random();
     private final CollectiveMemory collectiveMemory = CollectiveMemory.getInstance();
     private final Breeding breeding = Breeding.getInstance();
     private int turn;
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
+        
         visibleLocations.add(thisLocation);
         collectiveMemory.addVisibleLocations(visibleLocations);
 
@@ -35,15 +36,18 @@ public class Main implements IAntAI {
         } else if (thisAnt.getAntType().equals(EAntType.CARRIER)) {
             CarrierLogic carrierLogic = new CarrierLogic(thisAnt, thisLocation, possibleActions);
             action = carrierLogic.getAction();
-            
+            println("Carrier: chose action: " + action.toString());
+
             // QUEEN
         } else if (thisAnt.getAntType().equals(EAntType.QUEEN)) {
             if (possibleActions.contains(EAction.LayEgg)) {
                 action = EAction.LayEgg;
+            } else if (possibleActions.contains(EAction.PickUpFood)) {
+                action = EAction.PickUpFood;
             } else {
                 action = getRandomAction(possibleActions);
             }
-            
+
             // SCOUT
         } else if (thisAnt.getAntType().equals(EAntType.SCOUT)) {
             action = getRandomAction(possibleActions);
@@ -57,13 +61,6 @@ public class Main implements IAntAI {
             }
         }
 
-        StringBuilder actions = new StringBuilder();
-        for (EAction a : possibleActions) {
-            actions.append(a.toString());
-            actions.append(", ");
-        }
-        System.out.println("Available actions: " + actions.toString());
-        System.out.println("ID: " + thisAnt.antID() + " chose action: " + action);
         return action;
     }
 
@@ -71,39 +68,36 @@ public class Main implements IAntAI {
     public void onStartTurn(IAntInfo thisAnt, int turn
     ) {
         this.turn = turn;
-        System.out.println("ID: " + thisAnt.antID() + " onStartTurn(" + turn + ")");
+        println("System: ID: " + thisAnt.antID() + " onStartTurn(" + turn + ")");
     }
 
     @Override
-    public void onAttacked(IAntInfo thisAnt, int dir, IAntInfo attacker, int damage
-    ) {
-        System.out.println("ID: " + thisAnt.antID() + " onAttacked: " + damage + " damage");
+    public void onAttacked(IAntInfo thisAnt, int dir, IAntInfo attacker, int damage) {
+        println("System: ID: " + thisAnt.antID() + " onAttacked: " + damage + " damage");
     }
 
     @Override
-    public void onDeath(IAntInfo thisAnt
-    ) {
+    public void onDeath(IAntInfo thisAnt) {
         collectiveMemory.removeAnt(thisAnt);
-        System.out.println("ID: " + thisAnt.antID() + " onDeath");
+        println("System: ID: " + thisAnt.antID() + " onDeath");
     }
 
     @Override
-    public void onLayEgg(IAntInfo thisAnt, List<EAntType> types, IEgg egg
-    ) {
+    public void onLayEgg(IAntInfo thisAnt, List<EAntType> types, IEgg egg) {
         int index = breeding.getBreedingAction(collectiveMemory.getAnts(), turn);
         EAntType type = types.get(index);
-        System.out.println("ID: " + thisAnt.antID() + " onLayEgg: " + type);
+        println("System: ID: " + thisAnt.antID() + " onLayEgg: " + type);
         egg.set(type, this);
     }
 
     @Override
-    public void onHatch(IAntInfo thisAnt, ILocationInfo thisLocation, int worldSizeX, int worldSizeY
-    ) {
+    public void onHatch(IAntInfo thisAnt, ILocationInfo thisLocation, int worldSizeX, int worldSizeY) {
         collectiveMemory.addAnt(thisAnt);
         if (thisAnt.getAntType().getTypeName().equals("Queen")) {
             collectiveMemory.setQueenSpawn(thisLocation);
         }
-        System.out.println("ID: " + thisAnt.antID() + " onHatch");
+        println("System: ID: " + thisAnt.antID() + " onHatch");
+        
         collectiveMemory.saveWorldSizeX(worldSizeX);
         collectiveMemory.saveWorldSizeY(worldSizeY);
     }

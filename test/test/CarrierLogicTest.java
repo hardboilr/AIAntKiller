@@ -1,6 +1,6 @@
 package test;
 
-import ai.Main;
+import ai.JT_Destroyer;
 import aiantwars.EAction;
 import aiantwars.EAntType;
 import aiantwars.IAntInfo;
@@ -38,7 +38,7 @@ public class CarrierLogicTest {
     List<EAction> possibleActions;
     private final OnGameFinished onGameFinished;
     private AntWarsGameCtrl factory;
-    private Main ai;
+    private JT_Destroyer ai;
 
     public CarrierLogicTest() {
         Debug.isDebug = false;
@@ -50,7 +50,7 @@ public class CarrierLogicTest {
         IGraphicsAntWarsGUI antwarsGUI = new DummyGraphicsAntWarsGUI(false);
         factory = new AntWarsGameCtrl(antwarsGUI, board, onGameFinished);
         thisLocation = new Location(4, 5);
-        ai = new Main();
+        ai = new JT_Destroyer();
         thisAnt = new LogicAnt(EAntType.CARRIER, ai, board, factory, thisLocation, 0, false, 0, 50, 0, 5, false);
     }
 

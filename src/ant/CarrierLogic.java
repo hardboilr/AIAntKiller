@@ -7,7 +7,6 @@ import aiantwars.ILocationInfo;
 import aiantwars.impl.Location;
 import algorithm.ShortestPath;
 import behaviour.food.ScavengeFood;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import memory.CollectiveMemory;
@@ -41,23 +40,23 @@ public class CarrierLogic {
     }
 
     public EAction getAction() {
-        println("foodLoad: " + thisAnt.getFoodLoad() + ", maxFoodLoad: " + maxFoodLoad);
+//        System.out.println("\u001B[31m test");
+        
+        println("Carrier: Current AP: " +  thisAnt.getActionPoints() + "| Available actions: " + possibleActions.toString());
+        println("Carrier: foodLoad: " + thisAnt.getFoodLoad() + ", maxFoodLoad: " + maxFoodLoad);
 
         if (isDeposit() && possibleActions.contains(EAction.DropFood) && thisAnt.getFoodLoad() > minFoodLoad) {
             // a. when ant have food and current position is a deposit, then drop food
-            println("Picked a");
             return EAction.DropFood;
         } else if (isDeposit() && !possibleActions.contains(EAction.DropFood) && thisAnt.getFoodLoad() > minFoodLoad) {
             // b. when ant have food and current position is a deposit, but ant cannot drop food, then pass turn
-            println("Picked b");
             return EAction.Pass;
         } else if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < maxFoodLoad) {
             // c. when ant is within max food load threshold, then pickup food
-            println("Picked c");
             return EAction.PickUpFood;
         } else if (thisAnt.getFoodLoad() >= maxFoodLoad) {
             // d. when ant max food load has been reached, then return to deposit location with lowest food count
-            println("Picked d");
+            println("d. max food load has been reached. Returning to deposit location with lowest food count");
             ILocationInfo depositLocation = findDepositLocation();
             if (depositLocation != null) {
                 ShortestPath path = new ShortestPath(thisAnt, thisLocation, findDepositLocation());
@@ -69,11 +68,11 @@ public class CarrierLogic {
             }
         } else if (thisLocation.getFoodCount() == 0) {
             // e. when current position has 0 food, then scavenge food
-            println("picked e");
+            println("e. current position has 0 food. Scavenging food");
             ScavengeFood scavengeFood = new ScavengeFood(thisAnt);
-            
+//            return scavengeFood.getEAction();
         }
-        println("Picked random");
+        println("Carrier: Picked random");
         return getRandomAction(possibleActions);
     }
 
