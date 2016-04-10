@@ -174,7 +174,7 @@ public class CarrierLogicTest {
         cm.addTile(new Location(6,7));
         cm.getTile("6,7").setType(TileType.DEPOSIT);
         
-        thisAnt = new LogicAnt(EAntType.CARRIER, ai, board, factory, thisLocation, 1/**direction*/, false/**carriesSoil*/, 0/**age*/, 50/**hitpoints*/, 10/**foodLoad*/, 40/**hitpoints*/, false/**isDead*/);
+        thisAnt = new LogicAnt(EAntType.CARRIER, ai, board, factory, thisLocation, 1/**direction*/, false/**carriesSoil*/, 0/**age*/, 50/**hitpoints*/, 20/**foodLoad*/, 40/**hitpoints*/, false/**isDead*/);
         logic = new CarrierLogic(thisAnt, thisLocation, possibleActions);
         action = logic.getAction();
         assertEquals(EAction.MoveForward, action);
