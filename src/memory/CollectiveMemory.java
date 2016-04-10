@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static utility.Debug.println;
 
 public class CollectiveMemory {
 
@@ -26,36 +27,30 @@ public class CollectiveMemory {
         return instance;
     }
 
-    public void addVisibleLocations(List<ILocationInfo> visibleLocations) {
+    public void addTiles(List<ILocationInfo> visibleLocations) {
         for (ILocationInfo visibleLocation : visibleLocations) {
-            Position pos = new Position(visibleLocation.getX(), visibleLocation.getY());
-            int foodCount = visibleLocation.getFoodCount();
-            IAntInfo ant = visibleLocation.getAnt();
-            boolean isFilled = visibleLocation.isFilled();
-            boolean isRock = visibleLocation.isRock();
-
-            if (tiles.containsKey(pos)) {
-                tiles.get(pos);
-                Tile tile = new Tile(foodCount, ant, isFilled, isRock);
-                tiles.put(pos, tile);
-            } else {
-                Tile tile = new Tile(foodCount, ant, isFilled, isRock);
-                tiles.put(pos, tile);
-            }
+            addTile(visibleLocation);
         }
     }
-    
-    public void addLocation(ILocationInfo location) {
-        Tile tile = new Tile(location);
-        tiles.put(new Position(tile.getX(), tile.getY()), tile);
+
+    public void addTile(ILocationInfo location) {
+        Position pos = new Position(location.getX(), location.getY());
+
+        if (tiles.containsKey(pos)) {
+            Tile get = tiles.get(pos);
+            get.setFoodCount(location.getFoodCount());
+            get.setAnt(location.getAnt());
+            get.setIsFilled(location.isFilled());
+            get.setIsRock(location.isFilled());
+            get.setFoodCount(location.getFoodCount());
+        } else {
+            Tile tile = new Tile(location.getX(), location.getY(), location.getFoodCount(), location.getAnt(), location.isFilled(), location.isRock());
+            tiles.put(pos, tile);
+        }
     }
 
     public Map<Position, Tile> getTiles() {
         return tiles;
-    }
-    
-    public List<Tile> getTilesAsList() {
-        return new ArrayList(tiles.values());
     }
 
     public Tile getTile(Position pos) {
@@ -64,6 +59,7 @@ public class CollectiveMemory {
 
     public Tile getTile(String pos) {
         String[] positions = pos.split(",");
+        println("System: getTile(" + pos + ")");
         return tiles.get(new Position(Integer.parseInt(positions[0]), Integer.parseInt(positions[1])));
     }
 

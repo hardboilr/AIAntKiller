@@ -29,13 +29,15 @@ public class Tile {
         this.y = y;
     }
 
-    public Tile(int foodCount, IAntInfo ant, boolean isFilled, boolean isRock) {
+    public Tile(int x, int y, int foodCount, IAntInfo ant, boolean isFilled, boolean isRock) {
+        this.x = x;
+        this.y = y;
         this.foodCount = foodCount;
         this.ant = ant;
         this.isFilled = isFilled;
         this.isRock = isRock;
     }
-    
+
     public Tile(ILocationInfo location) {
         this.x = location.getX();
         this.y = location.getY();
@@ -140,7 +142,7 @@ public class Tile {
 
     @Override
     public String toString() {
-        return "Tile:" + ", isRock:" + isRock;
+        return "Tile: " + "(" + x + "," + y + ")" + ", isRock: " + isRock + ", foodCount: " + foodCount;
     }
 
 }

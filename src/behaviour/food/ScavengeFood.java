@@ -57,18 +57,31 @@ public class ScavengeFood {
         }
 
         // east
-        xOffset = currentLocation.getY() + 1;
+        xOffset = currentLocation.getX() + 1;
         if (checkPosition(xOffset, yOffset)) {
             Tile tile = cm.getTile(xOffset + "," + yOffset);
             tile.setDirection(1);
             possibleLocations.add(tile);
         }
 
-        println("possibleLocations size: " + possibleLocations.size());
-        println("C: firstLocation: " + possibleLocations.first().toString());
-        
-        int chosenDirection = possibleLocations.first().getDirection();
-        return Calc.getMovementAction(thisAnt.getDirection(), chosenDirection);
+        println("System: possibleLocations size: " + possibleLocations.size());
+
+        if (possibleLocations.size() > 0) {
+            for (Tile t : possibleLocations) {
+                println("System: " + t.toString());
+            }
+            println("System: ---");
+
+            println("C: firstLocation: " + possibleLocations.first().toString());
+
+            int chosenDirection = possibleLocations.first().getDirection();
+            return Calc.getMovementAction(thisAnt.getDirection(), chosenDirection);
+
+        } else {
+            return EAction.Pass;
+
+        }
+
     }
 
     private boolean checkPosition(int x, int y) {

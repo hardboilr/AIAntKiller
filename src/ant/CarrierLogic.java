@@ -13,9 +13,9 @@ import memory.CollectiveMemory;
 import memory.Position;
 import memory.Tile;
 import memory.TileType;
-import static utility.Action.getRandomAction;
 import utility.Calc;
 import static utility.Debug.println;
+import static utility.Action.getRandomAction;
 
 /**
  *
@@ -40,9 +40,8 @@ public class CarrierLogic {
     }
 
     public EAction getAction() {
-//        System.out.println("\u001B[31m test");
-        
-        println("Carrier: Current AP: " +  thisAnt.getActionPoints() + "| Available actions: " + possibleActions.toString());
+
+        println("Carrier: Current AP: " + thisAnt.getActionPoints() + "| Available actions: " + possibleActions.toString());
         println("Carrier: foodLoad: " + thisAnt.getFoodLoad() + ", maxFoodLoad: " + maxFoodLoad);
 
         if (isDeposit() && possibleActions.contains(EAction.DropFood) && thisAnt.getFoodLoad() > minFoodLoad) {
@@ -51,7 +50,7 @@ public class CarrierLogic {
         } else if (isDeposit() && !possibleActions.contains(EAction.DropFood) && thisAnt.getFoodLoad() > minFoodLoad) {
             // b. when ant have food and current position is a deposit, but ant cannot drop food, then pass turn
             return EAction.Pass;
-        } else if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < maxFoodLoad) {
+        } else if (!isDeposit() && possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < maxFoodLoad) {
             // c. when ant is within max food load threshold, then pickup food
             return EAction.PickUpFood;
         } else if (thisAnt.getFoodLoad() >= maxFoodLoad) {
@@ -68,9 +67,14 @@ public class CarrierLogic {
             }
         } else if (thisLocation.getFoodCount() == 0) {
             // e. when current position has 0 food, then scavenge food
-            println("e. current position has 0 food. Scavenging food");
+            println("e. current position: " + thisLocation.getX() + "," + thisLocation.getY() + " has 0 food. Scavenging food");
             ScavengeFood scavengeFood = new ScavengeFood(thisAnt);
-//            return scavengeFood.getEAction();
+            EAction eAction = scavengeFood.getEAction();
+            if (eAction.equals(EAction.Pass)) {
+                return getRandomAction(possibleActions);
+            } else {
+                return eAction;
+            }
         }
         println("Carrier: Picked random");
         return getRandomAction(possibleActions);
@@ -134,20 +138,17 @@ public class CarrierLogic {
         List<IAntInfo> ants = cm.getAnts();
         int maxLoad = thisAnt.getAntType().getMaxFoodLoad();
 
-        if (ants.size() < 3) {
-            return maxLoad / 3;
+        int noOfCarriers = 0;
+        for (IAntInfo ant : cm.getAnts()) {
+            if (ant.getAntType().equals(EAntType.CARRIER)) {
+                noOfCarriers++;
+            }
+        }
+
+        if (ants.size() <= 3 || noOfCarriers <= 2) {
+            return maxLoad / 2;
         } else {
-            int noOfCarriers = 0;
-            for (IAntInfo ant : cm.getAnts()) {
-                if (ant.getAntType().equals(EAntType.CARRIER)) {
-                    noOfCarriers++;
-                }
-            }
-            if (noOfCarriers <= 2) {
-                return maxLoad / 2;
-            } else {
-                return maxLoad;
-            }
+            return maxLoad;
         }
     }
 }

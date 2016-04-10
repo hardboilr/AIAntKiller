@@ -13,17 +13,12 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 import utility.Calc;
-import static utility.Debug.println;
 import static java.lang.Math.abs;
 import java.util.Comparator;
-import static utility.Debug.print;
 
 /**
- * WIP!
  *
- * 1. Failed strategy below! Instead implement wip Board.class
- *
- * @author Tobias
+ * @author Tobias Jacobsen
  */
 public class ShortestPath {
 
@@ -66,22 +61,10 @@ public class ShortestPath {
                 if (!closedList.contains(adjacentNode)) {
                     adjacentNode.setDirection(Calc.getMovementDirection(currentNode, adjacentNode));
 
-                    // for debugging
-                    println("Considering: " + adjacentNode + ". Direction: " + adjacentNode.getDirection() + ". Parent: " + adjacentNode.getParent().toString());
-                    print(adjacentNode + " has " + adjacentNode.getAdjacentNodes().size() + " adjacent nodes: ");
-
-                    for (Node n : adjacentNode.getAdjacentNodes()) {
-                        print("(" + n + ")");
-                    }
-//                    println("");
-                    //---------
-
                     // calculate new gValue
                     double newG = getGCost(adjacentNode);
 
                     if (adjacentNode.getgVal() > newG) {
-                        println("lower gVal found on: " + adjacentNode);
-                        println("setting: " + adjacentNode.getgVal() + " to: " + newG);
                         adjacentNode.setgVal(newG); // update gValue
                     }
 
@@ -97,11 +80,9 @@ public class ShortestPath {
                         // calculate hCost and add node to openList
                         adjacentNode.sethVal(getHCost(adjacentNode));
 
-                        println("hCost for: " + adjacentNode + " with direction: " + adjacentNode.getDirection() + " is: " + adjacentNode.gethVal());
 
                         openList.add(adjacentNode);
                     }
-                    print("\n and gCost: " + adjacentNode.getgVal() + ", " + "hCost: " + adjacentNode.gethVal() + ", fCost: " + adjacentNode.getfVal() + "\n" + "\n"); //debug
                 }
             }
 
@@ -110,21 +91,16 @@ public class ShortestPath {
             }
 
             closedList.add(currentNode);
-            println("##to closedList-> " + currentNode);
 
             currentNode = openList.poll();
 
             //update currentNode direction
             currentNode.setDirection(Calc.getMovementDirection(currentNode.getParent(), currentNode));
 
-            println("###Picked with lowest cost--->" + currentNode);
-
             // found goal. Run through parent nodes and save to list 
             if (currentNode == goalNode) {
-                println("found goal!-> " + currentNode.toString());
                 List<ILocationInfo> shortestPath = new ArrayList();
                 while (true) {
-                    println("Adding: " + currentNode.getX() + "," + currentNode.getY());
                     ILocationInfo loc = new Location(currentNode.getX(), currentNode.getY());
                     shortestPath.add(loc);
                     currentNode = currentNode.getParent();
@@ -133,10 +109,6 @@ public class ShortestPath {
                     }
                 }
                 Collections.reverse(shortestPath);
-                println("Path is: ");
-                for (ILocationInfo loc : shortestPath) {
-                    println(loc.getX() + "," + loc.getY());
-                }
                 return shortestPath;
             }
         }
@@ -164,10 +136,8 @@ public class ShortestPath {
 
         // calculate straight movement costs
         int straightMovementDistance = movementX + movementY; 
-        print("straightDistance: " + straightMovementDistance + ", ");
         int straightMovementCost = Calc.getMovementCost(EAction.MoveForward, ant.getAntType(), false); 
         movementCost += straightMovementDistance * straightMovementCost; 
-        print("straightMovementCost: " + movementCost + ", ");
 
         // calculate optional turn costs for x direction
         if (movementX > 0) {
@@ -177,10 +147,7 @@ public class ShortestPath {
                 direction = 1; 
             }
             movementAction = Calc.getMovementAction(currentNode.getDirection(), direction); 
-            print("currentDirection: " + currentNode.getDirection() + ", ");
-            print("movementAction: " + movementAction.toString() + ", ");
             movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
-            print("with optional turn1: " + movementCost + ", ");
         }
 
         // calculate optional turn costs for y direction
@@ -192,7 +159,6 @@ public class ShortestPath {
             }
             movementAction = Calc.getMovementAction(ant.getDirection(), direction);
             movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
-            print("with optional turn1: " + movementCost);
         }
         return movementCost; 
     }
@@ -209,17 +175,13 @@ public class ShortestPath {
         Node thisNode = currentNode;
 
         gCost += Calc.getMovementCost(Calc.getMovementAction(thisNode.getParent().getDirection(), thisNode.getDirection()), ant.getAntType(), false);
-        println("inital cost: " + gCost);
 
         // also add to gCost, from parent
         // when getParent == null, this should be start node
         if (thisNode.getParent() == startNode) {
-            println("->Parent is: " + thisNode.getParent() + "(goalnode)");
         } else {
             Node parent = thisNode.getParent();
-            println("Parent is: " + parent);
             gCost += parent.getgVal();
-            println("Adding cost: " + parent.getgVal());
         }
         return gCost;
     }

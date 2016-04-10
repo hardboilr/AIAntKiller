@@ -125,7 +125,7 @@ public class CollectiveMemorytest {
         locations.add(location2);
         locations.add(location3);
 
-        memory.addVisibleLocations(locations);
+        memory.addTiles(locations);
 
         IAntInfo ant = new IAntInfo() {
             @Override
@@ -235,7 +235,7 @@ public class CollectiveMemorytest {
         };
         locations.add(location);
 
-        memory.addVisibleLocations(locations);
+        memory.addTiles(locations);
 
         Map<Position, Tile> map = memory.getTiles();
         Position pos = new Position(1, 0);

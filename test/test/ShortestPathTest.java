@@ -81,7 +81,7 @@ public class ShortestPathTest {
         Location loc84 = (Location) locations.get("8,4");
         loc84.setRock(true);
 
-        cm.addVisibleLocations(getLocationsList());
+        cm.addTiles(getLocationsList());
         board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
@@ -150,7 +150,7 @@ public class ShortestPathTest {
         Location loc29 = (Location) locations.get("2,9");
         loc29.setRock(true);
 
-        cm.addVisibleLocations(getLocationsList());
+        cm.addTiles(getLocationsList());
         board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
@@ -232,7 +232,7 @@ public class ShortestPathTest {
         Location loc29 = (Location) locations.get("2,9");
         loc29.setRock(true);
 
-        cm.addVisibleLocations(getLocationsList());
+        cm.addTiles(getLocationsList());
         board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
@@ -348,7 +348,7 @@ public class ShortestPathTest {
         Location loc69 = (Location) locations.get("6,9");
         loc69.setRock(true);
 
-        cm.addVisibleLocations(getLocationsList());
+        cm.addTiles(getLocationsList());
         board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
@@ -424,7 +424,7 @@ public class ShortestPathTest {
         Location loc37 = (Location) locations.get("3,7");
         loc37.setRock(true);
 
-        cm.addVisibleLocations(getLocationsList());
+        cm.addTiles(getLocationsList());
         board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);
@@ -490,7 +490,7 @@ public class ShortestPathTest {
         Location loc64 = (Location) locations.get("6,4");
         loc64.setRock(true);
 
-        cm.addVisibleLocations(getLocationsList());
+        cm.addTiles(getLocationsList());
         board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
 
         antwarsGUI = new DummyGraphicsAntWarsGUI(false);

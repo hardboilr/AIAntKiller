@@ -108,7 +108,7 @@ public class CarrierLogicTest {
             }
         };
         visibleLocations.add(thisLocation);
-        cm.addVisibleLocations(visibleLocations);
+        cm.addTiles(visibleLocations);
 
         possibleActions = new ArrayList();
         possibleActions.add(EAction.Pass);
@@ -171,7 +171,7 @@ public class CarrierLogicTest {
         possibleActions.add(EAction.TurnRight);
         possibleActions.add(EAction.TurnLeft);
         
-        cm.addLocation(new Location(6,7));
+        cm.addTile(new Location(6,7));
         cm.getTile("6,7").setType(TileType.DEPOSIT);
         
         thisAnt = new LogicAnt(EAntType.CARRIER, ai, board, factory, thisLocation, 1/**direction*/, false/**carriesSoil*/, 0/**age*/, 50/**hitpoints*/, 10/**foodLoad*/, 40/**hitpoints*/, false/**isDead*/);

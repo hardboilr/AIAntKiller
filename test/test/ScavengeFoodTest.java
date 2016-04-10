@@ -70,7 +70,7 @@ public class ScavengeFoodTest {
                 add(loc21);
             }
         };
-        cm.addVisibleLocations(visibleLocations);
+        cm.addTiles(visibleLocations);
         
         
         ScavengeFood collectFood = new ScavengeFood(thisAnt);
@@ -99,7 +99,7 @@ public class ScavengeFoodTest {
                 add(loc21);
             }
         };
-        cm.addVisibleLocations(visibleLocations);
+        cm.addTiles(visibleLocations);
         
         ScavengeFood collectFood = new ScavengeFood(thisAnt);
         EAction eAction = collectFood.getEAction();
@@ -127,7 +127,7 @@ public class ScavengeFoodTest {
                 add(loc21);
             }
         };
-        cm.addVisibleLocations(visibleLocations);
+        cm.addTiles(visibleLocations);
         
         ScavengeFood collectFood = new ScavengeFood(thisAnt);
         EAction eAction = collectFood.getEAction();

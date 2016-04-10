@@ -10,9 +10,11 @@ import ant.CarrierLogic;
 import behaviour.Breeding;
 import java.util.List;
 import memory.CollectiveMemory;
-import static utility.Action.getRandomAction;
+import memory.Tile;
+import memory.TileType;
 import utility.Debug;
 import static utility.Debug.println;
+import static utility.Action.getRandomAction;
 
 public class JT_Destroyer implements IAntAI {
 
@@ -24,7 +26,7 @@ public class JT_Destroyer implements IAntAI {
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
         
         visibleLocations.add(thisLocation);
-        collectiveMemory.addVisibleLocations(visibleLocations);
+        collectiveMemory.addTiles(visibleLocations);
 
         EAction action = null;
 
@@ -95,6 +97,13 @@ public class JT_Destroyer implements IAntAI {
         collectiveMemory.addAnt(thisAnt);
         if (thisAnt.getAntType().getTypeName().equals("Queen")) {
             collectiveMemory.setQueenSpawn(thisLocation);
+            
+            // for testing purposes only!
+            collectiveMemory.addTile(thisLocation);
+            Tile tile = collectiveMemory.getTile(thisLocation.getX() + "," + thisLocation.getY());
+            tile.setType(TileType.DEPOSIT);
+            // ---------------------------
+            
         }
         println("System: ID: " + thisAnt.antID() + " onHatch");
         
