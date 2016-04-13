@@ -12,7 +12,7 @@ public class CollectiveMemory {
     private static CollectiveMemory instance = null;
     private final Map<Position, Tile> tiles = new HashMap();
     private final List<IAntInfo> ants = new ArrayList();
-    private List<ILocationInfo> breedingGrounds;
+    private final List<ILocationInfo> breedingGrounds = new ArrayList();
     private ILocationInfo queenSpawn;
     private int worldSizeX;
     private int worldSizeY;
