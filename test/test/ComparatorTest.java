@@ -1,6 +1,5 @@
 package test;
 
-import behaviour.LocationExtends;
 import comparator.FoodCostComparator;
 import java.util.ArrayList;
 import java.util.Collections;

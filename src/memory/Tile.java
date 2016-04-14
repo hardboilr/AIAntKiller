@@ -3,9 +3,6 @@ package memory;
 import aiantwars.EAntType;
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
-import behaviour.LocationExtends;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import utility.Calc;
 
 /**
@@ -132,11 +129,7 @@ public class Tile {
         if (ant != null) {
             int currentDirection = ant.getDirection();
             EAntType antType = ant.getAntType();
-            try {
-                movementCost = Calc.getMovementCost(Calc.getMovementAction(currentDirection, direction), antType, true);
-            } catch (Exception ex) {
-                Logger.getLogger(LocationExtends.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            movementCost = Calc.getMovementCost(Calc.getMovementAction(currentDirection, direction), antType, true);
         }
     }
 
