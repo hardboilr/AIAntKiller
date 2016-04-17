@@ -12,6 +12,7 @@ import behaviour.Breeding;
 import java.util.List;
 import memory.CollectiveMemory;
 import static utility.Action.getRandomAction;
+import static utility.Debug.isDebug;
 import static utility.Debug.println;
 
 public class JT_Destroyer implements IAntAI {
@@ -22,7 +23,7 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
-
+        isDebug = true;
         visibleLocations.add(thisLocation);
         collectiveMemory.addVisibleLocations(visibleLocations);
 

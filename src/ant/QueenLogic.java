@@ -55,6 +55,7 @@ public class QueenLogic {
         this.thisLocation = thisLocation;
         this.possibleActions = possibleActions;
         EAction action = getRandomAction(possibleActions);
+        memory = cm.getTiles();
 
         /**
          * Before turn 20, the queen is looking for and creating breeding
@@ -70,7 +71,6 @@ public class QueenLogic {
                         Tile tile = memory.get(pos);
                         tile.setType(TileType.BREEDING);
                     }
-                    cm.addBreedingGround(thisLocation);
                 }
             } else {
                 ShortestPath sp = new ShortestPath(thisAnt, thisLocation, new Location(cm.getQueenSpawn().getX(), cm.getQueenSpawn().getY()));
@@ -80,7 +80,6 @@ public class QueenLogic {
                         Tile tile = memory.get(pos);
                         tile.setType(TileType.BREEDING);
                     }
-                    cm.addBreedingGround(thisLocation);
                 }
             }
         }
