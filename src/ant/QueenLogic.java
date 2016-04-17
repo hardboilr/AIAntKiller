@@ -58,27 +58,42 @@ public class QueenLogic {
         memory = cm.getTiles();
 
         /**
-         * Before turn 20, the queen is looking for and creating breeding
-         * grounds near the spawnpoint this breeding grounds are used for the
-         * rest of the game
+         * Queen is creating breeding grounds and deposit locations, near the
+         * queenSpawn used for the rest of the game
          *
          */
-        if (turn <= 20) {
-            Position pos = new Position(thisLocation.getX(), thisLocation.getY());
-            if (thisLocation.getX() == cm.getQueenSpawn().getX() && thisLocation.getY() == cm.getQueenSpawn().getY()) {
-                if (thisLocation.getFoodCount() <= 1) {
-                    if (memory.containsKey(pos)) {
-                        Tile tile = memory.get(pos);
+        Position currentPos = new Position(thisLocation.getX(), thisLocation.getY());
+        if (thisLocation.getX() == cm.getQueenSpawn().getX() && thisLocation.getY() == cm.getQueenSpawn().getY()) {
+            if (thisLocation.getFoodCount() <= 1) {
+                if (memory.containsKey(currentPos)) {
+                    Tile tile = memory.get(currentPos);
+                    if (tile.getType() == TileType.DEFAULT) {
                         tile.setType(TileType.BREEDING);
+                        println("Set location " + currentPos.toString() + " to a breeding location!");
                     }
                 }
-            } else {
-                ShortestPath sp = new ShortestPath(thisAnt, thisLocation, new Location(cm.getQueenSpawn().getX(), cm.getQueenSpawn().getY()));
-                List<ILocationInfo> path = sp.getShortestPath();
-                if (thisLocation.getFoodCount() <= 1 && path.size() <= 3) {
-                    if (memory.containsKey(pos)) {
-                        Tile tile = memory.get(pos);
-                        tile.setType(TileType.BREEDING);
+            }
+        } else {
+            ShortestPath sp = new ShortestPath(thisAnt, thisLocation, new Location(cm.getQueenSpawn().getX(), cm.getQueenSpawn().getY()));
+            List<ILocationInfo> path = sp.getShortestPath();
+            //Breeding location
+            if (path.size() == 1) {
+                if (thisLocation.getFoodCount() <= 1) {
+                    if (memory.containsKey(currentPos)) {
+                        Tile tile = memory.get(currentPos);
+                        if (tile.getType() == TileType.DEFAULT) {
+                            tile.setType(TileType.BREEDING);
+                            println("Set location " + currentPos.toString() + " to a breeding location!");
+                        }
+                    }
+                }
+            } //Deposit location
+            else if (path.size() == 2) {
+                if (memory.containsKey(currentPos)) {
+                    Tile tile = memory.get(currentPos);
+                    if (tile.getType() == TileType.DEFAULT) {
+                        tile.setType(TileType.DEPOSIT);
+                        println("Set location " + currentPos.toString() + " to a deposit location!");
                     }
                 }
             }
@@ -109,7 +124,7 @@ public class QueenLogic {
          * Else if foodload is lower than 5, look for deposit locations
          */
         if (thisAnt.getFoodLoad() >= 5) {
-            println("Queen has enough food to lay egg, looking for breeding location");
+            println("queen: has enough food to lay egg, looking for breeding location");
             ILocationInfo breedingLocation = findBreedingLocation();
             if (breedingLocation != null) {
                 ShortestPath path = new ShortestPath(thisAnt, thisLocation, breedingLocation);
@@ -120,7 +135,7 @@ public class QueenLogic {
                 }
             }
         } else if (thisAnt.getFoodLoad() < 5) {
-            println("Queen has no more food, looking for deposit location");
+            println("queen: is low on food, looking for deposit location");
             ILocationInfo depositLocation = findDepositLocation();
             if (depositLocation != null) {
                 ShortestPath path = new ShortestPath(thisAnt, thisLocation, depositLocation);
@@ -132,7 +147,7 @@ public class QueenLogic {
             }
         }
 
-        return action;
+        return checkAction(action);
     }
 
     /**
@@ -198,4 +213,11 @@ public class QueenLogic {
         }
     }
 
+    public EAction checkAction(EAction action) {
+        if (action == EAction.EatFood) {
+            action = getRandomAction(possibleActions);
+            checkAction(action);
+        }
+        return action;
+    }
 }

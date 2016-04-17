@@ -73,7 +73,7 @@ public class CarrierLogic {
 //            return scavengeFood.getEAction();
         }
         println("Carrier: Picked random");
-        return getRandomAction(possibleActions);
+        return checkAction(getRandomAction(possibleActions));
     }
 
     /**
@@ -149,5 +149,13 @@ public class CarrierLogic {
                 return maxLoad;
             }
         }
+    }
+
+    public EAction checkAction(EAction action) {
+        if (action == EAction.EatFood) {
+            action = getRandomAction(possibleActions);
+            checkAction(action);
+        }
+        return action;
     }
 }
