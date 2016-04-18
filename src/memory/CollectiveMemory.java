@@ -13,7 +13,6 @@ public class CollectiveMemory {
     private static CollectiveMemory instance = null;
     private final Map<Position, Tile> tiles = new HashMap();
     private final List<IAntInfo> ants = new ArrayList();
-    private final List<ILocationInfo> breedingGrounds = new ArrayList();
     private ILocationInfo queenSpawn;
     private int worldSizeX;
     private int worldSizeY;
@@ -104,11 +103,4 @@ public class CollectiveMemory {
         return worldSizeY;
     }
 
-    public void addBreedingGround(ILocationInfo location) {
-        breedingGrounds.add(location);
-    }
-
-    public List<ILocationInfo> getBreedingGrounds() {
-        return breedingGrounds;
-    }
 }

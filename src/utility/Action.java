@@ -80,8 +80,8 @@ public class Action {
 
     public static void init() {
         //default weights
-        turnLeftWeight = 60;
-        turnRightWeight = 60;
+        turnLeftWeight = 75;
+        turnRightWeight = 75;
         moveForwardWeight = 100;
         moveBackwardWeight = 20;
         attackWeight = 0;
