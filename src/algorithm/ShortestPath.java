@@ -80,7 +80,6 @@ public class ShortestPath {
                         // calculate hCost and add node to openList
                         adjacentNode.sethVal(getHCost(adjacentNode));
 
-
                         openList.add(adjacentNode);
                     }
                 }
@@ -135,9 +134,9 @@ public class ShortestPath {
         int movementY = abs(curY - goalY);
 
         // calculate straight movement costs
-        int straightMovementDistance = movementX + movementY; 
-        int straightMovementCost = Calc.getMovementCost(EAction.MoveForward, ant.getAntType(), false); 
-        movementCost += straightMovementDistance * straightMovementCost; 
+        int straightMovementDistance = movementX + movementY;
+        int straightMovementCost = Calc.getMovementCost(EAction.MoveForward, ant.getAntType(), false);
+        movementCost += straightMovementDistance * straightMovementCost;
 
         // calculate optional turn costs for x direction
         if (movementX > 0) {
@@ -146,7 +145,7 @@ public class ShortestPath {
             } else {
                 direction = 1;
             }
-            movementAction = Calc.getMovementAction(currentNode.getDirection(), direction); 
+            movementAction = Calc.getMovementAction(currentNode.getDirection(), direction);
             movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
         }
 

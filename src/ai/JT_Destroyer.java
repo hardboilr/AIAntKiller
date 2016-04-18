@@ -26,7 +26,7 @@ public class JT_Destroyer implements IAntAI {
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
         Debug.isDebug = false;
-        
+
         visibleLocations.add(thisLocation);
         collectiveMemory.addTiles(visibleLocations);
 
@@ -97,13 +97,12 @@ public class JT_Destroyer implements IAntAI {
         collectiveMemory.addAnt(thisAnt);
         if (thisAnt.getAntType().getTypeName().equals("Queen")) {
             collectiveMemory.setQueenSpawn(thisLocation);
-            
+
             // for testing purposes only!
 //            collectiveMemory.addTile(thisLocation);
 //            Tile tile = collectiveMemory.getTile(thisLocation.getX() + "," + thisLocation.getY());
 //            tile.setType(TileType.DEPOSIT);
             // ---------------------------
-            
         }
         println("System: ID: " + thisAnt.antID() + " onHatch");
 
