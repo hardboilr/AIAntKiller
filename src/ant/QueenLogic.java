@@ -13,6 +13,7 @@ import memory.Tile;
 import memory.TileType;
 import static utility.Action.getRandomAction;
 import utility.Calc;
+import utility.Debug;
 import static utility.Debug.println;
 
 public class QueenLogic {
@@ -51,6 +52,8 @@ public class QueenLogic {
      * @return EAction
      */
     public EAction getAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions, List<ILocationInfo> visibleLocations, int turn) {
+        Debug.isDebug = true;
+        
         this.thisAnt = thisAnt;
         this.thisLocation = thisLocation;
         this.possibleActions = possibleActions;

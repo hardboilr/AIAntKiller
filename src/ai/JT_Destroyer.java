@@ -99,9 +99,9 @@ public class JT_Destroyer implements IAntAI {
             collectiveMemory.setQueenSpawn(thisLocation);
             
             // for testing purposes only!
-            collectiveMemory.addTile(thisLocation);
-            Tile tile = collectiveMemory.getTile(thisLocation.getX() + "," + thisLocation.getY());
-            tile.setType(TileType.DEPOSIT);
+//            collectiveMemory.addTile(thisLocation);
+//            Tile tile = collectiveMemory.getTile(thisLocation.getX() + "," + thisLocation.getY());
+//            tile.setType(TileType.DEPOSIT);
             // ---------------------------
             
         }
