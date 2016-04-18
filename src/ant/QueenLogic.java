@@ -53,7 +53,7 @@ public class QueenLogic {
      */
     public EAction getAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions, List<ILocationInfo> visibleLocations, int turn) {
         Debug.isDebug = true;
-        
+
         this.thisAnt = thisAnt;
         this.thisLocation = thisLocation;
         this.possibleActions = possibleActions;
@@ -66,6 +66,7 @@ public class QueenLogic {
          *
          */
         Position currentPos = new Position(thisLocation.getX(), thisLocation.getY());
+        //If location is queenspawn
         if (thisLocation.getX() == cm.getQueenSpawn().getX() && thisLocation.getY() == cm.getQueenSpawn().getY()) {
             if (thisLocation.getFoodCount() <= 1) {
                 if (memory.containsKey(currentPos)) {
@@ -212,6 +213,7 @@ public class QueenLogic {
             return null;
         } else {
             ILocationInfo loc = new Location(breeding.getX(), breeding.getY());
+            println("FindBreedingLocation: returned locatiion (" + loc.getX() + ", " + loc.getY() + ")");
             return loc;
         }
     }
