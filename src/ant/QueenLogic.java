@@ -60,12 +60,28 @@ public class QueenLogic {
         EAction action = getRandomAction(possibleActions);
         memory = cm.getTiles();
 
+        boolean actionPicked = false;
+
+        //Position right in fornt of thisAnt as Position object
+        Position posInFront = new Position(visibleLocations.get(0).getX(), visibleLocations.get(0).getY());
+        //thisLocation as a Position object
+        Position currentPos = new Position(thisLocation.getX(), thisLocation.getY());
+
+        //tileInFront used for locating breeding grounds
+        Tile tileInFront = memory.get(currentPos);
+
+        /**
+         * If location in front of thisAnt in memory get location
+         */
+        if (memory.containsKey(posInFront)) {
+            tileInFront = memory.get(posInFront);
+        }
+
         /**
          * Queen is creating breeding grounds and deposit locations, near the
          * queenSpawn used for the rest of the game
          *
          */
-        Position currentPos = new Position(thisLocation.getX(), thisLocation.getY());
         //If location is queenspawn
         if (thisLocation.getX() == cm.getQueenSpawn().getX() && thisLocation.getY() == cm.getQueenSpawn().getY()) {
             if (thisLocation.getFoodCount() <= 1) {
@@ -92,7 +108,7 @@ public class QueenLogic {
                     }
                 }
             } //Deposit location
-            else if (path.size() == 2) {
+            else if (path.size() == 2 || path.size() == 3) {
                 if (memory.containsKey(currentPos)) {
                     Tile tile = memory.get(currentPos);
                     if (tile.getType() == TileType.DEFAULT) {
@@ -109,48 +125,53 @@ public class QueenLogic {
          *
          * Else if possible actions contains PickUpFood then pickupfoood
          */
-        if (possibleActions.contains(EAction.LayEgg)) {
-            Position pos = new Position(visibleLocations.get(0).getX(), visibleLocations.get(0).getY());
-            if (memory.containsKey(pos)) {
-                Tile tile = memory.get(pos);
-                if (tile.getType().equals(TileType.BREEDING)) {
-                    action = EAction.LayEgg;
-                }
+        if (possibleActions.contains(EAction.LayEgg) && turn < 30) {
+            action = EAction.LayEgg;
+            actionPicked = true;
+        } else if (possibleActions.contains(EAction.LayEgg)) {
+            println("PossibleAction layEgg at current pos: " + posInFront.toString());
+            if (tileInFront.getType().equals(TileType.BREEDING)) {
+                action = EAction.LayEgg;
+                actionPicked = true;
             }
         } else if (possibleActions.contains(EAction.PickUpFood)) {
             action = EAction.PickUpFood;
+            actionPicked = true;
         }
 
         /**
-         * If thisAnt foodload is larger than 5 or equal to 5, look for breeding
-         * grounds
+         * Check if positionInFront of thisAnt is breeding ground and
+         * actionpoints < 5 then pass
          *
-         * Else if foodload is lower than 5, look for deposit locations
+         * Else look for breeding grounds or deposit locations
          */
-        if (thisAnt.getFoodLoad() >= 5) {
-            println("queen: has enough food to lay egg, looking for breeding location");
-            ILocationInfo breedingLocation = findBreedingLocation();
-            if (breedingLocation != null) {
-                ShortestPath path = new ShortestPath(thisAnt, thisLocation, breedingLocation);
-                int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
-                EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
-                if (possibleActions.contains(movementAction)) {
-                    return movementAction;
+        if (!actionPicked) {
+            if (tileInFront.getType() == TileType.BREEDING && thisAnt.getActionPoints() < 5) {
+                action = EAction.Pass;
+            } else if (thisAnt.getFoodLoad() >= 5) {
+                println("queen: has enough food to lay egg, looking for breeding location");
+                ILocationInfo breedingLocation = findBreedingLocation();
+                if (breedingLocation != null) {
+                    ShortestPath path = new ShortestPath(thisAnt, thisLocation, breedingLocation);
+                    int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
+                    EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
+                    if (possibleActions.contains(movementAction)) {
+                        action = movementAction;
+                    }
                 }
-            }
-        } else if (thisAnt.getFoodLoad() < 5) {
-            println("queen: is low on food, looking for deposit location");
-            ILocationInfo depositLocation = findDepositLocation();
-            if (depositLocation != null) {
-                ShortestPath path = new ShortestPath(thisAnt, thisLocation, depositLocation);
-                int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
-                EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
-                if (possibleActions.contains(movementAction)) {
-                    return movementAction;
+            } else if (thisAnt.getFoodLoad() < 5) {
+                println("queen: is low on food, looking for deposit location");
+                ILocationInfo depositLocation = findDepositLocation();
+                if (depositLocation != null) {
+                    ShortestPath path = new ShortestPath(thisAnt, thisLocation, depositLocation);
+                    int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
+                    EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
+                    if (possibleActions.contains(movementAction)) {
+                        action = movementAction;
+                    }
                 }
             }
         }
-
         return checkAction(action);
     }
 
@@ -213,7 +234,7 @@ public class QueenLogic {
             return null;
         } else {
             ILocationInfo loc = new Location(breeding.getX(), breeding.getY());
-            println("FindBreedingLocation: returned locatiion (" + loc.getX() + ", " + loc.getY() + ")");
+            println("FindBreedingLocation: returned location (" + loc.getX() + ", " + loc.getY() + ")");
             return loc;
         }
     }
