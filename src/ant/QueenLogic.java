@@ -52,7 +52,7 @@ public class QueenLogic {
      * @return EAction
      */
     public EAction getAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions, List<ILocationInfo> visibleLocations, int turn) {
-        Debug.isDebug = true;
+        Debug.isDebug = false;
 
         this.thisAnt = thisAnt;
         this.thisLocation = thisLocation;
