@@ -18,10 +18,11 @@ import utility.Calc;
  */
 public class ScavengeFood {
 
-    private final CollectiveMemory cm = CollectiveMemory.getInstance();
+    private final CollectiveMemory cm;
     private final IAntInfo thisAnt;
 
-    public ScavengeFood(IAntInfo thisAnt) {
+    public ScavengeFood(IAntInfo thisAnt, CollectiveMemory cm) {
+        this.cm = cm;
         this.thisAnt = thisAnt;
     }
 

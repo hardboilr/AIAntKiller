@@ -5,18 +5,6 @@ import java.util.List;
 
 public class Breeding {
 
-    private static Breeding instance = null;
-
-    private Breeding() {
-    }
-
-    public static Breeding getInstance() {
-        if (instance == null) {
-            instance = new Breeding();
-        }
-        return instance;
-    }
-
     public int getBreedingAction(List<IAntInfo> ants, int turn) {
         //First ant is allways ant type "Carrier"
         if (ants.size() == 1 && turn <= 50) {

@@ -23,20 +23,20 @@ import static utility.Action.getRandomAction;
  */
 public class CarrierLogic {
 
-    private final CollectiveMemory cm = CollectiveMemory.getInstance();
+    private final CollectiveMemory cm;
     private final IAntInfo thisAnt;
     private final ILocationInfo thisLocation;
     private final List<EAction> possibleActions;
     private final int maxFoodLoad;
     private final int minFoodLoad;
 
-    public CarrierLogic(IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions) {
+    public CarrierLogic(IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions, CollectiveMemory cm) {
+        this.cm = cm;
         this.thisAnt = thisAnt;
         this.thisLocation = thisLocation;
         this.possibleActions = possibleActions;
         maxFoodLoad = calcMaxFoodLoad();
         minFoodLoad = 3;
-
     }
 
     public EAction getAction() {
@@ -58,7 +58,7 @@ public class CarrierLogic {
             println("d. max food load has been reached. Returning to deposit location with lowest food count");
             ILocationInfo depositLocation = findDepositLocation();
             if (depositLocation != null) {
-                ShortestPath path = new ShortestPath(thisAnt, thisLocation, findDepositLocation());
+                ShortestPath path = new ShortestPath(thisAnt, thisLocation, findDepositLocation(), cm);
                 int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
                 EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
                 if (possibleActions.contains(movementAction)) {
@@ -68,7 +68,7 @@ public class CarrierLogic {
         } else if (thisLocation.getFoodCount() == 0) {
             // e. when current position has 0 food, then scavenge food
             println("e. current position: " + thisLocation.getX() + "," + thisLocation.getY() + " has 0 food. Scavenging food");
-            ScavengeFood scavengeFood = new ScavengeFood(thisAnt);
+            ScavengeFood scavengeFood = new ScavengeFood(thisAnt, cm);
             EAction eAction = scavengeFood.getEAction();
             if (eAction.equals(EAction.Pass)) {
                 return getRandomAction(possibleActions);

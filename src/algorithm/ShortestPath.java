@@ -15,6 +15,7 @@ import java.util.Set;
 import utility.Calc;
 import static java.lang.Math.abs;
 import java.util.Comparator;
+import memory.CollectiveMemory;
 
 /**
  *
@@ -28,9 +29,9 @@ public class ShortestPath {
     private final Board board;
     private final Node[][] nodes;
 
-    public ShortestPath(IAntInfo ant, ILocationInfo start, ILocationInfo goal) {
+    public ShortestPath(IAntInfo ant, ILocationInfo start, ILocationInfo goal, CollectiveMemory cm) {
         this.ant = ant;
-        board = new Board();
+        board = new Board(cm);
         nodes = board.getBoardNodes();
         startNode = nodes[start.getX()][start.getY()];
         startNode.setDirection(ant.getDirection());

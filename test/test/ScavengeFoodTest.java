@@ -27,7 +27,7 @@ import test.model.OnGameFinished;
  */
 public class ScavengeFoodTest {
 
-    private final CollectiveMemory cm = CollectiveMemory.getInstance();
+    private final CollectiveMemory cm = new CollectiveMemory();
     private final Board board;
     private final IAntInfo thisAnt;
     private final ILocationInfo thisLocation;
@@ -73,7 +73,7 @@ public class ScavengeFoodTest {
         cm.addTiles(visibleLocations);
         
         
-        ScavengeFood collectFood = new ScavengeFood(thisAnt);
+        ScavengeFood collectFood = new ScavengeFood(thisAnt, cm);
         EAction eAction = collectFood.getEAction();
         assertEquals(EAction.TurnLeft, eAction);
     }
@@ -101,7 +101,7 @@ public class ScavengeFoodTest {
         };
         cm.addTiles(visibleLocations);
         
-        ScavengeFood collectFood = new ScavengeFood(thisAnt);
+        ScavengeFood collectFood = new ScavengeFood(thisAnt, cm);
         EAction eAction = collectFood.getEAction();
         assertEquals(EAction.MoveBackward, eAction);
     }
@@ -129,7 +129,7 @@ public class ScavengeFoodTest {
         };
         cm.addTiles(visibleLocations);
         
-        ScavengeFood collectFood = new ScavengeFood(thisAnt);
+        ScavengeFood collectFood = new ScavengeFood(thisAnt, cm);
         EAction eAction = collectFood.getEAction();
         assertEquals(EAction.TurnLeft, eAction);
     }

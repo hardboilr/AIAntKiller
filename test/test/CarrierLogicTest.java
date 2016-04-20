@@ -30,7 +30,7 @@ import utility.Debug;
  */
 public class CarrierLogicTest {
 
-    private final CollectiveMemory cm = CollectiveMemory.getInstance();
+    private final CollectiveMemory cm = new CollectiveMemory();
     private final Board board;
     private IAntInfo thisAnt;
     private final Location thisLocation;
@@ -123,7 +123,7 @@ public class CarrierLogicTest {
         // a. when ant have food and current position is a deposit, then drop food
         cm.getTile(new Position(thisLocation.getX(), thisLocation.getY())).setType(TileType.DEPOSIT);
         thisAnt = new LogicAnt(EAntType.CARRIER, ai, board, factory, thisLocation, 0/**direction*/, false/**carriesSoil*/, 0/**age*/, 50/**hitpoints*/, 30/**foodLoad*/, 40/**hitpoints*/, false/**isDead*/);
-        CarrierLogic logic = new CarrierLogic(thisAnt, thisLocation, possibleActions);
+        CarrierLogic logic = new CarrierLogic(thisAnt, thisLocation, possibleActions, cm);
         EAction action = logic.getAction();
         assertEquals(EAction.DropFood, action); 
         
@@ -139,7 +139,7 @@ public class CarrierLogicTest {
         
         cm.getTile(new Position(thisLocation.getX(), thisLocation.getY())).setType(TileType.DEPOSIT);
         thisAnt = new LogicAnt(EAntType.CARRIER, ai, board, factory, thisLocation, 0/**direction*/, false/**carriesSoil*/, 0/**age*/, 50/**hitpoints*/, 30/**foodLoad*/, 40/**hitpoints*/, false/**isDead*/);
-        logic = new CarrierLogic(thisAnt, thisLocation, possibleActions);
+        logic = new CarrierLogic(thisAnt, thisLocation, possibleActions, cm);
         action = logic.getAction();
         assertEquals(EAction.Pass, action); 
 
@@ -156,7 +156,7 @@ public class CarrierLogicTest {
         
         cm.getTile(new Position(thisLocation.getX(), thisLocation.getY())).setType(TileType.DEFAULT);
         thisAnt = new LogicAnt(EAntType.CARRIER, ai, board, factory, thisLocation, 1/**direction*/, false/**carriesSoil*/, 0/**age*/, 50/**hitpoints*/, 0/**foodLoad*/, 40/**hitpoints*/, false/**isDead*/);
-        logic = new CarrierLogic(thisAnt, thisLocation, possibleActions);
+        logic = new CarrierLogic(thisAnt, thisLocation, possibleActions, cm);
         action = logic.getAction();
         assertEquals(EAction.PickUpFood, action);
         
@@ -175,7 +175,7 @@ public class CarrierLogicTest {
         cm.getTile("6,7").setType(TileType.DEPOSIT);
         
         thisAnt = new LogicAnt(EAntType.CARRIER, ai, board, factory, thisLocation, 1/**direction*/, false/**carriesSoil*/, 0/**age*/, 50/**hitpoints*/, 20/**foodLoad*/, 40/**hitpoints*/, false/**isDead*/);
-        logic = new CarrierLogic(thisAnt, thisLocation, possibleActions);
+        logic = new CarrierLogic(thisAnt, thisLocation, possibleActions, cm);
         action = logic.getAction();
         assertEquals(EAction.MoveForward, action);
     }

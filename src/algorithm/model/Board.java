@@ -13,10 +13,11 @@ import static utility.Debug.println;
  */
 public class Board {
 
-    private final CollectiveMemory cm = CollectiveMemory.getInstance();
+    private final CollectiveMemory cm; /*= CollectiveMemory.getInstance();*/
     private final Node[][] nodes;
 
-    public Board() {
+    public Board(CollectiveMemory cm) {
+        this.cm = cm;
         int worldSizeX = cm.getWorldSizeX();
         int worldSizeY = cm.getWorldSizeY();
         
