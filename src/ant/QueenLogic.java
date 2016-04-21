@@ -18,27 +18,16 @@ import static utility.Debug.println;
 
 public class QueenLogic {
 
-    private final CollectiveMemory cm = CollectiveMemory.getInstance();
+    private final CollectiveMemory cm;
     private IAntInfo thisAnt;
     private ILocationInfo thisLocation;
     private List<EAction> possibleActions;
-    Map<Position, Tile> memory = cm.getTiles();
+    Map<Position, Tile> memory;
 
-    private static QueenLogic instance = null;
 
-    private QueenLogic() {
-    }
-
-    /**
-     * Returns the instance of this class
-     *
-     * @return instance
-     */
-    public static QueenLogic getInstance() {
-        if (instance == null) {
-            instance = new QueenLogic();
-        }
-        return instance;
+    public QueenLogic(CollectiveMemory cm) {
+        this.cm = cm;
+        memory = cm.getTiles();
     }
 
     /**
@@ -52,7 +41,7 @@ public class QueenLogic {
      * @return EAction
      */
     public EAction getAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions, List<ILocationInfo> visibleLocations, int turn) {
-        Debug.isDebug = true;
+        Debug.isDebug = false;
 
         this.thisAnt = thisAnt;
         this.thisLocation = thisLocation;
@@ -94,7 +83,7 @@ public class QueenLogic {
                 }
             }
         } else {
-            ShortestPath sp = new ShortestPath(thisAnt, thisLocation, new Location(cm.getQueenSpawn().getX(), cm.getQueenSpawn().getY()));
+            ShortestPath sp = new ShortestPath(thisAnt, thisLocation, new Location(cm.getQueenSpawn().getX(), cm.getQueenSpawn().getY()), cm);
             List<ILocationInfo> path = sp.getShortestPath();
             //Breeding location
             if (path.size() == 1) {
@@ -152,7 +141,7 @@ public class QueenLogic {
                 println("queen: has enough food to lay egg, looking for breeding location");
                 ILocationInfo breedingLocation = findBreedingLocation();
                 if (breedingLocation != null) {
-                    ShortestPath path = new ShortestPath(thisAnt, thisLocation, breedingLocation);
+                    ShortestPath path = new ShortestPath(thisAnt, thisLocation, breedingLocation, cm);
                     int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
                     EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
                     if (possibleActions.contains(movementAction)) {
@@ -163,7 +152,7 @@ public class QueenLogic {
                 println("queen: is low on food, looking for deposit location");
                 ILocationInfo depositLocation = findDepositLocation();
                 if (depositLocation != null) {
-                    ShortestPath path = new ShortestPath(thisAnt, thisLocation, depositLocation);
+                    ShortestPath path = new ShortestPath(thisAnt, thisLocation, depositLocation, cm);
                     int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
                     EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
                     if (possibleActions.contains(movementAction)) {
@@ -219,7 +208,7 @@ public class QueenLogic {
         for (Map.Entry<Position, Tile> entry : memory.entrySet()) {
             if (entry.getValue().getType().equals(TileType.BREEDING)) {
                 if (entry.getValue().getAnt() == null) {
-                    path = new ShortestPath(thisAnt, thisLocation, new Location(entry.getValue().getX(), entry.getValue().getY()));
+                    path = new ShortestPath(thisAnt, thisLocation, new Location(entry.getValue().getX(), entry.getValue().getY()), cm);
                     pathList = path.getShortestPath();
                     if (pathList.size() < distance) {
                         foundBreeding = true;

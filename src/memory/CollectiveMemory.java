@@ -10,22 +10,23 @@ import static utility.Debug.println;
 
 public class CollectiveMemory {
 
-    private static CollectiveMemory instance = null;
+//    private CollectiveMemory instance = null;
     private final Map<Position, Tile> tiles = new HashMap();
     private final List<IAntInfo> ants = new ArrayList();
     private ILocationInfo queenSpawn;
     private int worldSizeX;
     private int worldSizeY;
 
-    private CollectiveMemory() {
+    public CollectiveMemory() {
     }
 
-    public static CollectiveMemory getInstance() {
-        if (instance == null) {
-            instance = new CollectiveMemory();
-        }
-        return instance;
-    }
+//    public static CollectiveMemory getInstance() {
+//        if (instance == null) {
+//            instance = new CollectiveMemory();
+//        }
+//        return instance;
+//    }
+    
 
     public void addTiles(List<ILocationInfo> visibleLocations) {
         for (ILocationInfo visibleLocation : visibleLocations) {
@@ -61,10 +62,6 @@ public class CollectiveMemory {
         String[] positions = pos.split(",");
         println("System: getTile(" + pos + ")");
         return tiles.get(new Position(Integer.parseInt(positions[0]), Integer.parseInt(positions[1])));
-    }
-
-    public void clearMemory() {
-        instance = new CollectiveMemory();
     }
 
     public void addAnt(IAntInfo ant) {

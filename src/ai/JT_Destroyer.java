@@ -19,16 +19,16 @@ import static utility.Action.getRandomAction;
 
 public class JT_Destroyer implements IAntAI {
 
-    private final CollectiveMemory collectiveMemory = CollectiveMemory.getInstance();
-    private final Breeding breeding = Breeding.getInstance();
+    private final CollectiveMemory cm = new CollectiveMemory();
+    private final Breeding breeding = new Breeding();
     private int turn;
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
-        Debug.isDebug = false;
+        Debug.isDebug = true;
 
         visibleLocations.add(thisLocation);
-        collectiveMemory.addTiles(visibleLocations);
+        cm.addTiles(visibleLocations);
 
         EAction action = null;
 
@@ -38,13 +38,13 @@ public class JT_Destroyer implements IAntAI {
 
             // CARRIER
         } else if (thisAnt.getAntType().equals(EAntType.CARRIER)) {
-            CarrierLogic carrierLogic = new CarrierLogic(thisAnt, thisLocation, possibleActions);
+            CarrierLogic carrierLogic = new CarrierLogic(thisAnt, thisLocation, possibleActions, cm);
             action = carrierLogic.getAction();
             println("Carrier: chose action: " + action.toString());
 
             // QUEEN
         } else if (thisAnt.getAntType().equals(EAntType.QUEEN)) {
-            QueenLogic queenLogic = QueenLogic.getInstance();
+            QueenLogic queenLogic = new QueenLogic(cm);
             action = queenLogic.getAction(thisAnt, thisLocation, possibleActions, visibleLocations, turn);
             println("Queen: chose action: " + action.toString());
 
@@ -80,34 +80,29 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public void onDeath(IAntInfo thisAnt) {
-        collectiveMemory.removeAnt(thisAnt);
+        cm.removeAnt(thisAnt);
         println("System: ID: " + thisAnt.antID() + " onDeath");
     }
 
     @Override
     public void onLayEgg(IAntInfo thisAnt, List<EAntType> types, IEgg egg) {
-        int index = breeding.getBreedingAction(collectiveMemory.getAnts(), turn);
+        int index = breeding.getBreedingAction(cm.getAnts(), turn);
         EAntType type = types.get(index);
         println("System: ID: " + thisAnt.antID() + " onLayEgg: " + type);
+        
         egg.set(type, this);
     }
 
     @Override
     public void onHatch(IAntInfo thisAnt, ILocationInfo thisLocation, int worldSizeX, int worldSizeY) {
-        collectiveMemory.addAnt(thisAnt);
+        cm.addAnt(thisAnt);
         if (thisAnt.getAntType().getTypeName().equals("Queen")) {
-            collectiveMemory.setQueenSpawn(thisLocation);
-
-            // for testing purposes only!
-//            collectiveMemory.addTile(thisLocation);
-//            Tile tile = collectiveMemory.getTile(thisLocation.getX() + "," + thisLocation.getY());
-//            tile.setType(TileType.DEPOSIT);
-            // ---------------------------
+            cm.setQueenSpawn(thisLocation);
         }
         println("System: ID: " + thisAnt.antID() + " onHatch");
 
-        collectiveMemory.saveWorldSizeX(worldSizeX);
-        collectiveMemory.saveWorldSizeY(worldSizeY);
+        cm.saveWorldSizeX(worldSizeX);
+        cm.saveWorldSizeY(worldSizeY);
     }
 
 }

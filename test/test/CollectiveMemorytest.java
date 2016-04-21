@@ -21,7 +21,7 @@ public class CollectiveMemorytest {
 
     @BeforeClass
     public static void before() {
-        memory = CollectiveMemory.getInstance();
+        memory = new CollectiveMemory();
 
         List<ILocationInfo> locations = new ArrayList();
 

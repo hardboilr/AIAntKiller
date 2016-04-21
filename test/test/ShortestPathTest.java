@@ -38,7 +38,7 @@ public class ShortestPathTest {
     private AntWarsGameCtrl factory;
     private ITeamInfo teamInfo;
     private JT_Destroyer ai;
-    CollectiveMemory cm = CollectiveMemory.getInstance();
+    CollectiveMemory cm = new CollectiveMemory();
 
     public ShortestPathTest() {
         onFinished = new OnGameFinished();
@@ -46,11 +46,6 @@ public class ShortestPathTest {
         visibleLocations = new HashMap();
         cm.saveWorldSizeX(10);
         cm.saveWorldSizeY(10);
-    }
-
-    @After
-    public void tearDown() {
-        cm.clearMemory();
     }
 
     @Test
@@ -93,7 +88,7 @@ public class ShortestPathTest {
         ILocationInfo start = new Location(2, 3);
         ILocationInfo goal = new Location(2, 7);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal);
+        ShortestPath sp = new ShortestPath(ant, start, goal, cm);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
         assertEquals("2,4", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
@@ -163,7 +158,7 @@ public class ShortestPathTest {
 
         IAntInfo ant = new LogicAnt(factory, board, (Location) start, 2/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal);
+        ShortestPath sp = new ShortestPath(ant, start, goal, cm);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
         assertEquals("5,3", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
@@ -245,7 +240,7 @@ public class ShortestPathTest {
 
         IAntInfo ant = new LogicAnt(factory, board, (Location) start, 3/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal);
+        ShortestPath sp = new ShortestPath(ant, start, goal, cm);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
         assertEquals("7,3", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
@@ -361,7 +356,7 @@ public class ShortestPathTest {
 
         IAntInfo ant = new LogicAnt(factory, board, (Location) start, 3/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal);
+        ShortestPath sp = new ShortestPath(ant, start, goal, cm);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
         assertEquals("1,0", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
@@ -437,7 +432,7 @@ public class ShortestPathTest {
 
         IAntInfo ant = new LogicAnt(factory, board, (Location) start, 3/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal);
+        ShortestPath sp = new ShortestPath(ant, start, goal, cm);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
         assertEquals("2,5", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
@@ -503,7 +498,7 @@ public class ShortestPathTest {
 
         IAntInfo ant = new LogicAnt(factory, board, (Location) start, 0/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
 
-        ShortestPath sp = new ShortestPath(ant, start, goal);
+        ShortestPath sp = new ShortestPath(ant, start, goal, cm);
         List<ILocationInfo> shortestPath = sp.getShortestPath();
 
         assertEquals("exception", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
