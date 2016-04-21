@@ -185,7 +185,6 @@ public class QueenLogic {
         Tile deposit = new Tile(0, 0);
         deposit.setFoodCount(Integer.MAX_VALUE);
         boolean foundDeposit = false;
-
         for (Map.Entry<Position, Tile> entry : memory.entrySet()) {
             if (entry.getValue().getType().equals(TileType.DEPOSIT)) {
                 if (entry.getValue().getFoodCount() > deposit.getFoodCount()) {
@@ -200,6 +199,7 @@ public class QueenLogic {
             return null;
         } else {
             ILocationInfo loc = new Location(deposit.getX(), deposit.getY());
+            println("Found location (" + loc.getX() + ", " + loc.getY() + ")");
             return loc;
         }
     }
