@@ -1,4 +1,4 @@
-package a3.test;
+package a3.test.antlogic;
 
 import a3.ai.JT_Destroyer;
 import aiantwars.EAction;

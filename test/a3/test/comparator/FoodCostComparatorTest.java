@@ -1,6 +1,5 @@
-package a3.test;
+package a3.test.comparator;
 
-import a3.comparator.FoodCostComparator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,12 +7,13 @@ import a3.memory.Tile;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static a3.utility.Debug.println;
+import static org.junit.Assert.assertEquals;
 
 /**
  * 
  * @author Tobias
  */
-public class ComparatorTest {
+public class FoodCostComparatorTest {
 
     @Test
     public void testFoodCostComparator1() {
@@ -42,7 +42,7 @@ public class ComparatorTest {
         println(locWest);
 
         println("--- Sorted ---");
-        Collections.sort(path, new FoodCostComparator());
+        Collections.sort(path, Tile.FoodCostComparator);
         for (Tile location : path) {
             println(location);
         }
@@ -79,7 +79,7 @@ public class ComparatorTest {
         println(locWest);
 
         println("--- Sorted ---");
-        Collections.sort(path, new FoodCostComparator());
+        Collections.sort(path, Tile.FoodCostComparator);
         for (Tile location : path) {
             println(location);
         }

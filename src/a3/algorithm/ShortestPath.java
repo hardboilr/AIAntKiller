@@ -146,7 +146,7 @@ public class ShortestPath {
             } else {
                 direction = 1;
             }
-            movementAction = Calc.getMovementAction(currentNode.getDirection(), direction);
+            movementAction = Calc.getMovementAction(currentNode.getDirection(), direction, false);
             movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
         }
 
@@ -157,7 +157,7 @@ public class ShortestPath {
             } else {
                 direction = 0;
             }
-            movementAction = Calc.getMovementAction(ant.getDirection(), direction);
+            movementAction = Calc.getMovementAction(ant.getDirection(), direction, false);
             movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
         }
         return movementCost;
@@ -174,7 +174,7 @@ public class ShortestPath {
         int gCost = 0;
         Node thisNode = currentNode;
 
-        gCost += Calc.getMovementCost(Calc.getMovementAction(thisNode.getParent().getDirection(), thisNode.getDirection()), ant.getAntType(), false);
+        gCost += Calc.getMovementCost(Calc.getMovementAction(thisNode.getParent().getDirection(), thisNode.getDirection(), false), ant.getAntType(), false);
 
         // also add to gCost, from parent
         // when getParent == null, this should be start node

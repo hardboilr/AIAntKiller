@@ -2,7 +2,6 @@ package a3.algorithm.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import static a3.utility.Debug.println;
 
 /**
  * @author Tobias

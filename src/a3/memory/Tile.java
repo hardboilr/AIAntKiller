@@ -4,6 +4,7 @@ import aiantwars.EAntType;
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
 import a3.utility.Calc;
+import java.util.Comparator;
 
 /**
  *
@@ -16,6 +17,9 @@ public class Tile {
     private int direction;
     private int foodCount;
     private int movementCost;
+    private int frequency;
+    private double explorationPropensity = Double.POSITIVE_INFINITY;
+    private int distanceToScout = Integer.MAX_VALUE;
     private IAntInfo ant;
     private boolean isFilled;
     private boolean isRock;
@@ -125,17 +129,74 @@ public class Tile {
         this.type = type;
     }
 
+    public void setFrequency(int freq) {
+        frequency = freq;
+    }
+
+    public void incrementFrequency() {
+        frequency++;
+    }
+
+    public void setExplorationPropensity(double explorationPropensity) {
+        this.explorationPropensity = explorationPropensity;
+    }
+
+    public double getExplorationPropensity() {
+        return explorationPropensity;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public int getDistanceToScout() {
+        return distanceToScout;
+    }
+
+    public void setDistanceToScout(int distanceToScout) {
+        this.distanceToScout = distanceToScout;
+    }
+
     private void calcMovementCost(IAntInfo ant, int direction) {
         if (ant != null) {
             int currentDirection = ant.getDirection();
             EAntType antType = ant.getAntType();
-            movementCost = Calc.getMovementCost(Calc.getMovementAction(currentDirection, direction), antType, true);
+            movementCost = Calc.getMovementCost(Calc.getMovementAction(currentDirection, direction, false), antType, false);
         }
     }
 
+    public static final Comparator<Tile> FoodCostComparator = new Comparator<Tile>() {
+        @Override
+        public int compare(Tile o1, Tile o2) {
+            if (o1.getFoodCost() < o2.getFoodCost()) {
+                return -1;
+            } else if (o1.getFoodCount() > o2.getFoodCount()) {
+                return -1;
+            }
+            return 0;
+        }
+    };
+
+    public static final Comparator<Tile> ExplorationPropensityComparator = new Comparator<Tile>() {
+        @Override
+        public int compare(Tile o1, Tile o2) {
+            if (o1.getExplorationPropensity() < o2.getExplorationPropensity()) {
+                return -1;
+            } else if (o1.getDistanceToScout() < o2.getDistanceToScout()) {
+                return -1;
+            }
+            return 0;
+        }
+    };
+
     @Override
     public String toString() {
-        return "Tile: " + "(" + x + "," + y + ")" + ", isRock: " + isRock + ", foodCount: " + foodCount;
+        return "Tile: " + "(" + x + "," + y + ")" 
+                + ", isRock: " + isRock 
+                + ", isFilled: " + isFilled
+                + ", foodCount: " + foodCount 
+                + ", frequency: " + frequency 
+                + ", distanceToScout: " + distanceToScout 
+                + ", explorationPropensity: " + explorationPropensity;
     }
-
 }

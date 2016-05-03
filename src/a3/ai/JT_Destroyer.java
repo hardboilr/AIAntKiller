@@ -8,6 +8,7 @@ import aiantwars.IEgg;
 import aiantwars.ILocationInfo;
 import a3.ant.CarrierLogic;
 import a3.ant.QueenLogic;
+import a3.ant.ScoutLogic;
 import a3.behaviour.Breed;
 import java.util.List;
 import a3.memory.CollectiveMemory;
@@ -25,8 +26,9 @@ public class JT_Destroyer implements IAntAI {
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
         Debug.isDebug = true;
 
-        visibleLocations.add(thisLocation);
+        // add tiles to collective memory
         cm.addTiles(visibleLocations);
+        cm.addTile(thisLocation);
 
         EAction action = null;
 
@@ -48,6 +50,8 @@ public class JT_Destroyer implements IAntAI {
 
             // SCOUT
         } else if (thisAnt.getAntType().equals(EAntType.SCOUT)) {
+            ScoutLogic scoutLogic = new ScoutLogic(thisAnt, thisLocation, possibleActions, cm);
+            action = scoutLogic.getAction();
             action = getRandomAction(possibleActions);
             println("Scout: chose action: " + action.toString());
             //WARRIOR
@@ -61,7 +65,6 @@ public class JT_Destroyer implements IAntAI {
             }
             println("Warrior: chose action: " + action.toString());
         }
-
         return action;
     }
 
@@ -87,7 +90,7 @@ public class JT_Destroyer implements IAntAI {
         int index = breeding.getBreedingAction(cm.getAnts(), turn);
         EAntType type = types.get(index);
         println("System: ID: " + thisAnt.antID() + " onLayEgg: " + type);
-        
+
         egg.set(type, this);
     }
 

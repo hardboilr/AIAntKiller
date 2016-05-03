@@ -3,7 +3,6 @@ package a3.algorithm.model;
 import a3.memory.CollectiveMemory;
 import a3.memory.Position;
 import a3.memory.Tile;
-import static a3.utility.Debug.println;
 
 /**
  * Creates empty nodes based on world size and add them to two-dimensional
@@ -13,14 +12,11 @@ import static a3.utility.Debug.println;
  */
 public class Board {
 
-    private final CollectiveMemory cm; /*= CollectiveMemory.getInstance();*/
     private final Node[][] nodes;
 
     public Board(CollectiveMemory cm) {
-        this.cm = cm;
         int worldSizeX = cm.getWorldSizeX();
         int worldSizeY = cm.getWorldSizeY();
-        
         nodes = new Node[worldSizeX][worldSizeY];
 
         // 1a. create nodes and add to two-dimensional nodes array.

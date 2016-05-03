@@ -3,7 +3,6 @@ package a3.behaviour;
 import aiantwars.EAction;
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
-import a3.comparator.FoodCostComparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import a3.memory.CollectiveMemory;
@@ -36,7 +35,7 @@ public class ScavengeFood {
      */
     public EAction getEAction() {
         ILocationInfo currentLocation = thisAnt.getLocation();
-        SortedSet<Tile> possibleLocations = new TreeSet(new FoodCostComparator());
+        SortedSet<Tile> possibleLocations = new TreeSet(Tile.FoodCostComparator);
 
         int xOffset = currentLocation.getX();
         int yOffset = currentLocation.getY() + 1;
@@ -75,7 +74,7 @@ public class ScavengeFood {
 
         if (possibleLocations.size() > 0) {
             int chosenDirection = possibleLocations.first().getDirection();
-            return Calc.getMovementAction(thisAnt.getDirection(), chosenDirection);
+            return Calc.getMovementAction(thisAnt.getDirection(), chosenDirection, false);
 
         } else {
             return EAction.Pass;

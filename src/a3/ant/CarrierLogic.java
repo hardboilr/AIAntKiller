@@ -60,7 +60,7 @@ public class CarrierLogic {
             if (depositLocation != null) {
                 ShortestPath path = new ShortestPath(thisAnt, thisLocation, findDepositLocation(), cm);
                 int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
-                EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
+                EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
                 if (possibleActions.contains(movementAction)) {
                     return movementAction;
                 }

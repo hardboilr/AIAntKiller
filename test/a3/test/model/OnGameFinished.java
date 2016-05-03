@@ -11,6 +11,4 @@ public class OnGameFinished implements IOnGameFinished{
     public void onGameFinished(Map<ITeamInfo, Score> scores) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
 }

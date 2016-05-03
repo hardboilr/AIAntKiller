@@ -16,11 +16,6 @@ public class CollectiveMemory {
     private int worldSizeX;
     private int worldSizeY;
 
-    public CollectiveMemory() {
-    }
-
-    
-
     public void addTiles(List<ILocationInfo> visibleLocations) {
         for (ILocationInfo visibleLocation : visibleLocations) {
             addTile(visibleLocation);
@@ -31,22 +26,24 @@ public class CollectiveMemory {
         Position pos = new Position(location.getX(), location.getY());
 
         if (tiles.containsKey(pos)) {
-            Tile get = tiles.get(pos);
-            get.setFoodCount(location.getFoodCount());
-            get.setAnt(location.getAnt());
-            get.setIsFilled(location.isFilled());
-            get.setIsRock(location.isFilled());
-            get.setFoodCount(location.getFoodCount());
+            Tile existingTile = tiles.get(pos);
+            existingTile.setFoodCount(location.getFoodCount());
+            existingTile.setAnt(location.getAnt());
+            existingTile.setIsFilled(location.isFilled());
+            existingTile.setIsRock(location.isFilled());
+            existingTile.setFoodCount(location.getFoodCount());
+            existingTile.incrementFrequency();
         } else {
-            Tile tile = new Tile(location.getX(), location.getY(), location.getFoodCount(), location.getAnt(), location.isFilled(), location.isRock());
-            tiles.put(pos, tile);
+            Tile newTile = new Tile(location.getX(), location.getY(), location.getFoodCount(), location.getAnt(), location.isFilled(), location.isRock());
+            newTile.incrementFrequency();
+            tiles.put(pos, newTile);
         }
     }
 
     public Map<Position, Tile> getTiles() {
         return tiles;
     }
-    
+
     public void clearTiles() {
         tiles = new HashMap();
     }
@@ -57,7 +54,6 @@ public class CollectiveMemory {
 
     public Tile getTile(String pos) {
         String[] positions = pos.split(",");
-        println("System: getTile(" + pos + ")");
         return tiles.get(new Position(Integer.parseInt(positions[0]), Integer.parseInt(positions[1])));
     }
 
@@ -73,12 +69,19 @@ public class CollectiveMemory {
         return ants;
     }
 
-    public void setQueenSpawn(ILocationInfo queenSpawn) {
-        this.queenSpawn = this.queenSpawn == null ? queenSpawn : this.queenSpawn;
+    public void setQueenSpawn(ILocationInfo loc) {
+        addTile(loc);
+        getTile(loc.getX() + "," + loc.getY()).setType(TileType.QUEENSPAWN);
     }
 
-    public ILocationInfo getQueenSpawn() {
-        return queenSpawn;
+    public Tile getQueenSpawn() {
+        for (Map.Entry<Position, Tile> entry : tiles.entrySet()) {
+            Tile tile = entry.getValue();
+            if (tile.getType().equals(TileType.QUEENSPAWN)) {
+                return tile;
+            }
+        }
+        return null;
     }
 
     public void saveWorldSizeX(int worldSizeX) {

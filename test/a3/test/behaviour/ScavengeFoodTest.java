@@ -1,4 +1,4 @@
-package a3.test;
+package a3.test.behaviour;
 
 import a3.ai.JT_Destroyer;
 import aiantwars.EAction;
@@ -103,7 +103,7 @@ public class ScavengeFoodTest {
         
         ScavengeFood collectFood = new ScavengeFood(thisAnt, cm);
         EAction eAction = collectFood.getEAction();
-        assertEquals(EAction.MoveBackward, eAction);
+        assertEquals(EAction.TurnLeft, eAction);
     }
 
     @Test

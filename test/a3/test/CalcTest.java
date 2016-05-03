@@ -17,17 +17,17 @@ public class CalcTest {
     public void GetMovementActionTest() {
         int currentDirection = 1;
         int direction = 2;
-        EAction movementAction = Calc.getMovementAction(currentDirection, direction);
+        EAction movementAction = Calc.getMovementAction(currentDirection, direction, true);
         assertEquals(EAction.TurnRight, movementAction);
 
         currentDirection = 4;
         direction = 2;
-        movementAction = Calc.getMovementAction(currentDirection, direction);
+        movementAction = Calc.getMovementAction(currentDirection, direction, true);
         assertEquals(EAction.MoveBackward, movementAction);
 
         currentDirection = 3;
         direction = 2;
-        movementAction = Calc.getMovementAction(currentDirection, direction);
+        movementAction = Calc.getMovementAction(currentDirection, direction, true);
         assertEquals(EAction.TurnLeft, movementAction);
 
     }

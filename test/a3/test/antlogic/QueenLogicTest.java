@@ -1,4 +1,4 @@
-package a3.test;
+package a3.test.antlogic;
 
 import org.junit.Before;
 import org.junit.Test;

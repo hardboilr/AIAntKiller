@@ -4,22 +4,29 @@ import aiantwars.EAction;
 import aiantwars.EAntType;
 import aiantwars.ILocationInfo;
 import a3.algorithm.model.Node;
+import a3.memory.Tile;
+import aiantwars.impl.Location;
+import static java.lang.Math.abs;
 
 /**
  * Todo: getMovementCost might be redundant!
  *
- * @author Tobias
+ * @author Tobias Jacobsen
  */
 public class Calc {
 
     //0 = NORTH, 1 = EAST, 2 = SOUTH, 3 = WEST
-    public static EAction getMovementAction(int currentDirection, int direction) {
+    public static EAction getMovementAction(int currentDirection, int direction, boolean canMoveBackward) {
         if (currentDirection == direction) {
             // going forward
             return EAction.MoveForward;
         } else if (Math.abs(currentDirection - direction) == 2) {
             // going backward
-            return EAction.MoveBackward;
+            if (canMoveBackward) {
+                return EAction.MoveBackward;
+            } else {
+                return EAction.TurnLeft;
+            }
         } else if (currentDirection + 1 == direction || currentDirection - 3 == direction) {
             // turning right
             return EAction.TurnRight;
@@ -94,4 +101,35 @@ public class Calc {
         }
     }
 
+    /**
+     * Calculates distance from A to B when 1 movement equals 1 distance
+     *
+     * @param currentLocation
+     * @param goalLocation
+     * @return
+     */
+    public static int distanceFromAtoB(Object currentLocation, Object goalLocation) {
+        int curX = 0, curY = 0, goalX = 0, goalY = 0;
+        if (currentLocation instanceof ILocationInfo) {
+            curX = ((ILocationInfo) currentLocation).getX();
+            curY = ((ILocationInfo) currentLocation).getY();
+        } else if (currentLocation instanceof Tile) {
+            curX = ((Tile) currentLocation).getX();
+            curY = ((Tile) currentLocation).getY();
+        } else if (currentLocation instanceof Location) {
+            curX = ((Location) currentLocation).getX();
+            curY = ((Location) currentLocation).getY();
+        }
+        if (goalLocation instanceof ILocationInfo) {
+            goalX = ((ILocationInfo) goalLocation).getX();
+            goalY = ((ILocationInfo) goalLocation).getY();
+        } else if (goalLocation instanceof Tile) {
+            goalX = ((Tile) goalLocation).getX();
+            goalY = ((Tile) goalLocation).getY();
+        } else if (goalLocation instanceof Location) {
+            goalX = ((Location) goalLocation).getX();
+            goalY = ((Location) goalLocation).getY();
+        }
+        return abs(curX - goalX) + abs(curY - goalY);
+    }
 }

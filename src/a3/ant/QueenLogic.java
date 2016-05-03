@@ -143,7 +143,7 @@ public class QueenLogic {
                 if (breedingLocation != null) {
                     ShortestPath path = new ShortestPath(thisAnt, thisLocation, breedingLocation, cm);
                     int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
-                    EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
+                    EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
                     if (possibleActions.contains(movementAction)) {
                         action = movementAction;
                     }
@@ -154,7 +154,7 @@ public class QueenLogic {
                 if (depositLocation != null) {
                     ShortestPath path = new ShortestPath(thisAnt, thisLocation, depositLocation, cm);
                     int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
-                    EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection);
+                    EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
                     if (possibleActions.contains(movementAction)) {
                         action = movementAction;
                     }
