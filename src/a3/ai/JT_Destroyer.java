@@ -9,12 +9,12 @@ import aiantwars.ILocationInfo;
 import a3.ant.CarrierLogic;
 import a3.ant.QueenLogic;
 import a3.ant.ScoutLogic;
+import a3.ant.WarriorLogic;
 import a3.behaviour.Breed;
 import java.util.List;
 import a3.memory.CollectiveMemory;
 import a3.utility.Debug;
 import static a3.utility.Debug.println;
-import static a3.utility.Action.getRandomAction;
 
 public class JT_Destroyer implements IAntAI {
 
@@ -44,25 +44,27 @@ public class JT_Destroyer implements IAntAI {
 
             // QUEEN
         } else if (thisAnt.getAntType().equals(EAntType.QUEEN)) {
-            QueenLogic queenLogic = new QueenLogic(cm);
-            action = queenLogic.getAction(thisAnt, thisLocation, possibleActions, visibleLocations, turn);
+            QueenLogic queenLogic = new QueenLogic(cm, thisAnt, thisLocation, possibleActions, visibleLocations, turn);
+            action = queenLogic.getAction();
             println("Queen: chose action: " + action.toString());
 
             // SCOUT
         } else if (thisAnt.getAntType().equals(EAntType.SCOUT)) {
             ScoutLogic scoutLogic = new ScoutLogic(thisAnt, thisLocation, possibleActions, cm);
             action = scoutLogic.getAction();
-            action = getRandomAction(possibleActions);
+//            action = getRandomAction(possibleActions);
             println("Scout: chose action: " + action.toString());
             //WARRIOR
         } else if (thisAnt.getAntType().equals(EAntType.WARRIOR)) {
-            if (possibleActions.contains(EAction.Attack) && visibleLocations.get(0).getAnt().getTeamInfo().getTeamID() != thisAnt.getTeamInfo().getTeamID()) {
-                action = EAction.Attack;
-            } else if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 2) {
-                action = EAction.PickUpFood;
-            } else {
-                action = getRandomAction(possibleActions);
-            }
+//            if (possibleActions.contains(EAction.Attack) && visibleLocations.get(0).getAnt().getTeamInfo().getTeamID() != thisAnt.getTeamInfo().getTeamID()) {
+//                action = EAction.Attack;
+//            } else if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 2) {
+//                action = EAction.PickUpFood;
+//            } else {
+//                action = getRandomAction(possibleActions);
+//            }
+            WarriorLogic warriorLogic = new WarriorLogic(thisAnt, thisLocation, possibleActions, visibleLocations, cm);
+            action = warriorLogic.getAction();
             println("Warrior: chose action: " + action.toString());
         }
         return action;
