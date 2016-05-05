@@ -19,40 +19,42 @@ import static a3.utility.Debug.println;
 public class QueenLogic {
 
     private final CollectiveMemory cm;
-    private IAntInfo thisAnt;
-    private ILocationInfo thisLocation;
-    private List<EAction> possibleActions;
-    Map<Position, Tile> memory;
+    private final IAntInfo thisAnt;
+    private final ILocationInfo thisLocation;
+    private final List<EAction> possibleActions;
+    private final List<ILocationInfo> visibleLocations;
+    private final Map<Position, Tile> memory;
+    private final int turn;
 
-
-    public QueenLogic(CollectiveMemory cm) {
+    public QueenLogic(CollectiveMemory cm, IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions, List<ILocationInfo> visibleLocations, int turn) {
         this.cm = cm;
+        this.thisAnt = thisAnt;
+        this.thisLocation = thisLocation;
+        this.possibleActions = possibleActions;
+        this.turn = turn;
+        this.visibleLocations = visibleLocations;
         memory = cm.getTiles();
     }
 
     /**
      * Calculates the action for queen and returns it
      *
-     * @param thisAnt
-     * @param thisLocation
-     * @param possibleActions
-     * @param visibleLocations
-     * @param turn
      * @return EAction
      */
-    public EAction getAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions, List<ILocationInfo> visibleLocations, int turn) {
+    public EAction getAction() {
         Debug.isDebug = false;
 
-        this.thisAnt = thisAnt;
-        this.thisLocation = thisLocation;
-        this.possibleActions = possibleActions;
         EAction action = getRandomAction(possibleActions);
-        memory = cm.getTiles();
-
         boolean actionPicked = false;
 
         //Position right in fornt of thisAnt as Position object
-        Position posInFront = new Position(visibleLocations.get(0).getX(), visibleLocations.get(0).getY());
+        Position posInFront;
+        try {
+            posInFront = new Position(visibleLocations.get(0).getX(), visibleLocations.get(0).getY());
+        } catch (IndexOutOfBoundsException ex) {
+            posInFront = new Position(thisLocation.getX(), thisLocation.getY());
+            println("Warrior: looking at the wall");
+        }
         //thisLocation as a Position object
         Position currentPos = new Position(thisLocation.getX(), thisLocation.getY());
 
@@ -228,7 +230,7 @@ public class QueenLogic {
         }
     }
 
-    public EAction checkAction(EAction action) {
+    private EAction checkAction(EAction action) {
         if (action == EAction.EatFood) {
             action = getRandomAction(possibleActions);
             checkAction(action);
