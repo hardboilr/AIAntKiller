@@ -8,7 +8,7 @@ import a3.memory.Tile;
  * Creates empty nodes based on world size and add them to two-dimensional
  * array. Is used for pathfinding algorithm.
  *
- * @author Tobias
+ * @author Tobias Jacobsen
  */
 public class Board {
 

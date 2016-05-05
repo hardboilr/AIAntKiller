@@ -24,7 +24,7 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
-        Debug.isDebug = true;
+        Debug.isDebug = false;
 
         // add tiles to collective memory
         cm.addTiles(visibleLocations);

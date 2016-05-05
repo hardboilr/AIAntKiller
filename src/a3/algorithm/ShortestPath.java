@@ -16,6 +16,7 @@ import a3.utility.Calc;
 import static java.lang.Math.abs;
 import java.util.Comparator;
 import a3.memory.CollectiveMemory;
+import a3.memory.Tile;
 
 /**
  *
@@ -25,25 +26,29 @@ public class ShortestPath {
 
     private final IAntInfo ant;
     private final Node startNode;
-    private final Node goalNode;
+    private Node goalNode;
     private final Board board;
     private final Node[][] nodes;
 
-    public ShortestPath(IAntInfo ant, ILocationInfo start, ILocationInfo goal, CollectiveMemory cm) {
+    public ShortestPath(IAntInfo ant, ILocationInfo start, Object goal, CollectiveMemory cm) {
         this.ant = ant;
         board = new Board(cm);
         nodes = board.getBoardNodes();
         startNode = nodes[start.getX()][start.getY()];
         startNode.setDirection(ant.getDirection());
         startNode.setgVal(0);
-        goalNode = nodes[goal.getX()][goal.getY()];
+        if (goal instanceof ILocationInfo) {
+            goalNode = nodes[((ILocationInfo) goal).getX()][((ILocationInfo) goal).getY()];
+        } else if (goal instanceof Tile) {
+            goalNode = nodes[((Tile) goal).getX()][((Tile) goal).getY()];
+        }
     }
 
     /**
      * Calculates shortest path to goal using A*.
      *
      * @return List containing path to goal, excluding current location and
-     * including goal location. Null if path could not be found (ex. due to
+     * including goal location. 0 index contains goal. Null if path could not be found (ex. due to
      * obstructions)
      */
     public List<ILocationInfo> getShortestPath() {
@@ -87,6 +92,7 @@ public class ShortestPath {
             }
 
             if (openList.isEmpty()) {
+                System.out.println("Openlist empty!");
                 return null;
             }
 

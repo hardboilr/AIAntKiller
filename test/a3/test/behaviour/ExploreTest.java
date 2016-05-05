@@ -42,6 +42,8 @@ public class ExploreTest {
     public ExploreTest() {
         thisLocation = new Location(1, 7);
         onGameFinished = new OnGameFinished();
+        cm.saveWorldSizeX(18);
+        cm.saveWorldSizeY(10);
         board = new Board(18, 10);
         ITeamInfo teamInfo = new TeamInfo(1, "Test team");
         JT_Destroyer ai = new JT_Destroyer();
