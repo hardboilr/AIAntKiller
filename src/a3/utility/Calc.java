@@ -4,7 +4,7 @@ import aiantwars.EAction;
 import aiantwars.EAntType;
 import aiantwars.ILocationInfo;
 import a3.algorithm.model.Node;
-import a3.memory.Tile;
+import a3.memory.model.Tile;
 import aiantwars.impl.Location;
 import static java.lang.Math.abs;
 

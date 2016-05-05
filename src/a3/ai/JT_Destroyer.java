@@ -108,11 +108,11 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public void onStartMatch(int worldSizeX, int worldSizeY) {
+        cm.clearTiles();
     }
 
     @Override
     public void onStartRound(int round) {
-        cm.clearTiles();
     }
 
     @Override

@@ -1,8 +1,8 @@
 package a3.algorithm.model;
 
 import a3.memory.CollectiveMemory;
-import a3.memory.Position;
-import a3.memory.Tile;
+import a3.memory.model.Position;
+import a3.memory.model.Tile;
 
 /**
  * Creates empty nodes based on world size and add them to two-dimensional

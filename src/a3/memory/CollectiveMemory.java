@@ -1,5 +1,8 @@
 package a3.memory;
 
+import a3.memory.model.Position;
+import a3.memory.model.Tile;
+import a3.memory.model.TileType;
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
 import java.util.ArrayList;
@@ -99,5 +102,7 @@ public class CollectiveMemory {
     public int getWorldSizeY() {
         return worldSizeY;
     }
+    
+    
 
 }

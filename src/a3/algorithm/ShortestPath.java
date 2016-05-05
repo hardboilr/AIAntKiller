@@ -16,7 +16,7 @@ import a3.utility.Calc;
 import static java.lang.Math.abs;
 import java.util.Comparator;
 import a3.memory.CollectiveMemory;
-import a3.memory.Tile;
+import a3.memory.model.Tile;
 
 /**
  *

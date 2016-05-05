@@ -1,6 +1,6 @@
 package a3.test.comparator;
 
-import a3.memory.Tile;
+import a3.memory.model.Tile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -3,7 +3,7 @@ package a3.test.behaviour;
 import a3.ai.JT_Destroyer;
 import a3.behaviour.Explore;
 import a3.memory.CollectiveMemory;
-import a3.memory.Tile;
+import a3.memory.model.Tile;
 import a3.test.model.OnGameFinished;
 import static a3.utility.Debug.println;
 import aiantwars.EAction;

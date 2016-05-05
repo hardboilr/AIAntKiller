@@ -2,8 +2,8 @@ package a3.behaviour;
 
 import a3.algorithm.ShortestPath;
 import a3.memory.CollectiveMemory;
-import a3.memory.Position;
-import a3.memory.Tile;
+import a3.memory.model.Position;
+import a3.memory.model.Tile;
 import a3.utility.Calc;
 import static a3.utility.Calc.distanceFromAtoB;
 import static a3.utility.Calc.getMovementDirection;

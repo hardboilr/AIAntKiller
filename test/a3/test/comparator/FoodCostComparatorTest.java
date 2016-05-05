@@ -3,7 +3,7 @@ package a3.test.comparator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import a3.memory.Tile;
+import a3.memory.model.Tile;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static a3.utility.Debug.println;

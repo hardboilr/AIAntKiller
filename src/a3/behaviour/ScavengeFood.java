@@ -6,8 +6,8 @@ import aiantwars.ILocationInfo;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import a3.memory.CollectiveMemory;
-import a3.memory.Position;
-import a3.memory.Tile;
+import a3.memory.model.Position;
+import a3.memory.model.Tile;
 import a3.utility.Calc;
 
 /**

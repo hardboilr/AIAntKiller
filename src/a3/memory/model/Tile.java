@@ -1,5 +1,6 @@
-package a3.memory;
+package a3.memory.model;
 
+import a3.memory.model.TileType;
 import aiantwars.EAntType;
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;

@@ -1,4 +1,4 @@
-package a3.memory;
+package a3.memory.model;
 
 /**
  *
