@@ -26,7 +26,7 @@ public class JT_Destroyer implements IAntAI {
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
         Debug.isDebug = false;
 
-        // add tiles to collective memory
+        // update collective memory
         cm.addTiles(visibleLocations);
         cm.addTile(thisLocation);
 
@@ -51,7 +51,7 @@ public class JT_Destroyer implements IAntAI {
             // SCOUT
         } else if (thisAnt.getAntType().equals(EAntType.SCOUT)) {
             ScoutLogic scoutLogic = new ScoutLogic(thisAnt, thisLocation, possibleActions, cm);
-            action = scoutLogic.getAction();
+           // action = scoutLogic.getAction();
             action = getRandomAction(possibleActions);
             println("Scout: chose action: " + action.toString());
             //WARRIOR
@@ -70,19 +70,21 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public void onStartTurn(IAntInfo thisAnt, int turn) {
-        this.turn = turn;
         println("System: ID: " + thisAnt.antID() + " onStartTurn(" + turn + ")");
+        this.turn = turn;
+        cm.setCurrentTurn(turn);
     }
 
     @Override
     public void onAttacked(IAntInfo thisAnt, int dir, IAntInfo attacker, int damage) {
         println("System: ID: " + thisAnt.antID() + " onAttacked: " + damage + " damage");
+        cm.updateEnemySighting(thisAnt, attacker);
     }
 
     @Override
     public void onDeath(IAntInfo thisAnt) {
-        cm.removeAnt(thisAnt);
         println("System: ID: " + thisAnt.antID() + " onDeath");
+        cm.removeAnt(thisAnt);
     }
 
     @Override
@@ -90,7 +92,6 @@ public class JT_Destroyer implements IAntAI {
         int index = breeding.getBreedingAction(cm.getAnts(), turn);
         EAntType type = types.get(index);
         println("System: ID: " + thisAnt.antID() + " onLayEgg: " + type);
-
         egg.set(type, this);
     }
 
@@ -104,6 +105,7 @@ public class JT_Destroyer implements IAntAI {
 
         cm.saveWorldSizeX(worldSizeX);
         cm.saveWorldSizeY(worldSizeY);
+        cm.setTeamID(thisAnt.getTeamInfo().getTeamID());
     }
 
     @Override

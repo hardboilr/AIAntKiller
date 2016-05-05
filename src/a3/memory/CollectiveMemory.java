@@ -1,5 +1,6 @@
 package a3.memory;
 
+import a3.memory.model.EnemySighting;
 import a3.memory.model.Position;
 import a3.memory.model.Tile;
 import a3.memory.model.TileType;
@@ -15,9 +16,12 @@ public class CollectiveMemory {
 
     private Map<Position, Tile> tiles = new HashMap();
     private final List<IAntInfo> ants = new ArrayList();
+    private final List<EnemySighting> enemysightings = new ArrayList();
     private ILocationInfo queenSpawn;
     private int worldSizeX;
     private int worldSizeY;
+    private int currentTurn;
+    private int teamID;
 
     public void addTiles(List<ILocationInfo> visibleLocations) {
         for (ILocationInfo visibleLocation : visibleLocations) {
@@ -41,6 +45,14 @@ public class CollectiveMemory {
             newTile.incrementFrequency();
             tiles.put(pos, newTile);
         }
+        
+        if(location.getAnt() != null) {
+            // enemy sighting!
+            if(location.getAnt().getTeamInfo().getTeamID() != teamID) {
+                addEnemySighting(location.getAnt());
+            }
+        }
+        
     }
 
     public Map<Position, Tile> getTiles() {
@@ -102,7 +114,50 @@ public class CollectiveMemory {
     public int getWorldSizeY() {
         return worldSizeY;
     }
-    
-    
 
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+    
+    public void setTeamID(int teamID) {
+        this.teamID = teamID;
+    }
+
+    public void updateEnemySighting(IAntInfo friendly, IAntInfo enemy) {
+        if (friendly == null && enemy != null) {
+            addEnemySighting(enemy);
+        } else if (friendly != null & enemy != null) {
+            addEnemySighting(friendly, enemy);
+        }
+    }
+    
+    public List<EnemySighting> getEnemySightings() {
+        return enemysightings;
+    }
+
+    private void addEnemySighting(IAntInfo enemy) {
+        for (EnemySighting enemySighting : enemysightings) {
+            if (enemySighting.getEnemy().antID() == enemy.antID()) {
+                EnemySighting es = new EnemySighting(null, enemy, currentTurn);
+                enemysightings.remove(enemySighting); // delete old sighting
+                enemysightings.add(es); // create new sighting
+                return;
+            }
+        }
+        EnemySighting es = new EnemySighting(null, enemy, currentTurn);
+        enemysightings.add(es);
+    }
+
+    private void addEnemySighting(IAntInfo friendly, IAntInfo enemy) {
+        for (EnemySighting enemySighting : enemysightings) {
+            if (enemySighting.getEnemy().antID() == enemy.antID()) {
+                EnemySighting es = new EnemySighting(friendly, enemy, currentTurn);
+                enemysightings.remove(enemySighting); // delete old sighting
+                enemysightings.add(es); // create new sighting
+                return;
+            }
+        }
+        EnemySighting es = new EnemySighting(null, enemy, currentTurn);
+        enemysightings.add(es);
+    }
 }
