@@ -13,6 +13,7 @@ import a3.ant.WarriorLogic;
 import a3.behaviour.Breed;
 import java.util.List;
 import a3.memory.CollectiveMemory;
+import static a3.utility.Action.getRandomAction;
 import a3.utility.Debug;
 import static a3.utility.Debug.println;
 
@@ -26,7 +27,7 @@ public class JT_Destroyer implements IAntAI {
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
         Debug.isDebug = false;
 
-        // add tiles to collective memory
+        // update collective memory
         cm.addTiles(visibleLocations);
         cm.addTile(thisLocation);
 
@@ -52,18 +53,11 @@ public class JT_Destroyer implements IAntAI {
         } else if (thisAnt.getAntType().equals(EAntType.SCOUT)) {
             ScoutLogic scoutLogic = new ScoutLogic(thisAnt, thisLocation, possibleActions, cm);
             action = scoutLogic.getAction();
-//            action = getRandomAction(possibleActions);
+            //action = getRandomAction(possibleActions);
             println("Scout: chose action: " + action.toString());
             //WARRIOR
         } else if (thisAnt.getAntType().equals(EAntType.WARRIOR)) {
-//            if (possibleActions.contains(EAction.Attack) && visibleLocations.get(0).getAnt().getTeamInfo().getTeamID() != thisAnt.getTeamInfo().getTeamID()) {
-//                action = EAction.Attack;
-//            } else if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 2) {
-//                action = EAction.PickUpFood;
-//            } else {
-//                action = getRandomAction(possibleActions);
-//            }
-            WarriorLogic warriorLogic = new WarriorLogic(thisAnt, thisLocation, possibleActions, visibleLocations, cm);
+            WarriorLogic warriorLogic = new WarriorLogic(thisAnt, thisLocation, possibleActions, cm);
             action = warriorLogic.getAction();
             println("Warrior: chose action: " + action.toString());
         }
@@ -72,8 +66,9 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public void onStartTurn(IAntInfo thisAnt, int turn) {
-        this.turn = turn;
         println("System: ID: " + thisAnt.antID() + " onStartTurn(" + turn + ")");
+        this.turn = turn;
+        cm.setCurrentTurn(turn);
     }
 
     @Override
@@ -83,8 +78,8 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public void onDeath(IAntInfo thisAnt) {
-        cm.removeAnt(thisAnt);
         println("System: ID: " + thisAnt.antID() + " onDeath");
+        cm.removeAnt(thisAnt);
     }
 
     @Override
@@ -92,7 +87,6 @@ public class JT_Destroyer implements IAntAI {
         int index = breeding.getBreedingAction(cm.getAnts(), turn);
         EAntType type = types.get(index);
         println("System: ID: " + thisAnt.antID() + " onLayEgg: " + type);
-
         egg.set(type, this);
     }
 
@@ -106,6 +100,7 @@ public class JT_Destroyer implements IAntAI {
 
         cm.saveWorldSizeX(worldSizeX);
         cm.saveWorldSizeY(worldSizeY);
+        cm.setTeamID(thisAnt.getTeamInfo().getTeamID());
     }
 
     @Override

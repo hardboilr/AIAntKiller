@@ -5,6 +5,7 @@ import aiantwars.EAntType;
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
 import a3.utility.Calc;
+import aiantwars.impl.LogicAnt;
 import java.util.Comparator;
 
 /**

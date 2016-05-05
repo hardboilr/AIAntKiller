@@ -17,6 +17,8 @@ public class CollectiveMemory {
     private ILocationInfo queenSpawn;
     private int worldSizeX;
     private int worldSizeY;
+    private int currentTurn;
+    private int teamID;
 
     public void addTiles(List<ILocationInfo> visibleLocations) {
         for (ILocationInfo visibleLocation : visibleLocations) {
@@ -101,7 +103,12 @@ public class CollectiveMemory {
     public int getWorldSizeY() {
         return worldSizeY;
     }
-    
-    
 
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+    
+    public void setTeamID(int teamID) {
+        this.teamID = teamID;
+    }
 }

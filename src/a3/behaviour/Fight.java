@@ -74,7 +74,7 @@ public class Fight {
     }
 
     /**
-     * Looks through collectivememory looking for enemy ants, returns the one
+     * Looks through collective memory looking for enemy ants, returns the one
      * with shortest distance
      *
      * @return ILocation
