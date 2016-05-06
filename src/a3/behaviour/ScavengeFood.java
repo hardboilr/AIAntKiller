@@ -78,9 +78,7 @@ public class ScavengeFood {
 
         } else {
             return EAction.Pass;
-
         }
-
     }
 
     /**

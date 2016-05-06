@@ -1,3 +1,6 @@
+## Notes
+This README is also available on this project's github repository [here](https://github.com/hardboilr/AIAntKiller "Antwars Github Project"). 
+
 ## Project overview 
 
 Initially our aim was to create very **low level ant-behaviour** which would mostly be independent of ant-type. Types of behavior would be kill, hunt, flee, scavenge, breed, explore etc. This layer would essentially be solely responsible for returning actions such as *Turn Left* or *Attack*. **Combining these low-level behaviors** would then create different types **mid-level** behavior akin **moods/state of mind**, based on a configuration of weighted probabilities. For instance creating an aggressive mood would be achieved by having a higher probability  against hunt, kill or scavenge behaviors. Finally on top of that a **high-level** type of behavior where it would be possible to create specific **goals**, such as set two warrior-ants to attack the enemy queen or assign an warrior-ant to protect the queen, again by **using mid-level behavior**.
@@ -25,7 +28,7 @@ In conclusion, we would say that we have managed to come close to our initial id
           
 ## Project management 
 
-We have used [Trello](https://trello.com/) for project management, so we could easily plan iterations and allot features between us. Especially important when working separately. Figure 2 shows a snapshot from the Trello-board which would obviously change frequently.
+We have used [Trello](https://trello.com/ "Trello front page") for project management, so we could easily plan iterations and allot features between us. Especially important when working separately. Figure 2 shows a snapshot from the Trello-board which would obviously change frequently.
 
 <p>
     <img src="https://raw.githubusercontent.com/hardboilr/AIAntKiller/master/img/trello.PNG?token=AHPOUA7Qcf7gvEoACM8OFjjs7Ofdcxfyks5XNZKswA%3D%3D" alt>
@@ -35,12 +38,32 @@ We have used [Trello](https://trello.com/) for project management, so we could e
 
 ## Overview    
 
-### a3.ai.JT_Destroyer ###
-JT_Destroyer implements `IAntAI`. Is responsible for delegating work to all sub-ai's; `a3.logic.CarrierLogic`, `a3.logic.QueenLogic`, `a3.logic.ScoutLogic` and [`a3.logic.WarriorLogic`](). Also creates `a3.memory.CollectiveMemory`, which is passed on to the AI's. 
+### [`a3.ai.JT_Destroyer`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/ai/JT_Destroyer.java) ###
 
-### A-star implementation
+JT_Destroyer implements `IAntAI`. Is responsible for delegating work to all sub-ai's: 
 
-### Collective Memory
+[`a3.logic.CarrierLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/CarrierLogic.java)
+[`a3.logic.QueenLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/QueenLogic.java)
+[`a3.logic.ScoutLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/ScoutLogic.java) 
+[`a3.logic.WarriorLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/WarriorLogic.java). 
+
+Also creates [`a3.memory.CollectiveMemory`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/memory/CollectiveMemory.java), which is passed on to the AI's. 
+
+### [`a3.algorithm.ShortestPath`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/algorithm/ShortestPath.java)
+
+Calculates shortest path to from `ILocationInfo start` to `ILocationInfo goal` using the A-Star algorithm. The ShortestPath constructor creates a two-dimensional array of Nodes, [`a3.algorithm.model.Node`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/algorithm/model/Node.java), which it get from `board.getBoardNodes();`, [`a3.algorithm.model.Board`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/algorithm/model/Board.java). The constructor in Board creates this array based on the x and y size of the world. It uses the Collective Memory to get information about world size and possible blocked or filled positions, which it consequently ignores. 
+A Node contains a list of adjacent nodes which is set in the Board constructor as well. Furthermore a Node is initialized with an `int direction` to calculate movement costs, a `double gVal` and `double hVal` set to `Double.POSITIVE_INFINITY`, and finally a `Node parent` used for backtracking.
+
+`getShortestPath()` is responsible for calculating the shortest path, which it does using the principles of the [A-Star search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm). It was particular challenging to calculate a Node's H- and G-cost due to this particular game's mechanics concerning movement: Movement cost varies based on the ant's direction relatively to the movement direction.
+
+#### H-cost
+H-cost is movement cost from current node to goal node. First, straight movement cost is calculated. This is the ant's action cost for moving forward multiplied with the number of traversed nodes. Afterwards the optional costs turn costs in the X and Y direction is added to the cost. 
+
+#### G-cost
+
+G-cost is movement cost from current node to start node. Calculates movement cost from current node to parent. It then adds movement cost from parent node to parent's node and so on until start node is reached. 
+
+### [`a3.memory.CollectiveMemory`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/memory/CollectiveMemory.java)
 
 A simple class that contains information about the current state of the game.  
 Right now it contains:
@@ -53,7 +76,7 @@ Right now it contains:
 
 The map is updated each time the getAction method is called on any of the ants in the game, the current and visible locations is saved in collective memory by overriding the data already stored for these locations.
 
-### QueenLogic
+### [`a3.logic.QueenLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/QueenLogic.java)
 Responsible for the hatching and breeding of new ants.  
 
 ##### Breeding and deposit locations
@@ -70,11 +93,34 @@ When the queen is low on food, it also uses the collective memory, looking for t
 ##### Determining ant type
 When the method onLayEgg is called the ai uses another class called Breed, this class uses the current ants, and the current turn to determine which type of ant is to be hatched next. This class also makes sure that the first ant is always a Carrier ant, so our ants can get out of an inclosure if that is the case. 
 
-### CarrierLogic
+### [`a3.logic.CarrierLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/CarrierLogic.java)
 
-### ScoutLogic
+Constructor calculates ant's maximum food load based on number of carriers already on team. If we have less than 4 ants *or* less than 3 carrier-ants, then max food load is set to 50% of ant's max food load.
 
-### WarriorLogic   
+Has 6 prioritized conditional courses of action:
+
+**1.** When ant have food and current position is a deposit, then **drop food**
+**2.** When ant have food and current position is a deposit, but ant **cannot drop food**, then **pass turn**
+**3.** When ant is below max food load threshold, then **pickup food**
+**4.** When ant max food load has been reached, then **return to deposit location** with lowest food count
+First the deposit location with lowest food count is found. If a location can be found, ShortestPath is used to determine the shortest path to that location. Finally the Calc-methods are used to find the movement action required to initialize the journey towards the deposit location. <br>
+**5.** When current position has 0 food, then **scavenge food**
+ScavengeFood is used to find the optimal position for getting food.<br>
+**6.** If no action is returned from above, then pick a random action  
+
+#### ScavengeFood
+
+Looks at the north, south, west and east locations from ant's current position using CollectiveMemory. If a location is free, it is added to a TreeSet, which sorts the locations using a custom **FoodCostComparator** contained in the `Tile.class`. The Set is sorted so that tiles with lowest foodCost and highest foodCount comes first. If Set is empty, return `EAction.Pass`, otherwise use Calc-methods to return the first action necessary to getting to that location. 
+
+### [`a3.logic.ScoutLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/ScoutLogic.java)
+
+### [`a3.logic.WarriorLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/WarriorLogic.java)   
 
 ### Helper methods
+
+#### [`a3.utility.Action`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/utility/Action.java)
+
+#### [`a3.utility.Calc`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/utility/Calc.java)
+
+#### [`a3.utility.Debug`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/utility/Debug.java)
 

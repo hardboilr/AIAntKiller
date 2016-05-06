@@ -31,17 +31,17 @@ public class ScoutLogic {
 
         EAction action;
 
-        // replenish food storage
+        // a. replenish food storage
         if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 5) {
             action = EAction.PickUpFood;
-        } else { // explore
+        } else { // b. explore
             Explore explore = new Explore(thisAnt, thisLocation, cm);
             action = explore.getAction();
             if (!possibleActions.contains(action)) {
                 action = EAction.Pass;
             }
         }
-        // get random action
+        // c. get random action
         if (action.equals(EAction.Pass)) {
             action = getRandomAction(possibleActions);
         }
