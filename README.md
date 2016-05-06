@@ -38,11 +38,10 @@ We have used [Trello](https://trello.com/) for project management, so we could e
 ### a3.ai.JT_Destroyer ###
 JT_Destroyer implements `IAntAI`. Is responsible for delegating work to all sub-ai's; `a3.logic.CarrierLogic`, `a3.logic.QueenLogic`, `a3.logic.ScoutLogic` and [`a3.logic.WarriorLogic`](). Also creates `a3.memory.CollectiveMemory`, which is passed on to the AI's. 
 
-
-
 ### A-star implementation
 
 ### Collective Memory
+
 A simple class that contains information about the current state of the game.  
 Right now it contains:
 * Map with all the tiles in the game, is constantly updated by all ants in the game (used by all behaviour classes)
@@ -53,11 +52,14 @@ Right now it contains:
 * Team id is stored (used in some behaviour classes) 
 
 The map is updated each time the getAction method is called on any of the ants in the game, the current and visible locations is saved in collective memory by overriding the data already stored for these locations.
+
 ### QueenLogic
 Responsible for the hatching and breeding of new ants.  
+
 ##### Breeding and deposit locations
 All through the game the queen creates new "breeding" and "deposit" locations which is used for the breeding of new ants. Breeding locations is locations close to the spawnpoint of the queen  with a low foodCount to avoid blocking the food. When the queen has enough food for a laying an egg, it looks for a breeding location to lay the egg. Deposit locations is placed a little further from the queen spawn and is a locations with no ants. When the queen is low on food, it looks for a deposit location for to get food for another egg.  
 Picks up food if the foodCount is low, and it's a possible action. To speed up the breeding of ants, in the first 30 rounds the queen lay eggs at all free locations, after this only breeding locations can hold eggs.  
+
 ##### Finding breeding location
 When the queen has enough food to lay an egg it uses the collective memory, and looks for the closest empty breeding location. For this it uses the pathfinding algorithm implemented. 
 For the queen to lay an egg it needs 5 action points, this does not necessarily match the amount of points the queen have when standing in front of a breeding location. Therefore the queen looks at location right in front and if it is a breeding location and the amount of action points is less than 5, the queen passes until it can lay an egg.
