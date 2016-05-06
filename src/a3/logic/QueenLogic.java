@@ -1,4 +1,4 @@
-package a3.ant;
+package a3.logic;
 
 import aiantwars.EAction;
 import aiantwars.IAntInfo;

@@ -1,4 +1,4 @@
-package a3.ant;
+package a3.logic;
 
 import a3.behaviour.Explore;
 import a3.memory.CollectiveMemory;

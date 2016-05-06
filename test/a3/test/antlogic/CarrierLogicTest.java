@@ -13,7 +13,7 @@ import aiantwars.impl.DummyGraphicsAntWarsGUI;
 import aiantwars.impl.Location;
 import aiantwars.impl.LogicAnt;
 import aiantwars.impl.TeamInfo;
-import a3.ant.CarrierLogic;
+import a3.logic.CarrierLogic;
 import java.util.ArrayList;
 import java.util.List;
 import a3.memory.CollectiveMemory;
