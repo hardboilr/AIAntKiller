@@ -57,7 +57,7 @@ public class JT_Destroyer implements IAntAI {
             println("Scout: chose action: " + action.toString());
             //WARRIOR
         } else if (thisAnt.getAntType().equals(EAntType.WARRIOR)) {
-            WarriorLogic warriorLogic = new WarriorLogic(thisAnt, thisLocation, possibleActions, cm);
+            WarriorLogic warriorLogic = new WarriorLogic(thisAnt, thisLocation, possibleActions, visibleLocations, cm);
             action = warriorLogic.getAction();
             println("Warrior: chose action: " + action.toString());
         }

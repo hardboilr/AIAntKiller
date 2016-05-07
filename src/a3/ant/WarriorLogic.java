@@ -1,5 +1,6 @@
 package a3.ant;
 
+import a3.behaviour.Fight;
 import a3.memory.CollectiveMemory;
 import a3.memory.model.Tile;
 import static a3.utility.Action.getRandomAction;
@@ -21,12 +22,14 @@ public class WarriorLogic {
     private final IAntInfo thisAnt;
     private final ILocationInfo thisLocation;
     private final List<EAction> possibleActions;
+    private final List<ILocationInfo> visibleLocations;
     private final CollectiveMemory cm;
 
-    public WarriorLogic(IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions, CollectiveMemory cm) {
+    public WarriorLogic(IAntInfo thisAnt, ILocationInfo thisLocation, List<EAction> possibleActions, List<ILocationInfo> visibleLocations, CollectiveMemory cm) {
         this.thisAnt = thisAnt;
         this.thisLocation = thisLocation;
         this.possibleActions = possibleActions;
+        this.visibleLocations = visibleLocations;
         this.cm = cm;
     }
 
@@ -35,12 +38,12 @@ public class WarriorLogic {
         EAction action = null;
 
         // replenish food storage
-        if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 5) {
+        if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 3) {
             return EAction.PickUpFood;
         }
 
         // Attack enemy if possible    
-        if (possibleActions.contains(EAction.Attack)) {
+        if (possibleActions.contains(EAction.Attack) && visibleLocations.get(0).getAnt().getTeamInfo().getTeamID() != thisAnt.getTeamInfo().getTeamID()) {
             return EAction.Attack;
         }
 
@@ -49,12 +52,27 @@ public class WarriorLogic {
         if (enemyTile != null) {
             return getMovementAction(thisAnt.getDirection(), getMovementDirection(thisAnt, enemyTile), false);
         }
-        
-        // Check if warrior should investigate an enemy sighting
-        
-        // INSERT FIGHT-CODE HERE
-        
-        return getRandomAction(possibleActions);
+
+        // If number of warrior ants correct look for enemy ants
+        int warriorCount = 0;
+
+        List<IAntInfo> ants = cm.getAnts();
+        for (IAntInfo ant : ants) {
+            switch (ant.getAntType().getTypeName()) {
+                case "Warrier":
+                    warriorCount++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (warriorCount >= 2) {
+            Fight fight = new Fight(thisAnt, thisLocation, cm, possibleActions);
+            return fight.getAction();
+        }
+
+        return checkAction(getRandomAction(possibleActions));
     }
 
     private Tile checkSurroundingTilesForEnemy() {
@@ -81,6 +99,14 @@ public class WarriorLogic {
             }
         }
         return null;
+    }
+
+    private EAction checkAction(EAction action) {
+        if (action == EAction.EatFood) {
+            action = getRandomAction(possibleActions);
+            checkAction(action);
+        }
+        return action;
     }
 
 }

@@ -7,11 +7,13 @@ import a3.memory.model.Tile;
 import a3.utility.Calc;
 import static a3.utility.Debug.println;
 import aiantwars.EAction;
+import aiantwars.EAntType;
 import aiantwars.IAntInfo;
 import aiantwars.ILocationInfo;
 import aiantwars.impl.Location;
 import java.util.List;
 import java.util.Map;
+import static a3.utility.Action.getRandomAction;
 
 /**
  *
@@ -34,43 +36,17 @@ public class Fight {
     }
 
     public EAction getAction() {
-        EAction action = EAction.Pass;
-        int scoutCount = 0;
-        int carrierCount = 0;
-        int warriorCount = 0;
-
-        List<IAntInfo> ants = cm.getAnts();
-        for (IAntInfo ant : ants) {
-            switch (ant.getAntType().getTypeName()) {
-                case "Scout":
-                    scoutCount++;
-                    break;
-                case "Carrier":
-                    carrierCount++;
-                    break;
-                case "Warrier":
-                    warriorCount++;
-                    break;
-                default:
-                    break;
+        ILocationInfo enemyLocation = findEnemyLocation();
+        if (enemyLocation != null) {
+            ShortestPath path = new ShortestPath(thisAnt, thisLocation, enemyLocation, cm);
+            int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
+            EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
+            if (possibleActions.contains(movementAction)) {
+                return movementAction;
             }
         }
 
-        if (warriorCount >= 2) {
-            //Look for enemy queen or enemy ants
-            println("queen: is low on food, looking for deposit location");
-            ILocationInfo enemyLocation = findEnemyLocation();
-            if (enemyLocation != null) {
-                ShortestPath path = new ShortestPath(thisAnt, thisLocation, enemyLocation, cm);
-                int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
-                EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
-                if (possibleActions.contains(movementAction)) {
-                    action = movementAction;
-                }
-            }
-        }
-
-        return action;
+        return getRandomAction(possibleActions);
     }
 
     /**
