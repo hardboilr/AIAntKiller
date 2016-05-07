@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Tobias
+ * @author Tobias Jacobsen
  */
 public class Node implements Comparable<Node> {
 
@@ -12,8 +12,7 @@ public class Node implements Comparable<Node> {
     private final int y;
     private int direction;
     private double gVal = Double.POSITIVE_INFINITY; // movement cost from starting node to this node
-    private double hVal = Double.POSITIVE_INFINITY;
-    ; // estimated movement cost from this node to final destination
+    private double hVal = Double.POSITIVE_INFINITY; // estimated movement cost from this node to final destination
     private Node parent;
     private final List<Node> adjacentNodes;
 
@@ -97,5 +96,4 @@ public class Node implements Comparable<Node> {
         }
         return 0;
     }
-
 }

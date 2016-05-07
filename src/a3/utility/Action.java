@@ -28,7 +28,7 @@ public class Action {
     private static Map<String, Double> weightMap;
 
     /**
-     * Returns random action based on weights
+     * Returns random action based on normalized weights
      *
      * @param possibleActions
      * @return random action
@@ -41,6 +41,8 @@ public class Action {
 
         int noOfPossibleActions = possibleActions.size();
 
+        // if no. of possible actions are more than one, make the calculation, 
+        // otherwise just return that one action 
         if (noOfPossibleActions > 1) {
 
             EAction action = EAction.Pass;
@@ -200,5 +202,4 @@ public class Action {
     public static void setPassWeight(double passWeight) {
         Action.passWeight = passWeight;
     }
-
 }

@@ -1,4 +1,4 @@
-package a3.ant;
+package a3.logic;
 
 import aiantwars.EAction;
 import aiantwars.EAntType;
@@ -51,7 +51,7 @@ public class CarrierLogic {
             // b. when ant have food and current position is a deposit, but ant cannot drop food, then pass turn
             return EAction.Pass;
         } else if (!isDeposit() && possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < maxFoodLoad) {
-            // c. when ant is within max food load threshold, then pickup food
+            // c. when ant is below max food load threshold, then pickup food
             return EAction.PickUpFood;
         } else if (thisAnt.getFoodLoad() >= maxFoodLoad) {
             // d. when ant max food load has been reached, then return to deposit location with lowest food count
@@ -70,12 +70,11 @@ public class CarrierLogic {
             println("e. current position: " + thisLocation.getX() + "," + thisLocation.getY() + " has 0 food. Scavenging food");
             ScavengeFood scavengeFood = new ScavengeFood(thisAnt, cm);
             EAction eAction = scavengeFood.getEAction();
-            if (eAction.equals(EAction.Pass)) {
-                return getRandomAction(possibleActions);
-            } else {
+            if (!eAction.equals(EAction.Pass)) {
                 return eAction;
             }
         }
+        // f. if no action is returned from above, then pick a random action
         println("Carrier: Picked random");
         return getRandomAction(possibleActions);
     }
