@@ -184,7 +184,7 @@ public class Tile {
         public int compare(Tile o1, Tile o2) {
             if (o1.getExplorationPropensity() < o2.getExplorationPropensity()) {
                 return -1;
-            } else if (o1.getDistanceToScout() < o2.getDistanceToScout()) {
+            } else if (o1.getExplorationPropensity() == o2.getExplorationPropensity() && o1.getDistanceToScout() < o2.getDistanceToScout()) {
                 return -1;
             }
             return 0;
@@ -196,7 +196,8 @@ public class Tile {
         return "Tile: " + "(" + x + "," + y + ")" 
                 + ", isRock: " + isRock 
                 + ", isFilled: " + isFilled
-                + ", foodCount: " + foodCount 
+                + ", foodCount: " + foodCount
+                + ", foodCost: " + getFoodCost()
                 + ", frequency: " + frequency 
                 + ", distanceToScout: " + distanceToScout 
                 + ", explorationPropensity: " + explorationPropensity;

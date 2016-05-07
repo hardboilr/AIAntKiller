@@ -54,8 +54,11 @@ public class CarrierLogic {
         } else if (!isDeposit() && possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < maxFoodLoad) {
             // c. when ant is below max food load threshold, then pickup food
             return EAction.PickUpFood;
+        } else if (possibleActions.contains(EAction.DigOut)) {
+            // d. when ant can pickup filled, then do that
+            return EAction.DigOut;
         } else if (thisAnt.getFoodLoad() >= maxFoodLoad) {
-            // d. when ant max food load has been reached, then return to deposit location with lowest food count
+            // e. when ant max food load has been reached, then return to deposit location with lowest food count
             println("Carrier: d. max food load has been reached. Returning to deposit location with lowest food count");
             ILocationInfo depositLocation = findDepositLocation();
             if (depositLocation != null) {
@@ -67,7 +70,7 @@ public class CarrierLogic {
                 }
             }
         } else if (thisLocation.getFoodCount() == 0) {
-            // e. when current position has 0 food, then scavenge food
+            // f. when current position has 0 food, then scavenge food
             println("Carrier: e. current position: " + thisLocation.getX() + "," + thisLocation.getY() + " has 0 food. Scavenging food");
             ScavengeFood scavengeFood = new ScavengeFood(thisAnt, cm);
             EAction eAction = scavengeFood.getEAction();
@@ -75,7 +78,7 @@ public class CarrierLogic {
                 return eAction;
             }
         }
-        // f. if no action is returned from above, then pick a random action
+        // g. if no action is returned from above, then pick a random action
         println("Carrier: Picked random");
         return getRandomAction(possibleActions);
     }

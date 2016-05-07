@@ -7,6 +7,7 @@ import a3.memory.model.Tile;
 import a3.utility.Calc;
 import static a3.utility.Calc.distanceFromAtoB;
 import static a3.utility.Calc.getMovementDirection;
+import static a3.utility.Debug.print;
 import static a3.utility.Debug.println;
 import aiantwars.EAction;
 import aiantwars.IAntInfo;
@@ -55,7 +56,7 @@ public class Explore {
                 tile.setDistanceToScout(distanceFromAtoB(tile, thisLocation));
 
                 // frequency * distance to queenspawn * distance to scout 
-                double explorationPropensity = tile.getFrequency() * distanceFromAtoB(thisLocation, cm.getQueenSpawn()) * tile.getDistanceToScout();
+                double explorationPropensity = (tile.getFrequency() + 1) * (distanceFromAtoB(thisLocation, cm.getQueenSpawn()) + 1) * (tile.getDistanceToScout() + 1);
 
                 // if tile has unexplored neighbour, multiply by 0.1
                 if (cm.getTile(tile.getX() + "," + (tile.getY() + 1)) == null) { // north
@@ -79,16 +80,20 @@ public class Explore {
             for (Tile t : possibleLocations) {
                 println("Scout: possible locations: " + t);
             }
-            
-            
+
             ShortestPath sp = new ShortestPath(thisAnt, thisLocation, possibleLocations.first(), cm);
             List<ILocationInfo> shortestPath = sp.getShortestPath();
+
+            println("shortestPath ->");
+            for (ILocationInfo l : shortestPath) {
+                print("(" + l.getX() + "," + l.getY() + "),");
+            }
 
             int movementDirection = getMovementDirection(thisLocation, shortestPath.get(0));
 
             println("chosenLocation: " + possibleLocations.first());
             println("chosenDirection: " + movementDirection);
-            
+
             return Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
 
         } else {

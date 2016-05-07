@@ -88,23 +88,25 @@ public class QueenLogic {
             ShortestPath sp = new ShortestPath(thisAnt, thisLocation, new Location(cm.getQueenSpawn().getX(), cm.getQueenSpawn().getY()), cm);
             List<ILocationInfo> path = sp.getShortestPath();
             //Breeding location
-            if (path.size() == 1) {
-                if (thisLocation.getFoodCount() <= 1) {
+            if (path != null) {
+                if (path.size() == 1) {
+                    if (thisLocation.getFoodCount() <= 1) {
+                        if (memory.containsKey(currentPos)) {
+                            Tile tile = memory.get(currentPos);
+                            if (tile.getType() == TileType.DEFAULT) {
+                                tile.setType(TileType.BREEDING);
+                                println("Set location " + currentPos.toString() + " to a breeding location!");
+                            }
+                        }
+                    }
+                } //Deposit location
+                else if (path.size() == 2 || path.size() == 3) {
                     if (memory.containsKey(currentPos)) {
                         Tile tile = memory.get(currentPos);
                         if (tile.getType() == TileType.DEFAULT) {
-                            tile.setType(TileType.BREEDING);
-                            println("Set location " + currentPos.toString() + " to a breeding location!");
+                            tile.setType(TileType.DEPOSIT);
+                            println("Set location " + currentPos.toString() + " to a deposit location!");
                         }
-                    }
-                }
-            } //Deposit location
-            else if (path.size() == 2 || path.size() == 3) {
-                if (memory.containsKey(currentPos)) {
-                    Tile tile = memory.get(currentPos);
-                    if (tile.getType() == TileType.DEFAULT) {
-                        tile.setType(TileType.DEPOSIT);
-                        println("Set location " + currentPos.toString() + " to a deposit location!");
                     }
                 }
             }

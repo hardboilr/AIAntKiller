@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import a3.memory.model.Tile;
+import a3.utility.Debug;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static a3.utility.Debug.println;
@@ -14,6 +15,10 @@ import static org.junit.Assert.assertEquals;
  * @author Tobias
  */
 public class FoodCostComparatorTest {
+    
+    public FoodCostComparatorTest() {
+        Debug.isDebug = true;
+    }
 
     @Test
     public void testFoodCostComparator1() {
@@ -36,7 +41,7 @@ public class FoodCostComparatorTest {
         path.add(locEast);
         println(locEast);
 
-        Tile locWest = new Tile(1, 1, null, 4, 6);
+        Tile locWest = new Tile(1, 1, null, 4, 5);
         locWest.setMovementCost(5);
         path.add(locWest);
         println(locWest);

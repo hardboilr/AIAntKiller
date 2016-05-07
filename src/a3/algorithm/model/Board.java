@@ -80,10 +80,10 @@ public class Board {
      */
     private boolean checkNode(int x, int y) {
         try {
-            
+
             Node node = nodes[x][y];
-            if(node != null) {
-            return true;
+            if (node != null) {
+                return true;
             } else {
                 return false;
             }

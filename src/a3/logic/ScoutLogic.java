@@ -27,7 +27,7 @@ public class ScoutLogic {
     }
 
     public EAction getAction() {
-        println("Scout: Current AP: " + thisAnt.getActionPoints() + "| Available actions: " + possibleActions.toString());
+        println("Scout: Current loc: " + thisLocation.getX() + "," + thisLocation.getY() + ", direction: " + thisAnt.getDirection() + ", AP: " + thisAnt.getActionPoints() + "| Available actions: " + possibleActions.toString());
 
         // a. when location has food and ant's food load is below 5, then pickup food
         if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 5) {

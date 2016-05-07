@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
     a3.test.comparator.FoodCostComparatorTest.class,
     a3.test.OpenListTest.class,
     a3.test.behaviour.ScavengeFoodTest.class,
-    a3.test.comparator.ExplorationPropensityComparator.class,
+    a3.test.comparator.ExplorationPropensityComparatorTest.class,
     a3.test.behaviour.ExploreTest.class,
     a3.test.ShortestPathTest.class,})
 
