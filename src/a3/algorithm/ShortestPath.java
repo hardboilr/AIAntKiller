@@ -25,19 +25,20 @@ import static a3.utility.Debug.println;
  */
 public class ShortestPath {
 
-    private final IAntInfo ant;
+    private final IAntInfo thisAnt;
     private final Node startNode;
     private Node goalNode;
     private final Board board;
     private final Node[][] nodes;
 
-    public ShortestPath(IAntInfo ant, ILocationInfo start, Object goal, CollectiveMemory cm) {
-        this.ant = ant;
-        board = new Board(cm);
+    public ShortestPath(IAntInfo thisAnt, ILocationInfo start, Object goal, CollectiveMemory cm) {
+        this.thisAnt = thisAnt;
+        board = new Board(cm, thisAnt, goal);
         nodes = board.getBoardNodes();
         startNode = nodes[start.getX()][start.getY()];
-        startNode.setDirection(ant.getDirection());
+        startNode.setDirection(thisAnt.getDirection());
         startNode.setgVal(0);
+
         if (goal instanceof ILocationInfo) {
             goalNode = nodes[((ILocationInfo) goal).getX()][((ILocationInfo) goal).getY()];
         } else if (goal instanceof Tile) {
@@ -49,8 +50,8 @@ public class ShortestPath {
      * Calculates shortest path to goal using A*.
      *
      * @return List containing path to goal, excluding current location and
-     * including goal location. 0 index contains goal. Null if path could not be found (ex. due to
-     * obstructions)
+     * including goal location. 0 index contains goal. Null if path could not be
+     * found (ex. due to obstructions)
      */
     public List<ILocationInfo> getShortestPath() {
         Set<Node> closedList = new HashSet();
@@ -143,7 +144,7 @@ public class ShortestPath {
 
         // calculate straight movement costs
         int straightMovementDistance = movementX + movementY;
-        int straightMovementCost = Calc.getMovementCost(EAction.MoveForward, ant.getAntType(), false);
+        int straightMovementCost = Calc.getMovementCost(EAction.MoveForward, thisAnt.getAntType(), false);
         movementCost += straightMovementDistance * straightMovementCost;
 
         // calculate optional turn costs for x direction
@@ -154,7 +155,7 @@ public class ShortestPath {
                 direction = 1;
             }
             movementAction = Calc.getMovementAction(currentNode.getDirection(), direction, false);
-            movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
+            movementCost += Calc.getMovementCost(movementAction, thisAnt.getAntType(), false) - thisAnt.getAntType().getActionCost(EAction.MoveForward);
         }
 
         // calculate optional turn costs for y direction
@@ -164,8 +165,8 @@ public class ShortestPath {
             } else {
                 direction = 0;
             }
-            movementAction = Calc.getMovementAction(ant.getDirection(), direction, false);
-            movementCost += Calc.getMovementCost(movementAction, ant.getAntType(), false) - ant.getAntType().getActionCost(EAction.MoveForward);
+            movementAction = Calc.getMovementAction(thisAnt.getDirection(), direction, false);
+            movementCost += Calc.getMovementCost(movementAction, thisAnt.getAntType(), false) - thisAnt.getAntType().getActionCost(EAction.MoveForward);
         }
         return movementCost;
     }
@@ -181,7 +182,7 @@ public class ShortestPath {
         int gCost = 0;
         Node thisNode = currentNode;
 
-        gCost += Calc.getMovementCost(Calc.getMovementAction(thisNode.getParent().getDirection(), thisNode.getDirection(), false), ant.getAntType(), false);
+        gCost += Calc.getMovementCost(Calc.getMovementAction(thisNode.getParent().getDirection(), thisNode.getDirection(), false), thisAnt.getAntType(), false);
 
         // also add to gCost, from parent
         // when getParent == null, this should be start node

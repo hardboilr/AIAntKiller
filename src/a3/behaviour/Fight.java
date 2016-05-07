@@ -39,10 +39,14 @@ public class Fight {
         ILocationInfo enemyLocation = findEnemyLocation();
         if (enemyLocation != null) {
             ShortestPath path = new ShortestPath(thisAnt, thisLocation, enemyLocation, cm);
-            int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
-            EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
-            if (possibleActions.contains(movementAction)) {
-                return movementAction;
+
+            List<ILocationInfo> shortestPath = path.getShortestPath();
+            if (shortestPath != null) {
+                int movementDirection = Calc.getMovementDirection(thisLocation, shortestPath.get(0));
+                EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
+                if (possibleActions.contains(movementAction)) {
+                    return movementAction;
+                }
             }
         }
 
@@ -65,9 +69,11 @@ public class Fight {
             if (entry.getValue().getAnt().getTeamInfo().getTeamID() != thisAnt.getTeamInfo().getTeamID()) {
                 path = new ShortestPath(thisAnt, thisLocation, new Location(entry.getValue().getX(), entry.getValue().getY()), cm);
                 pathList = path.getShortestPath();
-                if (pathList.size() < distance) {
-                    foundEnemy = true;
-                    enemyLocation = new Tile(entry.getValue().getX(), entry.getValue().getY());
+                if (pathList != null) {
+                    if (pathList.size() < distance) {
+                        foundEnemy = true;
+                        enemyLocation = new Tile(entry.getValue().getX(), entry.getValue().getY());
+                    }
                 }
             }
         }

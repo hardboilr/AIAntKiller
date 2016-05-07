@@ -146,10 +146,14 @@ public class QueenLogic {
                 ILocationInfo breedingLocation = findBreedingLocation();
                 if (breedingLocation != null) {
                     ShortestPath path = new ShortestPath(thisAnt, thisLocation, breedingLocation, cm);
-                    int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
-                    EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
-                    if (possibleActions.contains(movementAction)) {
-                        action = movementAction;
+
+                    List<ILocationInfo> shortestPath = path.getShortestPath();
+                    if (shortestPath != null) {
+                        int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
+                        EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
+                        if (possibleActions.contains(movementAction)) {
+                            action = movementAction;
+                        }
                     }
                 }
             } else if (thisAnt.getFoodLoad() < 5) {
@@ -214,11 +218,12 @@ public class QueenLogic {
                 if (entry.getValue().getAnt() == null) {
                     path = new ShortestPath(thisAnt, thisLocation, new Location(entry.getValue().getX(), entry.getValue().getY()), cm);
                     pathList = path.getShortestPath();
-                    if (pathList.size() < distance) {
-                        foundBreeding = true;
-                        breeding = new Tile(entry.getValue().getX(), entry.getValue().getY());
+                    if (pathList != null) {
+                        if (pathList.size() < distance) {
+                            foundBreeding = true;
+                            breeding = new Tile(entry.getValue().getX(), entry.getValue().getY());
+                        }
                     }
-
                 }
             }
         }

@@ -63,11 +63,15 @@ public class CarrierLogic {
             ILocationInfo depositLocation = findDepositLocation();
             if (depositLocation != null) {
                 ShortestPath path = new ShortestPath(thisAnt, thisLocation, findDepositLocation(), cm);
-                int movementDirection = Calc.getMovementDirection(thisLocation, path.getShortestPath().get(0));
-                EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
-                if (possibleActions.contains(movementAction)) {
-                    return movementAction;
+                List<ILocationInfo> shortestPath = path.getShortestPath();
+                if (shortestPath != null) {
+                    int movementDirection = Calc.getMovementDirection(thisLocation, shortestPath.get(0));
+                    EAction movementAction = Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
+                    if (possibleActions.contains(movementAction)) {
+                        return movementAction;
+                    }
                 }
+
             }
         } else if (thisLocation.getFoodCount() == 0) {
             // f. when current position has 0 food, then scavenge food

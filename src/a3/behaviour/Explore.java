@@ -84,20 +84,20 @@ public class Explore {
             ShortestPath sp = new ShortestPath(thisAnt, thisLocation, possibleLocations.first(), cm);
             List<ILocationInfo> shortestPath = sp.getShortestPath();
 
-            println("shortestPath ->");
-            for (ILocationInfo l : shortestPath) {
-                print("(" + l.getX() + "," + l.getY() + "),");
+            if (shortestPath != null) {
+                println("shortestPath ->");
+                for (ILocationInfo l : shortestPath) {
+                    print("(" + l.getX() + "," + l.getY() + "),");
+                }
+
+                int movementDirection = getMovementDirection(thisLocation, shortestPath.get(0));
+
+                println("chosenLocation: " + possibleLocations.first());
+                println("chosenDirection: " + movementDirection);
+
+                return Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
             }
-
-            int movementDirection = getMovementDirection(thisLocation, shortestPath.get(0));
-
-            println("chosenLocation: " + possibleLocations.first());
-            println("chosenDirection: " + movementDirection);
-
-            return Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
-
-        } else {
-            return EAction.Pass;
         }
+        return EAction.Pass;
     }
 }

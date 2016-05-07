@@ -3,6 +3,9 @@ package a3.algorithm.model;
 import a3.memory.CollectiveMemory;
 import a3.memory.model.Position;
 import a3.memory.model.Tile;
+import aiantwars.IAntInfo;
+import aiantwars.ILocationInfo;
+import aiantwars.impl.Location;
 
 /**
  * Creates empty nodes based on world size and add them to two-dimensional
@@ -14,10 +17,21 @@ public class Board {
 
     private final Node[][] nodes;
 
-    public Board(CollectiveMemory cm) {
+    public Board(CollectiveMemory cm, IAntInfo thisAnt, Object goal) {
         int worldSizeX = cm.getWorldSizeX();
         int worldSizeY = cm.getWorldSizeY();
         nodes = new Node[worldSizeX][worldSizeY];
+
+        int goalX = 0;
+        int goalY = 0;
+        if (goal instanceof ILocationInfo) {
+            goalX = ((ILocationInfo) goal).getX();
+            goalY = ((ILocationInfo) goal).getY();
+        } else if (goal instanceof Tile) {
+            goal = new Tile(((Tile) goal).getX(), ((Tile) goal).getY());
+            goalX = ((Tile) goal).getX();
+            goalY = ((Tile) goal).getY();
+        }
 
         // 1a. create nodes and add to two-dimensional nodes array.
         for (int x = 0; x < worldSizeX; x++) {
@@ -27,8 +41,13 @@ public class Board {
                 // 1b. check for obstacles
                 Tile tile = cm.getTiles().get(new Position(x, y));
                 if (tile != null) {
-                    if (tile.isFilled() || tile.isRock()) {
-                        nodes[x][y] = null;
+                    try {
+
+                        // if tile is filled OR rock or tile has ant AND ant is not thisAnt AND tile is not same as goal position 
+                        if (tile.isFilled() || tile.isRock() || (tile.getAnt() != null && tile.getAnt().antID() != thisAnt.antID() && tile.getX() != goalX && tile.getY() != goalY)) {
+                            nodes[x][y] = null;
+                        }
+                    } catch (NullPointerException ex) {
                     }
                 }
             }
