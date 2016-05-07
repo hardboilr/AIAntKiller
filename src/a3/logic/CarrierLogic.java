@@ -16,6 +16,7 @@ import a3.memory.model.TileType;
 import a3.utility.Calc;
 import static a3.utility.Debug.println;
 import static a3.utility.Action.getRandomAction;
+import a3.utility.Debug;
 
 /**
  *
@@ -41,6 +42,7 @@ public class CarrierLogic {
 
     public EAction getAction() {
 
+        println("status of mute: " + Debug.muteCarrier);
         println("Carrier: Current AP: " + thisAnt.getActionPoints() + "| Available actions: " + possibleActions.toString());
         println("Carrier: foodLoad: " + thisAnt.getFoodLoad() + ", maxFoodLoad: " + maxFoodLoad);
 

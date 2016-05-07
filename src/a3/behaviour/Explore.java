@@ -70,13 +70,17 @@ public class Explore {
 
                 // save explorationPropensity-factor to tile
                 tile.setExplorationPropensity(explorationPropensity);
-                System.out.println("Possible location: " + tile);
                 possibleLocations.add(tile);
             }
         }
 
         // find tile with lowest explorationPropensity-factor
         if (possibleLocations.size() > 0) {
+            for (Tile t : possibleLocations) {
+                println("Scout: possible locations: " + t);
+            }
+            
+            
             ShortestPath sp = new ShortestPath(thisAnt, thisLocation, possibleLocations.first(), cm);
             List<ILocationInfo> shortestPath = sp.getShortestPath();
 

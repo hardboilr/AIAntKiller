@@ -17,6 +17,7 @@ import static java.lang.Math.abs;
 import java.util.Comparator;
 import a3.memory.CollectiveMemory;
 import a3.memory.model.Tile;
+import static a3.utility.Debug.println;
 
 /**
  *
@@ -92,7 +93,7 @@ public class ShortestPath {
             }
 
             if (openList.isEmpty()) {
-                System.out.println("Openlist empty!");
+                println("Openlist empty!");
                 return null;
             }
 

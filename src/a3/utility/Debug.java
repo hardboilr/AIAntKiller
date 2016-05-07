@@ -36,7 +36,9 @@ public class Debug {
      * @param message
      */
     public static void println(Object message) {
-        format(message, true);
+        if (isDebug) {
+            format(message, true);
+        }
     }
 
     /**
@@ -45,31 +47,36 @@ public class Debug {
      * @param message
      */
     public static void print(Object message) {
-        format(message, false);
+        if (isDebug) {
+            format(message, false);
+        }
     }
 
     private static void format(Object message, boolean isPrintline) {
-        if (isDebug) {
-            String m = message.toString().toLowerCase();
+        String m = message.toString().toLowerCase();
 
-            if (m.contains("queen:") && !muteQueen) {
-                m = ANSI_RED + m + ANSI_RESET;
-                SystemOut(m, isPrintline);
-            } else if (m.contains("carrier:") && !muteCarrier) {
-                m = ANSI_GREEN + m + ANSI_RESET;
-                SystemOut(m, isPrintline);
-            } else if (m.contains("scout:") && !muteScout) {
-                m = ANSI_BLUE + m + ANSI_RESET;
-                SystemOut(m, isPrintline);
-            } else if (m.contains("warrior:") && !muteWarrior) {
-                m = ANSI_YELLOW + m + ANSI_RESET;
-                SystemOut(m, isPrintline);
-            } else if (m.contains("system:") && !muteWarrior) {
-                m = ANSI_MAGNETA + m + ANSI_RESET;
-                SystemOut(m, isPrintline);
-            } else {
-                SystemOut(m, isPrintline);
-            }
+        if (m.contains("queen:") && !muteQueen) {
+            m = ANSI_RED + m + ANSI_RESET;
+            SystemOut(m, isPrintline);
+        } else if (m.contains("queen:") && muteQueen) {
+        } else if (m.contains("carrier:") && !muteCarrier) {
+            m = ANSI_GREEN + m + ANSI_RESET;
+            SystemOut(m, isPrintline);
+        } else if (m.contains("carrier:") && muteCarrier) {
+        } else if (m.contains("scout:") && !muteScout) {
+            m = ANSI_BLUE + m + ANSI_RESET;
+            SystemOut(m, isPrintline);
+        } else if (m.contains("scout:") && muteScout) {
+        } else if (m.contains("warrior:") && !muteWarrior) {
+            m = ANSI_YELLOW + m + ANSI_RESET;
+            SystemOut(m, isPrintline);
+        } else if (m.contains("warrior:") && muteWarrior) {
+        } else if (m.contains("system:") && !muteSystem) {
+            m = ANSI_MAGNETA + m + ANSI_RESET;
+            SystemOut(m, isPrintline);
+        } else if (m.contains("system:") && muteSystem) {
+        } else {
+            SystemOut(m, isPrintline);
         }
     }
 

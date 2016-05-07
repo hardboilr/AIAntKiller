@@ -166,7 +166,5 @@ public class ExploreTest {
         Explore explore = new Explore(thisAnt, thisLocation, cm);
         
         EAction action = explore.getAction();
-        System.out.println(action);
-        
     }
 }
