@@ -132,6 +132,14 @@ tile.getFrequency() * distanceFromAtoB(thisLocation, cm.getQueenSpawn()) * tile.
 The tile with the **lowest propensity-value** is the most attractive tile for the scout to go to. This tile is found using a custom ExplorationPropensity**Comparator** found in the `Tile.class`. Finally the Calc-methods are used to find the first action necessary to getting to that location.
 
 ### [`a3.logic.WarriorLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/WarriorLogic.java)   
+The warrior logic class is responsible for attacking enemies, warriors is always on the lookout for food, if the foodCount of the ant is lower than or equal to 3 warriors will pickup the food, to stay healthy.
+##### Attacking
+If there is an ant right in front of the warrior, that is not on the same team, and it is a possible action then it attacks.
+
+##### Finding enemies
+The warrior always checks its surroundings for enemies, it looks north, south, east and west to see if an enemy ant is in that direction, and turns in that direction. 
+#### [`a3.behaviour.Fight`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/behaviour/Fight.java)
+When the whole colony has 2 or more warriors they will start to use the information collected by the scout ants, to hunt for enemy ants. 
 
 ### Helper methods
 
@@ -180,4 +188,3 @@ Also mute all messages that contains `queen:`, by setting static variable `muteQ
 ```public static void println(Object message)```: Prints **a line** of text to the console
 
 ```public static void print(Object message)```: Prints text to the console. 
-
