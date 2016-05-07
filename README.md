@@ -102,11 +102,13 @@ Has 6 prioritized conditional courses of action:
 **1.** When ant have food and current position is a deposit, then **drop food**
 **2.** When ant have food and current position is a deposit, but ant **cannot drop food**, then **pass turn**
 **3.** When ant is below max food load threshold, then **pickup food**
-**4.** When ant max food load has been reached, then **return to deposit location** with lowest food count
-First the deposit location with lowest food count is found. If a location can be found, ShortestPath is used to determine the shortest path to that location. Finally the Calc-methods are used to find the movement action required to initialize the journey towards that location. <br>
-**5.** When current position has 0 food, then **scavenge food**
-ScavengeFood is used to find the optimal position for getting food.<br>
-**6.** If no action is returned from above, then pick a random action  
+**4.** When ant can pickup filled, pickup filled
+To usually frees up space in the immediate area.
+**5.** When ant max food load has been reached, then **return to deposit location** with lowest food count
+First the deposit location with lowest food count is found. If a location can be found, ShortestPath is used to determine the shortest path to that location. Finally the Calc-methods are used to find the movement action required to initialize the journey towards that location. 
+**6.** When current position has 0 food, then **scavenge food**
+ScavengeFood is used to find the optimal position for getting food.
+**7.** If no action is returned from above, then pick a random action  
 
 #### [`a3.behaviour.ScavengeFood`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/behaviour/ScavengeFood.java)
 

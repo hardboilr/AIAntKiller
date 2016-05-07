@@ -39,33 +39,32 @@ public class JT_Destroyer implements IAntAI {
 
         // ALL
         if (possibleActions.contains(EAction.EatFood) && thisAnt.getHitPoints() < 10) {
-            action = EAction.EatFood;
+            return EAction.EatFood;
 
             // CARRIER
         } else if (thisAnt.getAntType().equals(EAntType.CARRIER)) {
             CarrierLogic carrierLogic = new CarrierLogic(thisAnt, thisLocation, possibleActions, cm);
-            action = carrierLogic.getAction();
             println("Carrier: chose action: " + action.toString());
+            return carrierLogic.getAction();
 
             // QUEEN
         } else if (thisAnt.getAntType().equals(EAntType.QUEEN)) {
             QueenLogic queenLogic = new QueenLogic(cm, thisAnt, thisLocation, possibleActions, visibleLocations, turn);
-            action = queenLogic.getAction();
             println("Queen: chose action: " + action.toString());
+            return queenLogic.getAction();
 
             // SCOUT
         } else if (thisAnt.getAntType().equals(EAntType.SCOUT)) {
             ScoutLogic scoutLogic = new ScoutLogic(thisAnt, thisLocation, possibleActions, cm);
-            action = scoutLogic.getAction();
-            //action = getRandomAction(possibleActions);
             println("Scout: chose action: " + action.toString());
+            return scoutLogic.getAction();
             //WARRIOR
         } else if (thisAnt.getAntType().equals(EAntType.WARRIOR)) {
             WarriorLogic warriorLogic = new WarriorLogic(thisAnt, thisLocation, possibleActions, visibleLocations, cm);
-            action = warriorLogic.getAction();
             println("Warrior: chose action: " + action.toString());
+            return warriorLogic.getAction();
         }
-        return action;
+        return getRandomAction(possibleActions);
     }
 
     @Override
@@ -123,5 +122,4 @@ public class JT_Destroyer implements IAntAI {
     @Override
     public void onEndMatch(int yourScore, int yourWins, int enemyScore, int enemyWins) {
     }
-
 }

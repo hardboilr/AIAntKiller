@@ -1,4 +1,4 @@
-package a3.test.behaviour;
+package a3.test.behavior;
 
 import a3.ai.JT_Destroyer;
 import aiantwars.EAction;

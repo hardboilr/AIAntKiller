@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import a3.memory.CollectiveMemory;
-import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import a3.test.model.OnGameFinished;
@@ -48,6 +47,9 @@ public class ShortestPathTest {
         cm.saveWorldSizeY(10);
     }
 
+    /**
+     * Tests shortest path with an ordinary scenario
+     */
     @Test
     public void testScenario1() {
         Map<String, ILocationInfo> locations = getLocationsMap();
@@ -101,6 +103,9 @@ public class ShortestPathTest {
         assertEquals("2,7", shortestPath.get(7).getX() + "," + shortestPath.get(7).getY());
     }
 
+    /**
+     * Tests shortest path with an ordinary scenario
+     */
     @Test
     public void testScenario2() {
         Map<String, ILocationInfo> locations = getLocationsMap();
@@ -181,6 +186,9 @@ public class ShortestPathTest {
         assertEquals("0,9", shortestPath.get(16).getX() + "," + shortestPath.get(17).getY());
     }
 
+    /**
+     * Tests shortest path with an ordinary scenario
+     */
     @Test
     public void testScenario3() {
         Map<String, ILocationInfo> locations = getLocationsMap();
@@ -271,6 +279,9 @@ public class ShortestPathTest {
         assertEquals("0,9", shortestPath.get(25).getX() + "," + shortestPath.get(25).getY());
     }
 
+    /**
+     * Tests shortest path with an ordinary scenario
+     */
     @Test
     public void testScenario4() {
         Map<String, ILocationInfo> locations = getLocationsMap();
@@ -404,6 +415,9 @@ public class ShortestPathTest {
         assertEquals("0,7", shortestPath.get(42).getX() + "," + shortestPath.get(42).getY());
     }
 
+    /**
+     * Tests shortest path with an ordinary scenario
+     */
     @Test
     public void testScenario5() {
         Map<String, ILocationInfo> locations = getLocationsMap();
@@ -448,8 +462,43 @@ public class ShortestPathTest {
         assertEquals("6,5", shortestPath.get(10).getX() + "," + shortestPath.get(10).getY());
     }
 
-    @Test(expected = NullPointerException.class)
+     /**
+     * Tests shortest path with an ordinary scenario and when there is an ant on goal (which is allowed)
+     */
+    @Test
     public void testScenario6() {
+        Map<String, ILocationInfo> locations = getLocationsMap();
+
+        Location loc33 = (Location) locations.get("3,3");
+        LogicAnt queen = new LogicAnt(factory, board, loc33, 0, 0, teamInfo, EAntType.QUEEN, ai);
+        loc33.setAnt(queen);
+
+        cm.addTiles(getLocationsList());
+        board = new Board(cm.getWorldSizeX(), cm.getWorldSizeY());
+        antwarsGUI = new DummyGraphicsAntWarsGUI(false);
+        factory = new AntWarsGameCtrl(antwarsGUI, board, onFinished);
+        ai = new JT_Destroyer();
+        teamInfo = new TeamInfo(1, "Test team");
+
+        ILocationInfo start = new Location(1, 5);
+        ILocationInfo goal = new Location(3, 3);
+
+        IAntInfo ant = new LogicAnt(factory, board, (Location) start, 3/*direction*/, 1, teamInfo, EAntType.SCOUT, ai);
+
+        ShortestPath sp = new ShortestPath(ant, start, goal, cm);
+        List<ILocationInfo> shortestPath = sp.getShortestPath();
+
+        assertEquals("2,5", shortestPath.get(0).getX() + "," + shortestPath.get(0).getY());
+        assertEquals("3,5", shortestPath.get(1).getX() + "," + shortestPath.get(1).getY());
+        assertEquals("3,4", shortestPath.get(2).getX() + "," + shortestPath.get(2).getY());
+        assertEquals("3,3", shortestPath.get(3).getX() + "," + shortestPath.get(3).getY());
+    }
+
+    /**
+     * Tests shortest path when no path could be found
+     */
+    @Test(expected = NullPointerException.class)
+    public void testScenario7() {
         Map<String, ILocationInfo> locations = getLocationsMap();
 
         Location loc23 = (Location) locations.get("2,3");
