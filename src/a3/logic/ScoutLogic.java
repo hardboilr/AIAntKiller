@@ -29,23 +29,17 @@ public class ScoutLogic {
     public EAction getAction() {
         println("Scout: Current AP: " + thisAnt.getActionPoints() + "| Available actions: " + possibleActions.toString());
 
-        EAction action;
-
-        // a. replenish food storage
+        // a. when location has food and ant's food load is below 5, then pickup food
         if (possibleActions.contains(EAction.PickUpFood) && thisAnt.getFoodLoad() < 5) {
-            action = EAction.PickUpFood;
-        } else { // b. explore
+            return EAction.PickUpFood;
+        } else { // b. else explore 
             Explore explore = new Explore(thisAnt, thisLocation, cm);
-            action = explore.getAction();
-            if (!possibleActions.contains(action)) {
-                action = EAction.Pass;
+            EAction action = explore.getAction();
+            if (possibleActions.contains(action) && !action.equals(EAction.Pass)) {
+                return action;
             }
         }
-        // c. get random action
-        if (action.equals(EAction.Pass)) {
-            action = getRandomAction(possibleActions);
-        }
-        return action;
+        // c. If no action was returned, then get random action
+        return getRandomAction(possibleActions);
     }
-
 }

@@ -7,13 +7,14 @@ import a3.algorithm.model.Node;
 import a3.memory.model.Tile;
 import aiantwars.impl.Location;
 import static java.lang.Math.abs;
+import java.util.Random;
 
 /**
- * Todo: getMovementCost might be redundant!
- *
  * @author Tobias Jacobsen
  */
 public class Calc {
+
+    private static Random rnd = new Random();
 
     //0 = NORTH, 1 = EAST, 2 = SOUTH, 3 = WEST
     public static EAction getMovementAction(int currentDirection, int direction, boolean canMoveBackward) {
@@ -25,7 +26,12 @@ public class Calc {
             if (canMoveBackward) {
                 return EAction.MoveBackward;
             } else {
-                return EAction.TurnLeft;
+                int nextInt = rnd.nextInt(2);
+                if (nextInt == 1) {
+                    return EAction.TurnLeft;
+                } else {
+                    return EAction.TurnRight;
+                }
             }
         } else if (currentDirection + 1 == direction || currentDirection - 3 == direction) {
             // turning right

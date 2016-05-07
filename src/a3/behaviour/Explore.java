@@ -31,6 +31,16 @@ public class Explore {
         this.cm = cm;
     }
 
+    /**
+     * Go's through all tiles in collective memory. Calculates distance to this
+     * location and calculates explorationPropensity on each tile.
+     * ExplorationPropensity (double value) is a factor of frequency, distance
+     * to queen spawn, distance to scout and the tile's potentially unexplored
+     * neighbors. The tile with the lowest value is the most attractive tile for
+     * the scout to go to.
+     *
+     * @return
+     */
     public EAction getAction() {
         SortedSet<Tile> possibleLocations = new TreeSet(Tile.ExplorationPropensityComparator);
         double unexploredFactor = 0.1;
@@ -39,30 +49,29 @@ public class Explore {
         for (Map.Entry<Position, Tile> entry : cm.getTiles().entrySet()) {
             Tile tile = entry.getValue();
 
-           // System.out.println("Considering: " + tile);
-
+            // if tile is not rock or filled and not thisLocation
             if (!tile.isFilled() && !tile.isRock() && (tile.getX() != thisLocation.getX() || tile.getY() != thisLocation.getY())) {
-                    // save distance toScout for later use in PropensityFactorComparator
-                    tile.setDistanceToScout(distanceFromAtoB(tile, thisLocation));
+                // save distance toScout for later use in PropensityFactorComparator
+                tile.setDistanceToScout(distanceFromAtoB(tile, thisLocation));
 
-                    // frequency * distance to queenspawn * distance to scout 
-                    double explorationPropensity = tile.getFrequency() * distanceFromAtoB(thisLocation, cm.getQueenSpawn()) * tile.getDistanceToScout();
+                // frequency * distance to queenspawn * distance to scout 
+                double explorationPropensity = tile.getFrequency() * distanceFromAtoB(thisLocation, cm.getQueenSpawn()) * tile.getDistanceToScout();
 
-                    // if tile has unexplored neighbour, multiply by 0.1
-                    if (cm.getTile(tile.getX() + "," + (tile.getY() + 1)) == null) { // north
-                        explorationPropensity = explorationPropensity * unexploredFactor;
-                    } else if (cm.getTile(tile.getX() + "," + (tile.getY() - 1)) == null) { // south
-                        explorationPropensity = explorationPropensity * unexploredFactor;
-                    } else if (cm.getTile((tile.getX() - 1) + "," + tile.getY()) == null) { // west
-                        explorationPropensity = explorationPropensity * unexploredFactor;
-                    } else if (cm.getTile((tile.getX() + 1) + "," + tile.getY()) == null) { // east
-                        explorationPropensity = explorationPropensity * unexploredFactor;
-                    }
+                // if tile has unexplored neighbour, multiply by 0.1
+                if (cm.getTile(tile.getX() + "," + (tile.getY() + 1)) == null) { // north
+                    explorationPropensity = explorationPropensity * unexploredFactor;
+                } else if (cm.getTile(tile.getX() + "," + (tile.getY() - 1)) == null) { // south
+                    explorationPropensity = explorationPropensity * unexploredFactor;
+                } else if (cm.getTile((tile.getX() - 1) + "," + tile.getY()) == null) { // west
+                    explorationPropensity = explorationPropensity * unexploredFactor;
+                } else if (cm.getTile((tile.getX() + 1) + "," + tile.getY()) == null) { // east
+                    explorationPropensity = explorationPropensity * unexploredFactor;
+                }
 
-                    // save explorationPropensity-factor to tile
-                    tile.setExplorationPropensity(explorationPropensity);
-                    System.out.println("Possible location: " + tile);
-                    possibleLocations.add(tile);
+                // save explorationPropensity-factor to tile
+                tile.setExplorationPropensity(explorationPropensity);
+                System.out.println("Possible location: " + tile);
+                possibleLocations.add(tile);
             }
         }
 
@@ -72,11 +81,11 @@ public class Explore {
             List<ILocationInfo> shortestPath = sp.getShortestPath();
 
             int movementDirection = getMovementDirection(thisLocation, shortestPath.get(0));
-            println("chosenLocation: " + possibleLocations.first());
 
-            int chosenDirection = possibleLocations.first().getDirection();
+            println("chosenLocation: " + possibleLocations.first());
             println("chosenDirection: " + movementDirection);
-            return Calc.getMovementAction(thisAnt.getDirection(), chosenDirection, false);
+            
+            return Calc.getMovementAction(thisAnt.getDirection(), movementDirection, false);
 
         } else {
             return EAction.Pass;

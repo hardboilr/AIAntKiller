@@ -23,7 +23,7 @@ import a3.test.model.OnGameFinished;
 
 /**
  * 
- * @author Tobias
+ * @author Tobias Jacobsen
  */
 public class ScavengeFoodTest {
 
@@ -103,7 +103,7 @@ public class ScavengeFoodTest {
         
         ScavengeFood collectFood = new ScavengeFood(thisAnt, cm);
         EAction eAction = collectFood.getEAction();
-        assertEquals(EAction.TurnLeft, eAction);
+        assertTrue(eAction.equals(EAction.TurnLeft) || eAction.equals(EAction.TurnRight));
     }
 
     @Test

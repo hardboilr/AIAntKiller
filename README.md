@@ -52,7 +52,7 @@ Also creates [`a3.memory.CollectiveMemory`](https://github.com/hardboilr/AIAntKi
 ### [`a3.algorithm.ShortestPath`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/algorithm/ShortestPath.java)
 
 Calculates shortest path to from `ILocationInfo start` to `ILocationInfo goal` using the A-Star algorithm. The ShortestPath constructor creates a two-dimensional array of Nodes, [`a3.algorithm.model.Node`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/algorithm/model/Node.java), which it get from `board.getBoardNodes();`, [`a3.algorithm.model.Board`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/algorithm/model/Board.java). The constructor in Board creates this array based on the x and y size of the world. It uses the Collective Memory to get information about world size and possible blocked or filled positions, which it consequently ignores. 
-A Node contains a list of adjacent nodes which is set in the Board constructor as well. Furthermore a Node is initialized with an `int direction` to calculate movement costs, a `double gVal` and `double hVal` set to `Double.POSITIVE_INFINITY`, and finally a `Node parent` used for backtracking.
+A Node contains a list of adjacent nodes which is set in the Board constructor as well. Furthermore a Node is initialized with an `int direction` which is used to calculate movement costs, a `double gVal` and `double hVal` set to `Double.POSITIVE_INFINITY`, and finally a `Node parent` used for backtracking.
 
 `getShortestPath()` is responsible for calculating the shortest path, which it does using the principles of the [A-Star search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm). It was particular challenging to calculate a Node's H- and G-cost due to this particular game's mechanics concerning movement: Movement cost varies based on the ant's direction relatively to the movement direction.
 
@@ -95,7 +95,7 @@ When the method onLayEgg is called the ai uses another class called Breed, this 
 
 ### [`a3.logic.CarrierLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/CarrierLogic.java)
 
-Constructor calculates ant's maximum food load based on number of carriers already on team. If we have less than 4 ants *or* less than 3 carrier-ants, then max food load is set to 50% of ant's max food load.
+Constructor calculates ant's maximum food load based on number of carriers already on team. If less than 4 ants *or* less than 3 carrier-ants, then max food load is set to 50% of ant's max food load.
 
 Has 6 prioritized conditional courses of action:
 
@@ -103,16 +103,33 @@ Has 6 prioritized conditional courses of action:
 **2.** When ant have food and current position is a deposit, but ant **cannot drop food**, then **pass turn**
 **3.** When ant is below max food load threshold, then **pickup food**
 **4.** When ant max food load has been reached, then **return to deposit location** with lowest food count
-First the deposit location with lowest food count is found. If a location can be found, ShortestPath is used to determine the shortest path to that location. Finally the Calc-methods are used to find the movement action required to initialize the journey towards the deposit location. <br>
+First the deposit location with lowest food count is found. If a location can be found, ShortestPath is used to determine the shortest path to that location. Finally the Calc-methods are used to find the movement action required to initialize the journey towards that location. <br>
 **5.** When current position has 0 food, then **scavenge food**
 ScavengeFood is used to find the optimal position for getting food.<br>
 **6.** If no action is returned from above, then pick a random action  
 
-#### ScavengeFood
+#### [`a3.behaviour.ScavengeFood`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/behaviour/ScavengeFood.java)
 
-Looks at the north, south, west and east locations from ant's current position using CollectiveMemory. If a location is free, it is added to a TreeSet, which sorts the locations using a custom **FoodCostComparator** contained in the `Tile.class`. The Set is sorted so that tiles with lowest foodCost and highest foodCount comes first. If Set is empty, return `EAction.Pass`, otherwise use Calc-methods to return the first action necessary to getting to that location. 
+Looks at the north, south, west and east locations from ant's current position using CollectiveMemory. If a location is free, it is added to a TreeSet, which sorts the locations using a custom FoodCost**Comparator** contained in the `Tile.class`. The Set is sorted so that tiles with lowest foodCost and highest foodCount comes first. If the Set is empty, return `EAction.Pass`, otherwise uses Calc-methods to return the first action necessary to getting to that location. 
 
 ### [`a3.logic.ScoutLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/ScoutLogic.java)
+
+Has 3 prioritized conditional courses of action:
+
+1. When location has food and ant's food load is below 5, then pickup food
+2. Else *explore*
+3. If no action was returned, then get random action
+
+#### [`a3.behaviour.Explore`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/behaviour/Explore.java)
+
+Go's through all tiles in collective memory. Calculates distance to current location and calculates *explorationPropensity*. Both values are saved to each tile. ExplorationPropensity is a factor of frequency, distance to queen spawn, distance to scout and the tile's potentially unexplored neighbors: 
+```java
+double explorationPropensity = 
+tile.getFrequency() * distanceFromAtoB(thisLocation, cm.getQueenSpawn()) * tile.getDistanceToScout();
+// if tile has unexplored neighbour, multiply by 0.1
+```
+                
+The tile with the **lowest propensity-value** is the most attractive tile for the scout to go to. This tile is found using a custom ExplorationPropensity**Comparator** found in the `Tile.class`. Finally the Calc-methods are used to find the first action necessary to getting to that location.
 
 ### [`a3.logic.WarriorLogic`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/logic/WarriorLogic.java)   
 
@@ -120,7 +137,47 @@ Looks at the north, south, west and east locations from ant's current position u
 
 #### [`a3.utility.Action`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/utility/Action.java)
 
+```public static EAction getRandomAction(List<EAction> possibleActions)```: Returns a random action based on normalized weights. This static method is initialized once with the following weights:
+```java
+//default weights
+turnLeftWeight = 75;
+turnRightWeight = 75;
+moveForwardWeight = 100;
+moveBackwardWeight = 20;
+attackWeight = 0;
+pickUpFoodWeight = 10;
+dropFoodWeight = 0;
+eatFoodWeight = 5;
+digOutWeight = 0;
+dropSoilWeight = 0;
+layEggWeight = 0;
+passWeight = 5;
+```
+It is then just a matter of calling a setter, ex. `public static void setTurnLeftWeight(double turnLeftWeight)` to influence the probability of that particular attribute.
+
 #### [`a3.utility.Calc`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/utility/Calc.java)
 
+```public static EAction getMovementAction(int currentDirection, int direction, boolean canMoveBackward)```
+Calculates movement action based on current direction (int) and destination direction (int). Also if *canMoveBackward* is false, it won't return the *MoveBackward*-action even though that would be the "best" action to take. Instead TurnLeft or TurnRight is returned.  
+
+```public static int getMovementCost(EAction action, EAntType antType, boolean canMoveBackward)```
+Calculates movement cost based on chosen Action, antType and if ant can move backward. 
+**movementCost** is an expression for the action cost associated with moving an ant from one Tile to another. Example: If the ant is moving forward, then the action cost is simply the cost associated with: `EAction.MoveFoward`. On the other hand, if the ant's action is to turn left, it will eventually have to move forward also, which means that the actual movement cost is the action cost associated with: `EAction.TurnLeft + EAction.MoveForward`.
+
+```public static int getMovementDirection(Object a, Object b)```
+Accept Object types of Node or ILocationInfo (and Tile can be easily added too). 
+The method simply calculates the absolute movement direction from A to B, based on the game rules. The rules state that north is 0, East is 1, South is 2 and West is 3. Example: If B tile is positioned above tile A, then the direction is 0 (north). If both tiles are on the same y-axis (in line horizontally), but B is to the left of A, then the direction is 3 (west) and so on.  
+
+```public static int distanceFromAtoB(Object currentLocation, Object goalLocation)```
+Accept Object-types of ILocationInfo, Location or Tile. 
+Calculates distance from A to B when 1 movement from position A to neighbor position B, equals 1 distance.
+
 #### [`a3.utility.Debug`](https://github.com/hardboilr/AIAntKiller/blob/master/src/a3/utility/Debug.java)
+
+Used to print text to System.out for the purpose of debugging. Global variable *isDebug* can be set to turnOff/On printing globally. Can print colored messages to easily identify segments of texts in the console related to ant-type, ex. write `queen:` in the message and that text will be colored red. 
+Also mute all messages that contains `queen:`, by setting static variable `muteQueen = true`;.  
+
+```public static void println(Object message)```: Prints **a line** of text to the console
+
+```public static void print(Object message)```: Prints text to the console. 
 

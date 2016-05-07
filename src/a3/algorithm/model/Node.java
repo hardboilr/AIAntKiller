@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Tobias
+ * @author Tobias Jacobsen
  */
 public class Node implements Comparable<Node> {
 
@@ -96,5 +96,4 @@ public class Node implements Comparable<Node> {
         }
         return 0;
     }
-
 }
