@@ -25,11 +25,7 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public EAction chooseAction(IAntInfo thisAnt, ILocationInfo thisLocation, List<ILocationInfo> visibleLocations, List<EAction> possibleActions) {
-        Debug.isDebug = true;
-        Debug.muteCarrier = true;
-        Debug.muteQueen = true;
-        Debug.muteSystem = true;
-        Debug.muteWarrior = true;
+        Debug.isDebug = false;
 
         // update collective memory
         cm.addTiles(visibleLocations);
@@ -44,24 +40,20 @@ public class JT_Destroyer implements IAntAI {
             // CARRIER
         } else if (thisAnt.getAntType().equals(EAntType.CARRIER)) {
             CarrierLogic carrierLogic = new CarrierLogic(thisAnt, thisLocation, possibleActions, cm);
-            println("Carrier: chose action: " + action.toString());
             return carrierLogic.getAction();
 
             // QUEEN
         } else if (thisAnt.getAntType().equals(EAntType.QUEEN)) {
             QueenLogic queenLogic = new QueenLogic(cm, thisAnt, thisLocation, possibleActions, visibleLocations, turn);
-            println("Queen: chose action: " + action.toString());
             return queenLogic.getAction();
 
             // SCOUT
         } else if (thisAnt.getAntType().equals(EAntType.SCOUT)) {
             ScoutLogic scoutLogic = new ScoutLogic(thisAnt, thisLocation, possibleActions, cm);
-            println("Scout: chose action: " + action.toString());
             return scoutLogic.getAction();
             //WARRIOR
         } else if (thisAnt.getAntType().equals(EAntType.WARRIOR)) {
             WarriorLogic warriorLogic = new WarriorLogic(thisAnt, thisLocation, possibleActions, visibleLocations, cm);
-            println("Warrior: chose action: " + action.toString());
             return warriorLogic.getAction();
         }
         return getRandomAction(possibleActions);
