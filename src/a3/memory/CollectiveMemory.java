@@ -13,7 +13,7 @@ import java.util.Map;
 public class CollectiveMemory {
 
     private Map<Position, Tile> tiles = new HashMap();
-    private final List<IAntInfo> ants = new ArrayList();
+    private List<IAntInfo> ants = new ArrayList();
     private ILocationInfo queenSpawn;
     private int worldSizeX;
     private int worldSizeY;
@@ -48,10 +48,9 @@ public class CollectiveMemory {
         return tiles;
     }
 
-    public void clearTiles() {
-        tiles = new HashMap();
-    }
-
+//    public void clearTiles() {
+//        tiles = new HashMap();
+//    }
     public Tile getTile(Position pos) {
         return tiles.get(pos);
     }
@@ -107,8 +106,13 @@ public class CollectiveMemory {
     public void setCurrentTurn(int currentTurn) {
         this.currentTurn = currentTurn;
     }
-    
+
     public void setTeamID(int teamID) {
         this.teamID = teamID;
+    }
+
+    public void clearMemory() {
+        tiles = new HashMap();
+        ants = new ArrayList();
     }
 }
