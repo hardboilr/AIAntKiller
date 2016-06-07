@@ -105,6 +105,7 @@ public class JT_Destroyer implements IAntAI {
 
     @Override
     public void onStartRound(int round) {
+        cm.clearTiles();
     }
 
     @Override
