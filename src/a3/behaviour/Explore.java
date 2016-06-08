@@ -55,6 +55,7 @@ public class Explore {
                 // save distance toScout for later use in PropensityFactorComparator
                 tile.setDistanceToScout(distanceFromAtoB(tile, thisLocation));
 
+                // frequency means how many times the current tiled has been observed by an ant
                 // frequency * distance to queenspawn * distance to scout 
                 double explorationPropensity = (tile.getFrequency() + 1) * (distanceFromAtoB(thisLocation, cm.getQueenSpawn()) + 1) * (tile.getDistanceToScout() + 1);
 

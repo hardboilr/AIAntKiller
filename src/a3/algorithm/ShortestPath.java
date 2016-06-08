@@ -172,7 +172,7 @@ public class ShortestPath {
     }
 
     /**
-     * Movement cost from current node to start-node
+     * Movement cost from start-node to current node 
      *
      * @param currentNode
      * @param startNode

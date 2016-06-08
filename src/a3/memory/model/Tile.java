@@ -56,11 +56,27 @@ public class Tile {
         this.ant = ant;
         this.direction = direction;
         this.foodCount = foodCount;
-        calcMovementCost(ant, direction);
+        calcMovementCost(ant);
     }
 
     public void setMovementCost(int movementCost) {
         this.movementCost = movementCost;
+    }
+    
+    public int getMovementCost() {
+        return movementCost;
+    }
+
+    public int getFoodCost() {
+        return movementCost - getFoodCount();
+    }
+
+    public void calcMovementCost(IAntInfo ant) {
+        if (ant != null) {
+            int currentDirection = ant.getDirection();
+            EAntType antType = ant.getAntType();
+            movementCost = Calc.getMovementCost(Calc.getMovementAction(currentDirection, direction, false), antType, false);
+        }
     }
 
     public int getDirection() {
@@ -69,10 +85,6 @@ public class Tile {
 
     public void setDirection(int direction) {
         this.direction = direction;
-    }
-
-    public int getFoodCost() {
-        return movementCost - getFoodCount();
     }
 
     public int getFoodCount() {
@@ -159,14 +171,6 @@ public class Tile {
         this.distanceToScout = distanceToScout;
     }
 
-    private void calcMovementCost(IAntInfo ant, int direction) {
-        if (ant != null) {
-            int currentDirection = ant.getDirection();
-            EAntType antType = ant.getAntType();
-            movementCost = Calc.getMovementCost(Calc.getMovementAction(currentDirection, direction, false), antType, false);
-        }
-    }
-
     public static final Comparator<Tile> FoodCostComparator = new Comparator<Tile>() {
         @Override
         public int compare(Tile o1, Tile o2) {
@@ -193,13 +197,13 @@ public class Tile {
 
     @Override
     public String toString() {
-        return "Tile: " + "(" + x + "," + y + ")" 
-                + ", isRock: " + isRock 
+        return "Tile: " + "(" + x + "," + y + ")"
+                + ", isRock: " + isRock
                 + ", isFilled: " + isFilled
                 + ", foodCount: " + foodCount
                 + ", foodCost: " + getFoodCost()
-                + ", frequency: " + frequency 
-                + ", distanceToScout: " + distanceToScout 
+                + ", frequency: " + frequency
+                + ", distanceToScout: " + distanceToScout
                 + ", explorationPropensity: " + explorationPropensity;
     }
 }

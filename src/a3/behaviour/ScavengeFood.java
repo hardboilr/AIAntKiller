@@ -9,6 +9,7 @@ import a3.memory.CollectiveMemory;
 import a3.memory.model.Position;
 import a3.memory.model.Tile;
 import a3.utility.Calc;
+import static a3.utility.Debug.println;
 
 /**
  * Responsible for ants collecting food around the board.
@@ -44,6 +45,7 @@ public class ScavengeFood {
         if (checkPosition(xOffset, yOffset)) {
             Tile tile = cm.getTile(xOffset + "," + yOffset);
             tile.setDirection(0);
+            tile.calcMovementCost(thisAnt); // used to calculate foodCost
             possibleLocations.add(tile);
         }
 
@@ -52,6 +54,7 @@ public class ScavengeFood {
         if (checkPosition(xOffset, yOffset)) {
             Tile tile = cm.getTile(xOffset + "," + yOffset);
             tile.setDirection(2);
+            tile.calcMovementCost(thisAnt);
             possibleLocations.add(tile);
         }
 
@@ -61,6 +64,7 @@ public class ScavengeFood {
         if (checkPosition(xOffset, yOffset)) {
             Tile tile = cm.getTile(xOffset + "," + yOffset);
             tile.setDirection(3);
+            tile.calcMovementCost(thisAnt);
             possibleLocations.add(tile);
         }
 
@@ -69,6 +73,7 @@ public class ScavengeFood {
         if (checkPosition(xOffset, yOffset)) {
             Tile tile = cm.getTile(xOffset + "," + yOffset);
             tile.setDirection(1);
+            tile.calcMovementCost(thisAnt);
             possibleLocations.add(tile);
         }
 

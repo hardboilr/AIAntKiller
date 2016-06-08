@@ -23,12 +23,12 @@ public class Debug {
     public static boolean muteScout;
     public static boolean muteWarrior;
 
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_MAGNETA = "\u001B[35m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_MAGNETA = "\u001B[35m";
 
     /**
      * Prints a line of text to the console
